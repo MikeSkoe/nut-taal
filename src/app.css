@@ -1,0 +1,34 @@
+body {
+    background: black;
+
+}
+
+input {
+    background: black;
+    border: 1px solid white;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+}
+
+body * {
+    color: white;
+}
+
+.noun {
+    color: rgb(255, 130, 232);
+}
+
+.verb {
+    color: rgb(179, 255, 179);
+}
+
+.ad {
+    color: rgb(129, 129, 255);
+}
+
+.hint {
+    margin: 2em 0;
+    border: 1px solid white;
+}
+
+span { color: inherit }
