@@ -1,0 +1,61 @@
+{
+  "name": "code-ish-app",
+  "version": "0.0.1",
+  "author": "Mikhail Skorykh",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "reason-react",
+    "ReScript",
+    "rescript-react",
+    "react",
+    "conlang",
+    "auxiliary"
+  ],
+  "engines": {
+    "node": "^16",
+    "npm": "^8"
+  },
+  "scripts": {
+    "build": "vite build",
+    "clean": "rescript clean",
+    "format": "npm run format:js && npm run format:res",
+    "format:js": "prettier --write \"**/*.{js,json,md,yml}\"",
+    "format:res": "rescript format -all",
+    "serve": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "@rescript/react": "^0.11.0",
+    "@ryyppy/rescript-promise": "^2.1.0",
+    "bs-fetch": "^0.6.2",
+    "dompurify": "^2.4.1",
+    "marked": "^4.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rescript": "^10.1.0",
+    "rescript-webapi": "^0.7.0"
+  },
+  "devDependencies": {
+    "@jihchi/vite-plugin-rescript": "^5.0.0",
+    "@vitejs/plugin-react": "^3.0.0",
+    "prettier": "^2.8.1",
+    "vite": "^4.0.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

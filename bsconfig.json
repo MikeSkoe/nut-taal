@@ -1,0 +1,26 @@
+{
+  "name": "code-ish-app",
+  "suffix": ".bs.js",
+  "jsx": { "version": 4, "mode": "classic" },
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-bs-no-version-header"
+  ],
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": true
+    }
+  ],
+  "bs-dependencies": [
+    "@rescript/react",
+    "@ryyppy/rescript-promise",
+    "bs-fetch",
+    "rescript-webapi"
+  ],
+  "bs-dev-dependencies": []
+}
