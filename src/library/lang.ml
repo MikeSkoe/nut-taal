@@ -23,9 +23,7 @@ type lex =
   | Con of conj * lex
 
 module Roots : (PARSABLE with type t := root) = struct
-  let mem str = Dictionary.fromStr str
-      |> Belt.Option.isSome
-
+  let mem = Dictionary.mem
   let show t =
     let rec iter t = match t with
       | Root(str, next) -> str :: iter next
@@ -44,9 +42,7 @@ module Roots : (PARSABLE with type t := root) = struct
 end
 
 module Conjs : (PARSABLE with type t := conj) = struct
-  let roots = ["and"; "or"; "if"]
-  let mem str = List.mem str roots
-
+  let mem = Dictionary.conjMem
   let show t = match t with
     | Conj str -> str
     | End -> ""
@@ -76,7 +72,11 @@ module Lexs : LEX = struct
       | Ad(root, next) -> adMark :: Roots.show root :: iter next
       | Con(conj, next) -> Conjs.show conj :: iter next
     in
-    iter lex |> List.fold_left (fun acc curr -> acc ^ " " ^ curr) ""
+    (match iter lex with
+      | word :: next when word = nounMark -> next
+      | words -> words
+    )
+    |> List.fold_left (fun acc curr -> acc ^ " " ^ curr) ""
 
   let parse str =
     let rec iter strs = match strs with
