@@ -1,16 +1,20 @@
 %%raw("import './app.css'")
 
-include Lang
+module Lang = Lang.Make (Dictionary.Term) (Dictionary.Conj)
 
-let rec rootEl = (root, onClick) => switch root {
-    | Root(root, End) => <span onClick={_ => onClick(root)}>{root->React.string}</span>
-    | Root(root, next) => <>
-        <span onClick={_ => onClick(root)}>
-            {root->React.string}
-            {"+"->React.string}
-        </span>
-        {rootEl(next, onClick)}
-    </>
+let rec rootEl = (root: Lang.Roots.t, onClick) => switch root {
+    | Root(root, End) => <span onClick={_ => onClick(root)}>{root->Dictionary.Term.show->React.string}</span>
+    | Root(root, next) => {
+        Js.log(root);
+        Js.log(next);
+        <>
+            <span onClick={_ => onClick(root)}>
+                {root->Dictionary.Term.show->React.string}
+                {"+"->React.string}
+            </span>
+            {rootEl(next, onClick)}
+        </>
+    }
     | Prop(root) => <u>{root->React.string}</u>
     | _ => <></>
 }
@@ -20,7 +24,7 @@ let nounEl = (root, onClick, isFirstWord) =>
         {isFirstWord
             ? React.null
             : <>
-                {Lexs.nounMark->React.string}
+                {Lang.nounMark->React.string}
                 {" "->React.string}
             </>}
         {rootEl(root, onClick)}
@@ -29,7 +33,7 @@ let nounEl = (root, onClick, isFirstWord) =>
 
 let verbEl = (root, onClick) =>
     <span className="verb">
-        {Lexs.verbMark->React.string}
+        {Lang.verbMark->React.string}
         {" "->React.string}
         {rootEl(root, onClick)}
         {" "->React.string}
@@ -42,7 +46,7 @@ let adEl = (root, onClick) =>
         {" "->React.string}
     </span>
 
-let rec toEl = (pars, onClick, ~isFirstWord = false, ()) => switch pars {
+let rec toEl = (pars: Lang.Lexs.t, onClick, ~isFirstWord = false, ()) => switch pars {
     | End => <></>
     | Noun(root, next) => <>
         {nounEl(root, onClick, isFirstWord)}
@@ -59,7 +63,7 @@ let rec toEl = (pars, onClick, ~isFirstWord = false, ()) => switch pars {
     | Con(root, next) =>
         <>
             <b>
-                {(Conjs.show(root)++" ")->React.string}
+                {(Dictionary.Conj.show(root)++" ")->React.string}
             </b>
             {toEl(next, onClick, ())}
         </>
@@ -68,18 +72,19 @@ let rec toEl = (pars, onClick, ~isFirstWord = false, ()) => switch pars {
 module Hint = {
     @react.component
     let make = (~str) => {
-        if !Dictionary.mem(str) {
-            <></>
-        } else {
-            let term = Dictionary.getTerm(str);
-            <table className="is-striped">
-                <tr>
-                    <th>{str->React.string}</th>
-                    <th>{"noun: "->React.string}{term.nounDefinition->React.string}</th>
-                    <th>{"verb: "->React.string}{term.verbDefinition->React.string}</th>
-                    <th>{"ad: "->React.string}{term.adDefinition->React.string}</th>
-                </tr>
-            </table>
+        let term = Dictionary.Term.parse(str);
+        switch term {
+            | None => <></>
+            | Some(term) => {
+                <table className="is-striped">
+                    <tr>
+                        <th>{str->React.string}</th>
+                        <th>{"noun: "->React.string}{term->Dictionary.Term.getNounDef->React.string}</th>
+                        <th>{"verb: "->React.string}{term->Dictionary.Term.getVerbDef->React.string}</th>
+                        <th>{"ad: "->React.string}{term->Dictionary.Term.getAdDef->React.string}</th>
+                    </tr>
+                </table>
+            }
         }
     }
 }
@@ -94,14 +99,13 @@ module Dict = {
                 <th>{"description"->React.string}</th>
             </tr>
             {
-                Dictionary.dict
-                ->Dictionary.MyDict.bindings
-                ->Belt.List.map(((str, term): (Dictionary.MyDict.key, Dictionary.term)) =>
-                <tr>
-                    <td>{str->React.string}</td>
-                    <td>{`${term.nounDefinition} / ${term.verbDefinition} / ${term.adDefinition}`->React.string}</td>
-                    <td>{term.description->React.string}</td>
-                </tr>)
+                Dictionary.Term.all
+                ->Belt.List.map(term =>
+                    <tr>
+                        <td>{term->Dictionary.Term.show->React.string}</td>
+                        <td>{`${term->Dictionary.Term.getNounDef} / ${term->Dictionary.Term.getVerbDef} / ${term->Dictionary.Term.getAdDef}`->React.string}</td>
+                        <td>{term->Dictionary.Term.getDescription->React.string}</td>
+                    </tr>)
                 ->Belt.List.toArray
                 ->React.array
             }
@@ -119,14 +123,13 @@ module ConjDict = {
                 <th>{"description"->React.string}</th>
             </tr>
             {
-                Dictionary.conjDict
-                ->Dictionary.MyDict.bindings
-                ->Belt.List.map(((str, conjTerm): (Dictionary.MyDict.key, Dictionary.conjTerm)) =>
-                <tr>
-                    <td>{str->React.string}</td>
-                    <td>{conjTerm.definition->React.string}</td>
-                    <td>{conjTerm.description->React.string}</td>
-                </tr>)
+                Dictionary.Conj.all
+                ->Belt.List.map(term =>
+                    <tr>
+                        <td>{term->Dictionary.Conj.show->React.string}</td>
+                        <td>{term->Dictionary.Conj.getDef->React.string}</td>
+                        <td>{term->Dictionary.Conj.getDescription->React.string}</td>
+                    </tr>)
                 ->Belt.List.toArray
                 ->React.array
             }
@@ -145,8 +148,8 @@ let make = () => {
             <textarea onChange={onChange} inputMode="text"/>
             <div>{
                 input
-                ->Lexs.parse
-                ->toEl(str => setHint(_ => str), ~isFirstWord=true, ())
+                ->Lang.Lexs.parse
+                ->toEl(str => setHint(_ => str->Dictionary.Term.show), ~isFirstWord=true, ())
             }</div>
         </div>
         <div>
@@ -155,5 +158,4 @@ let make = () => {
             <ConjDict />
         </div>
     </div>
-    // <p>{"mi i love a you"->Lexs.parse->toEl}</p>
 }
