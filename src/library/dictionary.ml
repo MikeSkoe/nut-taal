@@ -1,3 +1,5 @@
+include AbstractDict
+
 module MyDict = Map.Make(String)
 
 module Utils = struct
@@ -21,7 +23,7 @@ module Utils = struct
       )
 end
 
-module Term: Language.TERMIN_DICTIONARY = struct
+module Term: TERMIN_DICTIONARY = struct
    type t = {
       str: string;
       nounDefinition: string;
@@ -54,7 +56,7 @@ module Term: Language.TERMIN_DICTIONARY = struct
    let show { str } = str
 end
 
-module Conj: Language.CONJ_DICTIONARY = struct
+module Conj: CONJ_DICTIONARY = struct
    let nounMark = "a"
    let verbMark = "i"
    let adMark = "e"

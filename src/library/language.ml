@@ -1,36 +1,11 @@
-module type PARSABLE = sig
-   type t
-   val show : t -> string
-   val parse : string -> t option
-end
-
-module type CONJ_DICTIONARY = sig
-   include PARSABLE
-   val nounMark : string
-   val verbMark : string
-   val adMark : string
-   val mem : string -> bool
-   val getDef : t -> string
-   val getDescription : t -> string
-   val all : t list
-end
-
-module type TERMIN_DICTIONARY = sig
-   include PARSABLE
-   val getNounDef : t -> string
-   val getVerbDef : t -> string
-   val getAdjDef : t -> string
-   val getAdvDef : t -> string
-   val getDescription : t -> string
-   val all : t list
-end
+include AbstractDict
 
 let combMark = '-'
 let combMarkString = "-"
 
 module Make
-   (TD: TERMIN_DICTIONARY) (* Termin Dictionary *)
-   (CD: CONJ_DICTIONARY) (* Conjugation Dictionary *)
+   (TD: TERMIN_DICTIONARY)
+   (CD: CONJ_DICTIONARY)
 = struct
    module Roots = struct
       type t =
@@ -58,13 +33,27 @@ module Make
          iter (str |> String.split_on_char combMark)
    end
 
+   module Conjs = struct
+      type t =
+         | End
+         | Conj of CD.t
+
+      let show t = match t with
+        | Conj str -> CD.show str
+        | End -> ""
+   
+      let parse str = match CD.parse str with
+         | Some str -> Conj str
+         | None -> End
+    end
+
    module Lexs = struct
       type t =
          | End
          | Noun of Roots.t * t
          | Verb of Roots.t * t
          | Ad of Roots.t * t
-         | Con of CD.t * t
+         | Con of Conjs.t * t
 
       let isMark str = List.mem str [CD.nounMark; CD.verbMark; CD.adMark]
 
@@ -74,7 +63,7 @@ module Make
             | Noun(root, next) -> CD.nounMark :: Roots.show root :: iter next
             | Verb(root, next) -> CD.verbMark :: Roots.show root :: iter next
             | Ad(root, next) -> CD.adMark :: Roots.show root :: iter next
-            | Con(conj, next) -> CD.show conj :: iter next
+            | Con(conj, next) -> Conjs.show conj :: iter next
          in
          (match iter lex with
             | word :: next when word = CD.nounMark -> next
@@ -91,19 +80,12 @@ module Make
             | mark :: word :: next when mark = CD.adMark ->
                Ad(Roots.parse word, iter next)
             | mark :: word :: next when CD.mem mark ->
-               if isMark word
-                  then (match CD.parse mark with
-                     | Some(mark) -> Con(mark, iter next)
-                     | None -> End
-                  )
-                  else (match CD.parse mark with
-                     | Some(mark) -> Con(mark, iter (CD.nounMark :: next))
-                     | None -> End
-                  )
+               let next = if isMark word then word :: next else CD.nounMark :: word :: next in
+               Con(Conjs.parse mark, iter next)
             | word :: next ->
                iter (CD.adMark :: word :: next)
             | [] ->
-                  End
+               End
          in
          match
             str

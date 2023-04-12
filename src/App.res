@@ -35,8 +35,14 @@ let verbEl = (root, onClick) =>
         {" "->React.string}
     </span>
 
-let adEl = (root, onClick) =>
+let adEl = (root, onClick, isFirstWord) =>
     <span className="ad">
+        {isFirstWord
+            ? <>
+                {Dictionary.Conj.adMark->React.string}
+                {" "->React.string}
+            </>
+            : React.null}
         {" "->React.string}
         {rootEl(root, onClick)}
         {" "->React.string}
@@ -53,13 +59,27 @@ let rec toEl = (pars: Lang.Lexs.t, onClick, ~isFirstWord = false, ()) => switch 
         {toEl(next, onClick, ())}
     </>
     | Ad(root, next) => <>
-        {adEl(root, onClick)}
+        {adEl(root, onClick, isFirstWord)}
         {toEl(next, onClick, ())}
     </>
+    | Con(root, Noun(noun, next)) =>
+        <>
+            <b>
+                {(Lang.Conjs.show(root)++" ")->React.string}
+            </b>
+            {toEl(Noun(noun, next), onClick, ~isFirstWord=true, ())}
+        </>
+    | Con(root, Ad(noun, next)) =>
+        <>
+            <b>
+                {(Lang.Conjs.show(root)++" ")->React.string}
+            </b>
+            {toEl(Ad(noun, next), onClick, ~isFirstWord=true, ())}
+        </>
     | Con(root, next) =>
         <>
             <b>
-                {(Dictionary.Conj.show(root)++" ")->React.string}
+                {(Lang.Conjs.show(root)++" ")->React.string}
             </b>
             {toEl(next, onClick, ())}
         </>
