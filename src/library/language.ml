@@ -6,6 +6,9 @@ end
 
 module type CONJ_DICTIONARY = sig
    include PARSABLE
+   val nounMark : string
+   val verbMark : string
+   val adMark : string
    val mem : string -> bool
    val getDef : t -> string
    val getDescription : t -> string
@@ -16,25 +19,24 @@ module type TERMIN_DICTIONARY = sig
    include PARSABLE
    val getNounDef : t -> string
    val getVerbDef : t -> string
-   val getAdDef : t -> string
+   val getAdjDef : t -> string
+   val getAdvDef : t -> string
    val getDescription : t -> string
    val all : t list
 end
+
+let combMark = '-'
+let combMarkString = "-"
 
 module Make
    (TD: TERMIN_DICTIONARY) (* Termin Dictionary *)
    (CD: CONJ_DICTIONARY) (* Conjugation Dictionary *)
 = struct
-   let nounMark = "a"
-   let verbMark = "i"
-   let adMark = "e"
-
    module Roots = struct
       type t =
          | Root of TD.t * t
          | Prop of string
          | End
-      let combMark = "+"
 
       let show t =
          let rec iter t = match t with
@@ -42,7 +44,7 @@ module Make
             | Prop(str) -> [str]
             | End -> []
          in
-         Belt.List.reduce (iter t) "" (fun acc curr -> if acc = "" then curr else acc ^ combMark ^ curr)
+         Belt.List.reduce (iter t) "" (fun acc curr -> if acc = "" then curr else acc ^ combMarkString ^ curr)
 
       let parse str =
          let rec iter strings = match strings with
@@ -53,7 +55,7 @@ module Make
             )
             | [] -> End
          in
-         iter (str |> String.split_on_char '+')
+         iter (str |> String.split_on_char combMark)
    end
 
    module Lexs = struct
@@ -64,29 +66,29 @@ module Make
          | Ad of Roots.t * t
          | Con of CD.t * t
 
-      let isMark str = List.mem str [nounMark; verbMark; adMark]
+      let isMark str = List.mem str [CD.nounMark; CD.verbMark; CD.adMark]
 
       let show lex =
          let rec iter lex = match lex with
             | End -> []
-            | Noun(root, next) -> nounMark :: Roots.show root :: iter next
-            | Verb(root, next) -> verbMark :: Roots.show root :: iter next
-            | Ad(root, next) -> adMark :: Roots.show root :: iter next
+            | Noun(root, next) -> CD.nounMark :: Roots.show root :: iter next
+            | Verb(root, next) -> CD.verbMark :: Roots.show root :: iter next
+            | Ad(root, next) -> CD.adMark :: Roots.show root :: iter next
             | Con(conj, next) -> CD.show conj :: iter next
          in
          (match iter lex with
-            | word :: next when word = nounMark -> next
+            | word :: next when word = CD.nounMark -> next
             | words -> words
          )
          |> List.fold_left (fun acc curr -> acc ^ " " ^ curr) ""
 
       let parse str =
          let rec iter strs = match strs with
-            | mark :: word :: next when mark = nounMark ->
+            | mark :: word :: next when mark = CD.nounMark ->
                Noun(Roots.parse word, iter next)
-            | mark :: word :: next when mark = verbMark ->
+            | mark :: word :: next when mark = CD.verbMark ->
                Verb(Roots.parse word, iter next)
-            | mark :: word :: next when mark = adMark ->
+            | mark :: word :: next when mark = CD.adMark ->
                Ad(Roots.parse word, iter next)
             | mark :: word :: next when CD.mem mark ->
                if isMark word
@@ -95,11 +97,11 @@ module Make
                      | None -> End
                   )
                   else (match CD.parse mark with
-                     | Some(mark) -> Con(mark, iter (nounMark :: next))
+                     | Some(mark) -> Con(mark, iter (CD.nounMark :: next))
                      | None -> End
                   )
             | word :: next ->
-               iter (adMark :: word :: next)
+               iter (CD.adMark :: word :: next)
             | [] ->
                   End
          in
@@ -109,7 +111,7 @@ module Make
             |> String.split_on_char ' '
          with
             | mark :: next when isMark mark -> iter (mark :: next)
-            | next -> iter (nounMark :: next)
+            | next -> iter (CD.nounMark :: next)
 
          let mem str = parse str != End
    end
