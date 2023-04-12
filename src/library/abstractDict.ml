@@ -12,7 +12,7 @@ module type CONJ_DICTIONARY = sig
    val mem : string -> bool
    val getDef : t -> string
    val getDescription : t -> string
-   val all : t list
+   val all : t list promise
 end
 
 module type TERMIN_DICTIONARY = sig
@@ -22,5 +22,5 @@ module type TERMIN_DICTIONARY = sig
    val getAdjDef : t -> string
    val getAdvDef : t -> string
    val getDescription : t -> string
-   val all : t list
+   val all : t list promise
 end

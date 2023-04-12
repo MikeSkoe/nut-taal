@@ -108,6 +108,15 @@ module Hint = {
 module Dict = {
     @react.component
     let make = () => {
+        let (terms, setTerms) = React.useState(_ => list{})
+
+        React.useEffect0(() => {
+            Dictionary.Term.all
+            |> Js.Promise.then_ (terms => setTerms(_ => terms)->Js.Promise.resolve)
+            |> ignore;
+            None;
+        })
+
         <table className="is-striped">
             <thead>
                 <tr>
@@ -118,7 +127,7 @@ module Dict = {
             </thead>
             <tbody>
                 {
-                    Dictionary.Term.all
+                    terms
                     ->Belt.List.map(term =>
                         <tr key={term->Dictionary.Term.show}>
                             <td>{term->Dictionary.Term.show->React.string}</td>
@@ -136,6 +145,15 @@ module Dict = {
 module ConjDict = {
     @react.component
     let make = () => {
+        let (terms, setTerms) = React.useState(_ => list{})
+
+        React.useEffect0(() => {
+            Dictionary.Conj.all
+            |> Js.Promise.then_ (terms => setTerms(_ => terms)->Js.Promise.resolve)
+            |> ignore;
+            None;
+        })
+
         <table className="is-striped">
             <thead>
                 <tr>
@@ -146,7 +164,7 @@ module ConjDict = {
             </thead>
             <tbody>
                 {
-                    Dictionary.Conj.all
+                    terms
                     ->Belt.List.map(term =>
                         <tr key={term->Dictionary.Conj.show}>
                             <td>{term->Dictionary.Conj.show->React.string}</td>
@@ -174,5 +192,8 @@ let make = () => {
             ->Lang.Lexs.parse
             ->toEl(str => setHint(_ => str->Dictionary.Term.show), ~isFirstWord=true, ())
         }</div>
+        <Hint str={hint} />
+        <Dict />
+        <ConjDict />
     </div>
 }

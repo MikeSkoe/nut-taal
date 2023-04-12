@@ -19,7 +19,7 @@ module Utils = struct
                (makeEntity line)
                acc
             );
-         Js.Promise.resolve ()
+         Js.Promise.resolve dict.contents
       )
 end
 
@@ -35,7 +35,7 @@ module Term: TERMIN_DICTIONARY = struct
 
    let dict: t MyDict.t ref = ref MyDict.empty
 
-   let _ = Utils.loadDict "/dictionary.csv" dict
+   let dictProm = Utils.loadDict "/dictionary.csv" dict
       (fun line -> ({
          str=(Belt.List.getExn line 0);
          nounDefinition=(Belt.List.getExn line 1);
@@ -45,7 +45,11 @@ module Term: TERMIN_DICTIONARY = struct
          description=(Belt.List.getExn line 5);
       }))
 
-   let all = Belt.List.map (MyDict.bindings dict.contents) (fun (_, term) -> term)
+   let all = dictProm
+      |> Js.Promise.then_ (fun dict ->
+         Belt.List.map (MyDict.bindings dict) (fun (_, term) -> term)
+         |> Js.Promise.resolve
+      )
 
    let parse string = MyDict.(find_opt string dict.contents)
    let getAdjDef { adjectiveDefinition } = adjectiveDefinition
@@ -69,14 +73,18 @@ module Conj: CONJ_DICTIONARY = struct
 
    let dict: t MyDict.t ref = ref MyDict.empty
    
-   let _ = Utils.loadDict "/auxiliary.csv" dict
+   let dictProm = Utils.loadDict "/auxiliary.csv" dict
       (fun line -> ({
          str=(Belt.List.getExn line 0);
          definition=(Belt.List.getExn line 1);
          description=(Belt.List.getExn line 2);
       }))
 
-   let all = Belt.List.map (MyDict.bindings dict.contents) (fun (_, term) -> term)
+   let all = dictProm
+      |> Js.Promise.then_ (fun dict ->
+         Belt.List.map (MyDict.bindings dict) (fun (_, term) -> term)
+         |> Js.Promise.resolve
+      )
 
    let mem key = Belt.Option.isSome MyDict.(find_opt key dict.contents)
    let parse key = MyDict.find_opt key dict.contents
