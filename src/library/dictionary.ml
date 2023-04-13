@@ -26,10 +26,9 @@ end
 module Term: TERMIN_DICTIONARY = struct
    type t = {
       str: string;
-      nounDefinition: string;
-      verbDefinition: string;
-      adjectiveDefinition: string;
-      adverbDefinition: string;
+      noun: string;
+      verb: string;
+      ad: string;
       description: string;
    }
 
@@ -38,11 +37,10 @@ module Term: TERMIN_DICTIONARY = struct
    let dictProm = Utils.loadDict "/dictionary.csv" dict
       (fun line -> ({
          str=(Belt.List.getExn line 0);
-         nounDefinition=(Belt.List.getExn line 1);
-         verbDefinition=(Belt.List.getExn line 2);
-         adjectiveDefinition=(Belt.List.getExn line 3);
-         adverbDefinition=(Belt.List.getExn line 4);
-         description=(Belt.List.getExn line 5);
+         noun=(Belt.List.getExn line 1);
+         verb=(Belt.List.getExn line 2);
+         ad=(Belt.List.getExn line 3);
+         description=(Belt.List.getExn line 4);
       }))
 
    let all = dictProm
@@ -52,12 +50,11 @@ module Term: TERMIN_DICTIONARY = struct
       )
 
    let parse string = MyDict.(find_opt string dict.contents)
-   let getAdjDef { adjectiveDefinition } = adjectiveDefinition
-   let getAdvDef { adverbDefinition } = adverbDefinition
-   let getNounDef { nounDefinition } = nounDefinition
-   let getVerbDef { verbDefinition } = verbDefinition
-   let getDescription { description } = description
    let show { str } = str
+   let getAdDef { ad } = ad
+   let getNounDef { noun } = noun
+   let getVerbDef { verb } = verb
+   let getDescription { description } = description
 end
 
 module Conj: CONJ_DICTIONARY = struct

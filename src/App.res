@@ -97,7 +97,7 @@ module Hint = {
                         <th>{str->React.string}</th>
                         <th>{"noun: "->React.string}{term->Dictionary.Term.getNounDef->React.string}</th>
                         <th>{"verb: "->React.string}{term->Dictionary.Term.getVerbDef->React.string}</th>
-                        <th>{"ad: "->React.string}{term->Dictionary.Term.getAdjDef->React.string}</th>
+                        <th>{"ad: "->React.string}{term->Dictionary.Term.getAdDef->React.string}</th>
                     </tr>
                 </table>
             }
@@ -121,7 +121,9 @@ module Dict = {
             <thead>
                 <tr>
                     <th>{"term"->React.string}</th>
-                    <th>{"noun / verb / ad"->React.string}</th>
+                    <th>{"noun"->React.string}</th>
+                    <th>{"verb"->React.string}</th>
+                    <th>{"ad"->React.string}</th>
                     <th>{"description"->React.string}</th>
                 </tr>
             </thead>
@@ -131,7 +133,9 @@ module Dict = {
                     ->Belt.List.map(term =>
                         <tr key={term->Dictionary.Term.show}>
                             <td>{term->Dictionary.Term.show->React.string}</td>
-                            <td>{`${term->Dictionary.Term.getNounDef} / ${term->Dictionary.Term.getVerbDef} / ${term->Dictionary.Term.getAdjDef}`->React.string}</td>
+                            <td>{term->Dictionary.Term.getNounDef->React.string}</td>
+                            <td>{term->Dictionary.Term.getVerbDef->React.string}</td>
+                            <td>{term->Dictionary.Term.getAdDef->React.string}</td>
                             <td>{term->Dictionary.Term.getDescription->React.string}</td>
                         </tr>)
                     ->Belt.List.toArray

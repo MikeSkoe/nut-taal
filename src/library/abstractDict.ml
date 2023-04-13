@@ -19,8 +19,7 @@ module type TERMIN_DICTIONARY = sig
    include PARSABLE
    val getNounDef : t -> string
    val getVerbDef : t -> string
-   val getAdjDef : t -> string
-   val getAdvDef : t -> string
+   val getAdDef : t -> string
    val getDescription : t -> string
    val all : t list promise
 end

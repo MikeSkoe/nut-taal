@@ -88,8 +88,7 @@ module Make
                End
          in
          match
-            str
-            |> String.trim
+            String.trim str
             |> String.split_on_char ' '
          with
             | mark :: next when isMark mark -> iter (mark :: next)
