@@ -746,6 +746,13 @@ react@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
 
+rescript-url@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/rescript-url/-/rescript-url-0.1.3.tgz#a9de589e8959488ed2c7c77de216f02a087ad3a9"
+  integrity sha512-V+C8aUDoQPJq6V9jSMt9EMEc3IBhjydBxAdWh8FYBYx+Em/kyXV90P4cv7qBbg0Yd+CzFvIIMgfLNEwbxT9irQ==
+  dependencies:
+    rescript "^9.1.3"
+
 rescript-webapi@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/rescript-webapi/-/rescript-webapi-0.7.0.tgz#f8c61bf7383c82b6fe180ad045e16cb43b6299c0"
@@ -755,6 +762,11 @@ rescript@^10.1.0:
   version "10.1.2"
   resolved "https://registry.yarnpkg.com/rescript/-/rescript-10.1.2.tgz#ed3b8c762d6e22139803c16e765356685693e38c"
   integrity sha512-PPdhOiN+lwqxQ0qvzHc1KW0TL12LDy2X+qo/JIMIP3bMfiH0vxQH2e/lXuoutWWm04fGQGTv3hWH+gKW3/UyfA==
+
+rescript@^9.1.3:
+  version "9.1.4"
+  resolved "https://registry.yarnpkg.com/rescript/-/rescript-9.1.4.tgz#1eb126f98d6c16942c0bf0df67c050198e580515"
+  integrity sha512-aXANK4IqecJzdnDpJUsU6pxMViCR5ogAxzuqS0mOr8TloMnzAjJFu63fjD6LCkWrKAhlMkFFzQvVQYaAaVkFXw==
 
 resolve@^1.22.1:
   version "1.22.1"

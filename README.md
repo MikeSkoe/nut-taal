@@ -6,7 +6,7 @@ Noun: `a _` (`a` can be omited at the begining of a sencence of right after part
 
 Verb: `i _`
 
-Adjective / Adverb: `e _` or `NOUN _ _` or `VERB _ _`
+Adjective / Adverb: `e _` or `NOUN _ _` or `VERB _ _` (fold to the left)
 
 Particle: `... AND ...`
 

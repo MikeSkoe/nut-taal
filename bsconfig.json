@@ -21,6 +21,7 @@
     "@ryyppy/rescript-promise",
     "bs-fetch",
     "rescript-webapi",
+    "rescript-url",
     "@glennsl/bs-json"
   ],
   "bs-dev-dependencies": []

@@ -2,113 +2,102 @@
 
 module Lang = Language.Make (Dictionary.Term) (Dictionary.Conj)
 
-let rec rootEl = (root: Lang.Roots.t, onClick) => switch root {
-    | Root(root, End) => <span onClick={_ => onClick(root)}>{root->Dictionary.Term.show->React.string}</span>
-    | Root(root, next) => <>
-        <span onClick={_ => onClick(root)}>
-            {root->Dictionary.Term.show->React.string}
-            {Language.combMarkString->React.string}
-        </span>
-        {rootEl(next, onClick)}
-    </>
-    | Prop(root) => <u>{root->React.string}</u>
-    | _ => <></>
-}
-
-let nounEl = (root, onClick, isFirstWord) =>
-    <span className="noun">
-        {isFirstWord
-            ? React.null
-            : <>
-                {Dictionary.Conj.nounMark->React.string}
-                {" "->React.string}
-            </>}
-        {rootEl(root, onClick)}
-        {" "->React.string}
-    </span>
-
-let verbEl = (root, onClick) =>
-    <span className="verb">
-        {Dictionary.Conj.verbMark->React.string}
-        {" "->React.string}
-        {rootEl(root, onClick)}
-        {" "->React.string}
-    </span>
-
-let adEl = (root, onClick, isFirstWord) =>
-    <span className="ad">
-        {isFirstWord
-            ? <>
-                {Dictionary.Conj.adMark->React.string}
-                {" "->React.string}
-            </>
-            : React.null}
-        {" "->React.string}
-        {rootEl(root, onClick)}
-        {" "->React.string}
-    </span>
-
-let rec toEl = (pars: Lang.Lexs.t, onClick, ~isFirstWord = false, ()) => switch pars {
-    | End => <></>
-    | Noun(root, next) => <>
-        {nounEl(root, onClick, isFirstWord)}
-        {toEl(next, onClick, ())}
-    </>
-    | Verb(root, next) => <>
-        {verbEl(root, onClick)}
-        {toEl(next, onClick, ())}
-    </>
-    | Ad(root, next) => <>
-        {adEl(root, onClick, isFirstWord)}
-        {toEl(next, onClick, ())}
-    </>
-    | Con(root, Noun(noun, next)) =>
-        <>
-            <b>
-                {(Lang.Conjs.show(root)++" ")->React.string}
-            </b>
-            {toEl(Noun(noun, next), onClick, ~isFirstWord=true, ())}
-        </>
-    | Con(root, Ad(noun, next)) =>
-        <>
-            <b>
-                {(Lang.Conjs.show(root)++" ")->React.string}
-            </b>
-            {toEl(Ad(noun, next), onClick, ~isFirstWord=true, ())}
-        </>
-    | Con(root, next) =>
-        <>
-            <b>
-                {(Lang.Conjs.show(root)++" ")->React.string}
-            </b>
-            {toEl(next, onClick, ())}
-        </>
-}
-
-module Hint = {
-    @react.component
-    let make = (~str) => {
-        let term = Dictionary.Term.parse(str);
-        switch term {
-            | None => <></>
-            | Some(term) => {
-                <table className="is-striped">
-                    <tr>
-                        <th>{str->React.string}</th>
-                        <th>{"noun: "->React.string}{term->Dictionary.Term.getNounDef->React.string}</th>
-                        <th>{"verb: "->React.string}{term->Dictionary.Term.getVerbDef->React.string}</th>
-                        <th>{"ad: "->React.string}{term->Dictionary.Term.getAdDef->React.string}</th>
-                    </tr>
-                </table>
-            }
-        }
+let hint = (lex: Lang.Lexs.t) => {
+    switch lex {
+        | End =>
+            ""
+        | Noun(root, _) =>
+            root->Lang.Roots.fold(Dictionary.Term.getNounDef, "uknown")
+        | Verb(root, _) =>
+            root->Lang.Roots.fold(Dictionary.Term.getVerbDef, "uknown")
+        | Ad(root, _) =>
+            root->Lang.Roots.fold(Dictionary.Term.getAdDef, "uknown")
+        | Con(conj, _) =>
+            conj->Lang.Conjs.fold(Dictionary.Conj.getDef, "uknown")
     }
 }
 
-module Dict = {
+let rec rootEl = (root: Lang.Roots.t) => switch root {
+    | Root(root, End) =>
+        <span>
+            {root->Dictionary.Term.show->React.string}
+        </span>
+    | Root(root, next) => <>
+        <span>
+            {root->Dictionary.Term.show->React.string}
+            {Language.combMarkString->React.string}
+        </span>
+        {rootEl(next)}
+    </>
+    | Prop(root) =>
+        <u>
+            {root->React.string}
+        </u>
+    | _ =>
+        <></>
+}
+
+let nounEl = (root) =>
+    <span className="noun">
+        {rootEl(root)}
+        {" "->React.string}
+        <span className="tooltip">{hint(Lang.Lexs.Noun(root, End))->React.string}</span>
+    </span>
+
+let verbEl = (root) =>
+    <span className="verb">
+        {rootEl(root)}
+        {" "->React.string}
+        <span className="tooltip">{hint(Lang.Lexs.Verb(root, End))->React.string}</span>
+    </span>
+
+let adEl = (root) =>
+    <span className="ad">
+        {rootEl(root)}
+        {" "->React.string}
+        <span className="tooltip">{hint(Lang.Lexs.Ad(root, End))->React.string}</span>
+    </span>
+
+let auxEl = (conj) =>
+    <b>
+        {(Lang.Conjs.show(conj)++" ")->React.string}
+        {" "->React.string}
+        <span className="tooltip">{hint(Lang.Lexs.Con(conj, End))->React.string}</span>
+    </b>
+
+let rec toEl = (pars: Lang.Lexs.t) => switch pars {
+    | End => <></>
+    | Noun(root, next) => <> {nounEl(root)} {toEl(next)} </>
+    | Verb(root, next) => <> {verbEl(root)} {toEl(next)} </>
+    | Ad(root, next) => <> {adEl(root)} {toEl(next)} </>
+    | Con(conj, Noun(noun, next)) => <> {auxEl(conj)} {toEl(Noun(noun, next))} </>
+    | Con(conj, Ad(noun, next)) => <> {auxEl(conj)} {toEl(Ad(noun, next))} </>
+    | Con(conj, next) => <> {auxEl(conj)} {toEl(next)} </>
+}
+
+module DictionaryContext = {
+    let termsContext: React.Context.t<list<Dictionary.Term.t>> = React.createContext(list{});
+    let conjsContext: React.Context.t<list<Dictionary.Conj.t>> = React.createContext(list{}); 
+
+    module TermProvider = {
+        let make = React.Context.provider(termsContext);
+    }
+
+    module ConjProvider = {
+        let make = React.Context.provider(conjsContext);
+    }
+
     @react.component
-    let make = () => {
+    let make = (~children) => {
         let (terms, setTerms) = React.useState(_ => list{})
+        let (conjs, setConjs) = React.useState(_ => list{})
+
+        React.useEffect0(() => {
+            Dictionary.Conj.all
+            |> Js.Promise.then_ (conjs => setConjs(_ => conjs)->Js.Promise.resolve)
+            |> ignore;
+            None;
+        })
 
         React.useEffect0(() => {
             Dictionary.Term.all
@@ -116,6 +105,19 @@ module Dict = {
             |> ignore;
             None;
         })
+
+        <TermProvider value={terms}>
+            <ConjProvider value={conjs}>
+                {children}
+            </ConjProvider>
+        </TermProvider>
+    }
+}
+
+module Dict = {
+    @react.component
+    let make = () => {
+        let terms = React.useContext(DictionaryContext.termsContext)
 
         <table className="is-striped">
             <thead>
@@ -149,14 +151,7 @@ module Dict = {
 module ConjDict = {
     @react.component
     let make = () => {
-        let (terms, setTerms) = React.useState(_ => list{})
-
-        React.useEffect0(() => {
-            Dictionary.Conj.all
-            |> Js.Promise.then_ (terms => setTerms(_ => terms)->Js.Promise.resolve)
-            |> ignore;
-            None;
-        })
+        let conjs = React.useContext(DictionaryContext.conjsContext);
 
         <table className="is-striped">
             <thead>
@@ -168,12 +163,12 @@ module ConjDict = {
             </thead>
             <tbody>
                 {
-                    terms
-                    ->Belt.List.map(term =>
-                        <tr key={term->Dictionary.Conj.show}>
-                            <td>{term->Dictionary.Conj.show->React.string}</td>
-                            <td>{term->Dictionary.Conj.getDef->React.string}</td>
-                            <td>{term->Dictionary.Conj.getDescription->React.string}</td>
+                    conjs
+                    ->Belt.List.map(conj =>
+                        <tr key={conj->Dictionary.Conj.show}>
+                            <td>{conj->Dictionary.Conj.show->React.string}</td>
+                            <td>{conj->Dictionary.Conj.getDef->React.string}</td>
+                            <td>{conj->Dictionary.Conj.getDescription->React.string}</td>
                         </tr>)
                     ->Belt.List.toArray
                     ->React.array
@@ -183,21 +178,34 @@ module ConjDict = {
     }
 }
 
+module Parser = {
+    @react.component
+    let make = (~text) => {
+        let (input, setInput) = React.useState(_ => text);
+        let onChange = event => setInput((event->ReactEvent.Form.target)["value"]);
+
+        <>
+            <div>{input->Lang.Lexs.parse->toEl}</div>
+            <textarea onChange={onChange} inputMode="text"/>
+        </>
+    }
+}
+
 @react.component
 let make = () => {
-    let (hint, setHint) = React.useState(_ => "");
-    let (input, setInput) = React.useState(_ => "");
-    let onChange = event => setInput((event->ReactEvent.Form.target)["value"])
+    let url = RescriptReactRouter.useUrl();
 
-    <div className="flex" direction="column">
-        <textarea onChange={onChange} inputMode="text"/>
-        <div>{
-            input
-            ->Lang.Lexs.parse
-            ->toEl(str => setHint(_ => str->Dictionary.Term.show), ~isFirstWord=true, ())
-        }</div>
-        <Hint str={hint} />
-        <Dict />
-        <ConjDict />
-    </div>
+    <DictionaryContext>
+        <>
+            {switch url.path {
+                | list{"text", text} => <Parser text={text->Js.String2.replaceByRe(%re("/_/g"), " ")} />
+                | _ => <Parser text="" />
+            }}
+
+            <div className="flex" direction="column">
+                <Dict />
+                <ConjDict />
+            </div>
+        </>
+    </DictionaryContext>
 }

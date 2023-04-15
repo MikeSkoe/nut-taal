@@ -12,6 +12,10 @@ module Make
          | Root of TD.t * t
          | Prop of string
          | End
+      
+      let fold t fn default = match t with
+         | Root (t, _) -> fn t
+         | Prop _ | End -> default
 
       let show t =
          let rec iter t = match t with
@@ -35,8 +39,12 @@ module Make
 
    module Conjs = struct
       type t =
-         | End
          | Conj of CD.t
+         | End
+
+      let fold t fn default = match t with
+         | Conj t -> fn t
+         | End -> default
 
       let show t = match t with
         | Conj str -> CD.show str
