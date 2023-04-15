@@ -1,0 +1,1 @@
+module Lang = Language.Make (Dictionary.Term) (Dictionary.Conj)
