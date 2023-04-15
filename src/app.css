@@ -30,6 +30,11 @@ body {
     border-bottom: 1px solid var(--purple);
 }
 
+.aux {
+    position: relative;
+    font-weight: bolder;
+}
+
 .tooltip {
     visibility: hidden;
     position: absolute;
