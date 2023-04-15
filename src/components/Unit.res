@@ -51,46 +51,50 @@ module Tooltip = {
 
 module Noun = {
     @react.component
-    let make = (~root) => {
+    let make = (~root, ~children) => <>
         <span className="noun">
-            <Root root={root} />
             {" "->React.string}
+            <Root root={root} />
             <Tooltip hint={hint(Lang.Lexs.Noun(root, End))} />
         </span>
-    }
+        {children}
+    </>
 }
 
 module Verb = {
     @react.component
-    let make = (~root) => {
+    let make = (~root, ~children) => <>
         <span className="verb">
-            <Root root=root />
             {" "->React.string}
+            <Root root=root />
             <Tooltip hint={hint(Lang.Lexs.Verb(root, End))} />
         </span>
-    }
+        {children}
+    </>
 }
 
 module Ad = {
     @react.component
-    let make = (~root) => {
+    let make = (~root, ~children) => <>
         <span className="ad">
-            <Root root=root />
             {" "->React.string}
+            <Root root=root />
             <Tooltip hint={hint(Lang.Lexs.Ad(root, End))} />
         </span>
-    }
+        {children}
+    </>
 }
 
 module Aux = {
     @react.component
-    let make = (~conj) => {
+    let make = (~conj, ~children) => <>
         <span className="aux">
-            {(Lang.Conjs.show(conj)++" ")->React.string}
             {" "->React.string}
+            {(Lang.Conjs.show(conj)++" ")->React.string}
             <Tooltip hint={hint(Lang.Lexs.Con(conj, End))} />
         </span>
-    }
+        {children}
+    </>
 }
 
 module rec El: {
@@ -99,30 +103,19 @@ module rec El: {
 } = {
     @react.component
     let make = (~pars: Lang.Lexs.t) => switch pars {
-        | End => <></>
-        | Noun(root, next) => <>
-            <Noun root=root />
-            <El pars=next />
-        </>
-        | Verb(root, next) => <>
-            <Verb root=root />
-            <El pars=next />
-        </>
-        | Ad(root, next) => <>
-            <Ad root=root />
-            <El pars=next />
-        </>
-        | Con(conj, Noun(noun, next)) => <>
-            <Aux conj=conj />
-            <El pars=Noun(noun, next) />
-        </>
-        | Con(conj, Ad(noun, next)) => <>
-            <Aux conj=conj />
-            <El pars=Ad(noun, next) />
-        </>
-        | Con(conj, next) => <>
-            <Aux conj=conj />
-            <El pars=next />
-        </>
+        | End =>
+            <></>
+        | Noun(root, next) =>
+            <Noun root=root> <El pars=next /> </Noun>
+        | Verb(root, next) =>
+            <Verb root=root> <El pars=next /> </Verb>
+        | Ad(root, next) =>
+            <Ad root=root> <El pars=next /> </Ad>
+        | Con(conj, Noun(noun, next)) =>
+            <Aux conj=conj> <El pars=Noun(noun, next) /> </Aux>
+        | Con(conj, Ad(noun, next)) =>
+            <Aux conj=conj> <El pars=Ad(noun, next) /> </Aux>
+        | Con(conj, next) =>
+            <Aux conj=conj> <El pars=next /> </Aux>
     }
 }

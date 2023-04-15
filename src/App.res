@@ -10,7 +10,14 @@ module Parser = {
 
         <>
             <div>
-                <Unit.El pars={input->Lang.Lexs.parse} />
+                {String.split_on_char('.', input)
+                ->Belt.List.map(string => <>
+                    <Unit.El pars={string->Js.String2.trim->Lang.Lexs.parse} />
+                    {"."->React.string}
+                </>)
+                ->Belt.List.toArray
+                ->React.array
+                }
             </div>
             <textarea onChange inputMode="text"/>
         </>
