@@ -32,7 +32,7 @@ var dict = {
   contents: MyDict.empty
 };
 
-var dictProm = loadDict("/dictionary.csv", dict, (function (line) {
+var dictProm = loadDict("dictionary.csv", dict, (function (line) {
         return {
                 str: Belt_List.getExn(line, 0),
                 noun: Belt_List.getExn(line, 1),
@@ -86,7 +86,7 @@ var dict$1 = {
   contents: MyDict.empty
 };
 
-var dictProm$1 = loadDict("/auxiliary.csv", dict$1, (function (line) {
+var dictProm$1 = loadDict("auxiliary.csv", dict$1, (function (line) {
         return {
                 str: Belt_List.getExn(line, 0),
                 definition: Belt_List.getExn(line, 1),

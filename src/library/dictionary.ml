@@ -34,7 +34,7 @@ module Term: TERMIN_DICTIONARY = struct
 
    let dict: t MyDict.t ref = ref MyDict.empty
 
-   let dictProm = Utils.loadDict "/dictionary.csv" dict
+   let dictProm = Utils.loadDict "dictionary.csv" dict
       (fun line -> ({
          str=(Belt.List.getExn line 0);
          noun=(Belt.List.getExn line 1);
@@ -70,7 +70,7 @@ module Conj: CONJ_DICTIONARY = struct
 
    let dict: t MyDict.t ref = ref MyDict.empty
    
-   let dictProm = Utils.loadDict "/auxiliary.csv" dict
+   let dictProm = Utils.loadDict "auxiliary.csv" dict
       (fun line -> ({
          str=(Belt.List.getExn line 0);
          definition=(Belt.List.getExn line 1);
