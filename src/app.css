@@ -17,20 +17,19 @@ body {
 
 .noun {
     position: relative;
-    border-bottom: 1px solid var(--orange);
 }
 
 .verb {
     position: relative;
-    border-bottom: 1px solid var(--green);
+    color: var(--primary);
 }
 
 .ad {
     position: relative;
-    border-bottom: 1px solid var(--purple);
+    color: #999;
 }
 
-.aux {
+.conj {
     position: relative;
     font-weight: bolder;
 }

@@ -65,43 +65,73 @@ module Make
 
       let isMark str = List.mem str [CD.nounMark; CD.verbMark; CD.adMark]
 
+      type pending = P_N | P_V | P_A
+
+      let parse str =
+         let rec iter pending strs = 
+            match (pending, strs) with
+               | (_, [])
+                  -> End
+               
+               | (_, conj :: next) when CD.mem conj
+                  -> Con(Conjs.parse conj, iter P_N next)
+
+               | (_, mark :: word :: next) when mark = CD.nounMark && not (isMark word)
+                  -> Noun(Roots.parse word, iter P_V next)
+               | (_, mark :: word :: next) when mark = CD.verbMark && not (isMark word)
+                  -> Verb(Roots.parse word, iter P_N next)
+               | (_, mark :: word :: next) when mark = CD.adMark && not (isMark word)
+                  -> Ad(Roots.parse word, iter P_A next)
+
+               | (P_N, word :: next)
+                  -> Noun(Roots.parse word, iter P_V next)
+               | (P_V, word :: next)
+                  -> Verb(Roots.parse word, iter P_N next)
+               | (P_A, word :: next)
+                  -> Ad(Roots.parse word, iter P_A next)
+            in
+            String.trim str
+            |> String.split_on_char ' '
+            |> iter P_N
+
+         let mem str = parse str != End
+
       let show lex =
          let rec iter lex = match lex with
             | End -> []
-            | Noun(root, next) -> CD.nounMark :: Roots.show root :: iter next
-            | Verb(root, next) -> CD.verbMark :: Roots.show root :: iter next
-            | Ad(root, next) -> CD.adMark :: Roots.show root :: iter next
-            | Con(conj, next) -> Conjs.show conj :: iter next
+
+            | Noun(root, Ad(root', next))
+               -> Roots.(show root) :: CD.adMark :: (iter @@ Ad(root', next))
+            | Verb(root, Ad(root', next))
+               -> Roots.(show root) :: CD.adMark :: (iter @@ Ad(root', next))
+
+            | Noun(root, Verb(root', Ad(root'', next)))
+               -> Roots.(show root) :: CD.verbMark :: (iter @@ Verb(root', Ad(root'', next)))
+            | Verb(root, Noun(root', Ad(root'', next)))
+               -> Roots.(show root) :: CD.verbMark :: (iter @@ Verb(root', Ad(root'', next)))
+
+            | Noun(root, Noun(root', next))
+               -> Roots.(show root) :: CD.nounMark :: (iter @@ Noun(root', next))
+            | Verb(root, Verb(root', next))
+               -> Roots.(show root) :: CD.nounMark :: (iter @@ Verb(root', next))
+
+            | Noun(root, next)
+               -> Roots.(show root) :: iter next
+            | Verb(root, next)
+               -> Roots.(show root) :: iter next
+
+            | Ad(root, Noun(root', next))
+               -> Roots.show root :: CD.nounMark :: (iter @@ Noun(root', next))
+            | Ad(root, Verb(root', next))
+               -> Roots.show root :: CD.verbMark :: (iter @@ Verb(root', next))
+            | Ad(root, next)
+               -> Roots.show root :: iter next
+
+            | Con(conj, next)
+               -> Conjs.show conj :: iter next
          in
-         (match iter lex with
-            | word :: next when word = CD.nounMark -> next
-            | words -> words
-         )
+         iter lex
          |> List.fold_left (fun acc curr -> acc ^ " " ^ curr) ""
-
-      let parse str =
-         let rec iter strs = match strs with
-            | mark :: word :: next when mark = CD.nounMark ->
-               Noun(Roots.parse word, iter next)
-            | mark :: word :: next when mark = CD.verbMark ->
-               Verb(Roots.parse word, iter next)
-            | mark :: word :: next when mark = CD.adMark ->
-               Ad(Roots.parse word, iter next)
-            | mark :: word :: next when CD.mem mark ->
-               let next = if isMark word then word :: next else CD.nounMark :: word :: next in
-               Con(Conjs.parse mark, iter next)
-            | word :: next ->
-               iter (CD.adMark :: word :: next)
-            | [] ->
-               End
-         in
-         match
-            String.trim str
-            |> String.split_on_char ' '
-         with
-            | mark :: next when isMark mark -> iter (mark :: next)
-            | next -> iter (CD.nounMark :: next)
-
-         let mem str = parse str != End
+         |> String.trim
    end
 end

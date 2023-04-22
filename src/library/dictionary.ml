@@ -8,7 +8,7 @@ module Utils = struct
       |> Js.Promise.then_ (fun text ->
          let words = Belt.List.map
             (String.split_on_char '\n' text)
-            (String.split_on_char ',')
+            (String.split_on_char ';')
          in
          dict := Belt.List.reduce
             words

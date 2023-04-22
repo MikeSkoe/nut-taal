@@ -85,10 +85,10 @@ module Ad = {
     </>
 }
 
-module Aux = {
+module Conj = {
     @react.component
     let make = (~conj, ~children) => <>
-        <span className="aux">
+        <span className="conj">
             {" "->React.string}
             {(Lang.Conjs.show(conj)++" ")->React.string}
             <Tooltip hint={hint(Lang.Lexs.Con(conj, End))} />
@@ -112,10 +112,10 @@ module rec El: {
         | Ad(root, next) =>
             <Ad root=root> <El pars=next /> </Ad>
         | Con(conj, Noun(noun, next)) =>
-            <Aux conj=conj> <El pars=Noun(noun, next) /> </Aux>
+            <Conj conj=conj> <El pars=Noun(noun, next) /> </Conj>
         | Con(conj, Ad(noun, next)) =>
-            <Aux conj=conj> <El pars=Ad(noun, next) /> </Aux>
+            <Conj conj=conj> <El pars=Ad(noun, next) /> </Conj>
         | Con(conj, next) =>
-            <Aux conj=conj> <El pars=next /> </Aux>
+            <Conj conj=conj> <El pars=next /> </Conj>
     }
 }

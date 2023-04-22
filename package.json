@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "author": "Mikhail Skorykh",
   "license": "MIT",
-  "type": "module",
+  "type": "commonjs",
   "keywords": [
     "reason-react",
     "ReScript",
@@ -13,7 +13,7 @@
     "auxiliary"
   ],
   "engines": {
-    "node": "^16",
+    "node": "^18",
     "npm": "^8"
   },
   "scripts": {
@@ -23,7 +23,8 @@
     "format:js": "prettier --write \"**/*.{js,json,md,yml}\"",
     "format:res": "rescript format -all",
     "serve": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "test": "ava"
   },
   "dependencies": {
     "@glennsl/bs-json": "^5.0.4",
@@ -39,8 +40,10 @@
     "rescript-webapi": "^0.7.0"
   },
   "devDependencies": {
+    "@dzakh/rescript-ava": "^2.1.0",
     "@jihchi/vite-plugin-rescript": "^5.0.0",
     "@vitejs/plugin-react": "^3.0.0",
+    "ava": "5.1.x",
     "prettier": "^2.8.1",
     "vite": "^4.0.0"
   },
@@ -58,6 +61,12 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "ava": {
+    "files": [
+      "__tests__/**/*_test.mjs",
+      "__tests__/**/*_test.bs.js"
     ]
   }
 }

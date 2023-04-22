@@ -1,15 +1,15 @@
 {
   "name": "code-ish-app",
-  "suffix": ".bs.js",
+  "suffix": ".mjs",
   "jsx": { "version": 4, "mode": "classic" },
   "bsc-flags": [
     "-bs-super-errors",
     "-bs-no-version-header"
   ],
-  "sources": {
-    "dir": "src",
-    "subdirs": true
-  },
+  "sources": [
+    { "dir": "src", "subdirs": true },
+    { "dir": "__tests__", "subdirs": true, "type": "dev" }
+  ],
   "package-specs": [
     {
       "module": "es6",
@@ -24,5 +24,7 @@
     "rescript-url",
     "@glennsl/bs-json"
   ],
-  "bs-dev-dependencies": []
+  "bs-dev-dependencies": [
+    "@dzakh/rescript-ava"
+  ]
 }

@@ -1,24 +1,106 @@
-ek,I/me,,My,
-jy,You,,Your,
-dit,This/he/she/it,,This,
-dat,That/he/she/it,,That,
-hulle,They,,,
-nie,,To negotiate ,Not,
-het,Property,To have,Available,
-binne,Interior,To put inside,Inside,
-lief,Love,To love,Lovely,
-naam,Name,To call/to name,,
-persoon,Person,,,
-tik,Type,,,
-gaan,Way,To go,,
-beeld,Image,,,
-vra,Question,To ask,,
-skryf,Letter/Article,To write,,
-sin,,To see/to watch,,
-wat,What/which,,,
-dag,Day,,,
-probeer ,,To try,,
-maklik,,,Easy,
-taal,language,To speak,,
-val,fall,,Falling,
-hulle,They,,,
+binne;Interior;to put inside/to push;inside;Direction
+buite;distance;to pull;out;Direction
+post;;;post/after;Direction
+pre;;;before;Direction
+of;;;under/down;Direction
+op;;to win;above/up;Direction
+by;;;near/close to;Direction
+kant;side/direction;;;Direction
+een;one;;;Numbers
+bi;two;;;Numbers
+al;finish/end;to finish;already/yet/all;Numbers
+nie;negotiation/none;to refuse;not;Numbers
+dat;;;that;Pronoun
+dit;;;this;Pronoun
+sy;he/she/it/they;;;Pronoun
+my;I/me;;my;Pronoun
+jy;you;;your;Pronoun
+antwoord;;;;
+basis;base;;;
+beeld;image;to draw;;
+begin;;to start;;
+besig;busy;;;
+bruik;;to use;;
+brutaal;;;angry/brutal;
+dag;day;;;
+data;data;;;
+demo;demo;to show/to present;;
+dier;animal;;;
+doen;;to do/to make;;
+donker;darkness;;;
+funksie;function;;;
+gaan;;to go;;
+gee;;to give;;
+goed;good;;;
+grasie;grace;to thank;graceful;
+hart;heart;;;
+heid;property;;specific;
+het;property/possession;to have;available;
+hoop;hope;;;
+is;life;to be;;
+kan;;to able to;able;
+leer;;to learn;;
+lief;love;to love;lovely/dear;
+lig;light;to glow;light;
+lyk;;to see/to watch/to browse;alike;
+maklik;;;easy;
+man;male;;;
+meer;;;more, many, a lot;
+mens;human;;;
+min;minimum;to reduce/to fold;small;
+moeilik;;;hard/difficult;
+mooi;;;beautiful/pretty;
+motor;car/motor;;;
+naam;name/word;to call, to name;called, named;
+nuwe;news;;new;
+ook;also;;;
+opsie;option;to choose/to decide;;
+plant;plant;to plant;;
+plig;should/mast/duty;;;
+probeer;;to try;;
+rede;reason;;;
+roete;route;;;
+rond;rond/circle;;around;
+sien;;to watch;;
+sit;;to sit/to put;;
+skryf;note;to write;;
+soos;;reminds of;alike;
+speel;game;to play;;
+sterk;;;strong;
+stof;substance/material;;;
+stoor;;to save;;
+stoor;;to save/;;
+swak;;;weak;
+taal;language;to speak;;
+trek;;to take;attractive/interesting;
+val;;to fall/to attack;;
+vind;;to find;;
+vis;fish;;;
+vloei;flow;;;
+vraag;question;to ask;curious;
+vrou;female;;;
+wag;expectation;to wait;expected;
+was;was;;;
+wat;what/which;;;
+water;water;;;
+werk;job/work;to work;;
+wil;will;to want;;
+wolg;;to follow;;
+woord;word;;;
+nodig;need;;;
+inter;;;between/inter;
+plan;plan;;;
+bou;;;;
+help;help;;;
+vry;free;;;
+teen;opponent;;against;
+kom;;to come;;
+weet;knowledge;to know;;
+moet;should;;;
+sommige;something;;;
+vrees;fear;;;
+loop;walk;;;
+hard;;;intensive;
+sag;;;soft;
+luk;luck/happiness;;lucky/happy;
+verstaan;understanding;;;
