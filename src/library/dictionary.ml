@@ -33,7 +33,6 @@ module Term: TERMIN_DICTIONARY = struct
    }
 
    let dict: t MyDict.t ref = ref MyDict.empty
-   let compDict: t MyDict.t ref = ref MyDict.empty
 
    let dictProm = Utils.loadDict "dictionary.csv" dict
       (fun line -> ({
@@ -43,19 +42,10 @@ module Term: TERMIN_DICTIONARY = struct
          ad=(Belt.List.getExn line 3);
          description=(Belt.List.getExn line 4);
       }))
-   let compoundProm = Utils.loadDict "compound.csv" compDict
-      (fun line -> ({
-         str=(Belt.List.getExn line 0);
-         noun=(Belt.List.getExn line 1);
-         verb=(Belt.List.getExn line 2);
-         ad=(Belt.List.getExn line 3);
-         description=(Belt.List.getExn line 4);
-      }))
 
-   let all = Js.Promise.all2 (dictProm, compoundProm)
-      |> Js.Promise.then_ (fun (dict, compDict) ->
-         let bindings = Belt.List.concat (MyDict.bindings dict) (MyDict.bindings compDict) in
-         Belt.List.map bindings (fun (_, term) -> term)
+   let all = dictProm
+      |> Js.Promise.then_ (fun dict ->
+         Belt.List.map (MyDict.bindings dict) (fun (_, term) -> term)
          |> Js.Promise.resolve
       )
 

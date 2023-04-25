@@ -3,7 +3,6 @@
 import * as Lang from "../Lang.mjs";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
-import * as Language from "../library/language.mjs";
 import * as Dictionary from "../library/dictionary.mjs";
 import * as Caml_module from "rescript/lib/es6/caml_module.js";
 
@@ -40,18 +39,14 @@ function Unit$Root(props) {
   var root = props.root;
   if (typeof root === "number") {
     return React.createElement(React.Fragment, undefined);
-  }
-  if (root.TAG !== /* Root */0) {
-    return React.createElement("u", undefined, root._0);
-  }
-  var next = root._1;
-  var root$1 = root._0;
-  if (typeof next === "number") {
-    return React.createElement("span", undefined, Dictionary.Term.show(root$1));
-  } else {
-    return React.createElement(React.Fragment, undefined, React.createElement("span", undefined, Dictionary.Term.show(root$1), Language.combMarkString), React.createElement(Root.make, {
-                    root: next
+  } else if (root.TAG === /* Root */0) {
+    return React.createElement("span", undefined, Curry._1(Lang.Lang.Roots.show, {
+                    TAG: /* Root */0,
+                    _0: root._0,
+                    _1: root._1
                   }));
+  } else {
+    return React.createElement("u", undefined, root._0);
   }
 }
 
@@ -151,7 +146,7 @@ var Conj = {
 
 var El = Caml_module.init_mod([
       "Unit.res",
-      103,
+      95,
       4
     ], {
       TAG: /* Module */0,

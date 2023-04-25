@@ -8,6 +8,11 @@ import * as Caml_option from "rescript/lib/es6/caml_option.js";
 
 var combMarkString = "-";
 
+function log(a) {
+  console.log(a);
+  return a;
+}
+
 function Make(TD, CD) {
   var fold = function (t, fn, $$default) {
     if (typeof t === "number" || t.TAG !== /* Root */0) {
@@ -45,13 +50,32 @@ function Make(TD, CD) {
       if (!strings) {
         return /* End */0;
       }
+      var next = strings.tl;
       var word = strings.hd;
-      var word$1 = Curry._1(TD.parse, word);
+      var compound = Belt_List.reduce({
+            hd: word,
+            tl: next
+          }, "", (function (acc, curr) {
+              if (acc === "") {
+                return curr;
+              } else {
+                return acc + (combMarkString + curr);
+              }
+            }));
+      var word$1 = Curry._1(TD.parse, compound);
       if (word$1 !== undefined) {
         return {
                 TAG: /* Root */0,
                 _0: Caml_option.valFromOption(word$1),
-                _1: iter(strings.tl)
+                _1: /* End */0
+              };
+      }
+      var word$2 = Curry._1(TD.parse, word);
+      if (word$2 !== undefined) {
+        return {
+                TAG: /* Root */0,
+                _0: Caml_option.valFromOption(word$2),
+                _1: iter(next)
               };
       } else {
         return {
@@ -170,7 +194,9 @@ function Make(TD, CD) {
         
       }
     };
-    return iter(/* P_N */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str)));
+    var a = iter(/* P_N */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str)));
+    console.log(a);
+    return a;
   };
   var mem = function (str) {
     return parse$2(str) !== /* End */0;
@@ -367,6 +393,7 @@ var combMark = /* '-' */45;
 export {
   combMark ,
   combMarkString ,
+  log ,
   Make ,
 }
 /* No side effect */

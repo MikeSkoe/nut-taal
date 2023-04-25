@@ -22,21 +22,13 @@ module rec Root: {
     @react.component
     let make = (~root: Lang.Roots.t) => {
         switch root {
-            | Root(root, End) => <span>
-                {root->Dictionary.Term.show->React.string}
+            | Root(root, next) => <span>
+                {Root(root, next)->Lang.Roots.show->React.string}
             </span>
-            | Root(root, next) => <>
-                <span>
-                    {root->Dictionary.Term.show->React.string}
-                    {Language.combMarkString->React.string}
-                </span>
-                <Root root=next />
-            </>
             | Prop(root) => <u>
                 {root->React.string}
             </u>
-            | _ =>
-                <></>
+            | _ => <></>
         }
     }
 }

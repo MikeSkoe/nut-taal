@@ -32,10 +32,6 @@ var dict = {
   contents: MyDict.empty
 };
 
-var compDict = {
-  contents: MyDict.empty
-};
-
 var dictProm = loadDict("dictionary.csv", dict, (function (line) {
         return {
                 str: Belt_List.getExn(line, 0),
@@ -46,25 +42,11 @@ var dictProm = loadDict("dictionary.csv", dict, (function (line) {
               };
       }));
 
-var compoundProm = loadDict("compound.csv", compDict, (function (line) {
-        return {
-                str: Belt_List.getExn(line, 0),
-                noun: Belt_List.getExn(line, 1),
-                verb: Belt_List.getExn(line, 2),
-                ad: Belt_List.getExn(line, 3),
-                description: Belt_List.getExn(line, 4)
-              };
-      }));
-
-var all = Js_promise.then_((function (param) {
-        var bindings = Belt_List.concat(Curry._1(MyDict.bindings, param[0]), Curry._1(MyDict.bindings, param[1]));
-        return Promise.resolve(Belt_List.map(bindings, (function (param) {
+var all = Js_promise.then_((function (dict) {
+        return Promise.resolve(Belt_List.map(Curry._1(MyDict.bindings, dict), (function (param) {
                           return param[1];
                         })));
-      }), Promise.all([
-          dictProm,
-          compoundProm
-        ]));
+      }), dictProm);
 
 function parse(string) {
   return Curry._2(MyDict.find_opt, string, dict.contents);

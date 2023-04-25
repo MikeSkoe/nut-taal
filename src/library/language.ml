@@ -3,6 +3,10 @@ include AbstractDict
 let combMark = '-'
 let combMarkString = "-"
 
+let log a =
+   Js.log a;
+   a
+
 module Make
    (TD: TERMIN_DICTIONARY)
    (CD: CONJ_DICTIONARY)
@@ -28,9 +32,15 @@ module Make
       let parse str =
          let rec iter strings = match strings with
             | word :: next -> (
-               match TD.parse word with
-               | Some(word) -> Root(word, iter next)
-               | None -> Prop(word)
+               let
+                  compound = Belt.List.reduce (word :: next) "" (fun acc curr -> if acc = "" then curr else acc ^ combMarkString ^ curr)
+               in
+               match TD.parse compound with
+               | Some(word) -> Root(word, End)
+               | None -> (match TD.parse word with
+                  | Some(word) -> Root(word, iter next)
+                  | None -> Prop(word)
+               )
             )
             | [] -> End
          in
@@ -93,6 +103,7 @@ module Make
             String.trim str
             |> String.split_on_char ' '
             |> iter P_N
+            |> log
 
          let mem str = parse str != End
 
