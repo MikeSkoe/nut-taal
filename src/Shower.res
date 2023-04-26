@@ -8,16 +8,20 @@ module Tooltip = {
         </span>
 }
 
-let render = (className, prefix, (known, word, def)) => 
+let render = (className, prefix, (known, word, def)) => {
+    let onClick = React.useContext(DictionaryContext.onWordClickContext);
+
     <span className>
         {known
             ? <>
-                <span>{`${prefix}${word}`->React.string}</span>
+                <span onClick={_ => onClick(word)}>{`${prefix}${word}`->React.string}</span>
                 <Tooltip hint={def} />
             </>
             : <u>{`${prefix}${word}`->React.string}</u>
         }
     </span>;
+}
+
 let unit = (render, tuples): t => switch tuples {
     | list{data, ...next} => <>
         {render(" ", data)}

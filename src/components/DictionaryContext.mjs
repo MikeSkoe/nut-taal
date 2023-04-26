@@ -9,16 +9,26 @@ var termsContext = React.createContext(/* [] */0);
 
 var conjsContext = React.createContext(/* [] */0);
 
-var make = termsContext.Provider;
+var onWordClickContext = React.createContext(function (param) {
+      
+    });
 
-var TermProvider = {
+var make = onWordClickContext.Provider;
+
+var OnWordClickProvider = {
   make: make
 };
 
-var make$1 = conjsContext.Provider;
+var make$1 = termsContext.Provider;
+
+var TermProvider = {
+  make: make$1
+};
+
+var make$2 = conjsContext.Provider;
 
 var ConjProvider = {
-  make: make$1
+  make: make$2
 };
 
 function DictionaryContext(props) {
@@ -44,22 +54,24 @@ function DictionaryContext(props) {
                                   })));
                 }), Dictionary.Term.all);
         }), []);
-  return React.createElement(make, {
+  return React.createElement(make$1, {
               value: match[0],
-              children: React.createElement(make$1, {
+              children: React.createElement(make$2, {
                     value: match$1[0],
                     children: props.children
                   })
             });
 }
 
-var make$2 = DictionaryContext;
+var make$3 = DictionaryContext;
 
 export {
   termsContext ,
   conjsContext ,
+  onWordClickContext ,
+  OnWordClickProvider ,
   TermProvider ,
   ConjProvider ,
-  make$2 as make,
+  make$3 as make,
 }
 /* termsContext Not a pure module */

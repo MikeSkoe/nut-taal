@@ -2,6 +2,11 @@ open AbstractDict;
 
 let termsContext: React.Context.t<list<term>> = React.createContext(list{});
 let conjsContext: React.Context.t<list<conjTerm>> = React.createContext(list{}); 
+let onWordClickContext: React.Context.t<string => unit> = React.createContext(_ => ());
+
+module OnWordClickProvider = {
+    let make = React.Context.provider(onWordClickContext);
+}
 
 module TermProvider = {
     let make = React.Context.provider(termsContext);
