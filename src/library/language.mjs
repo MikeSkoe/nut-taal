@@ -35,17 +35,17 @@ function Make(TD, CD, SH) {
                   if (acc === "") {
                     return curr;
                   } else {
-                    return acc + (combMarkString + curr);
+                    return "" + acc + "" + combMarkString + "" + curr + "";
                   }
                 }));
   };
   var parse = function (str) {
-    var iter = function (strings) {
-      if (!strings) {
+    var iter = function (str) {
+      if (!str) {
         return /* End */0;
       }
-      var next = strings.tl;
-      var word = strings.hd;
+      var next = str.tl;
+      var word = str.hd;
       var compound = Belt_List.reduce({
             hd: word,
             tl: next
@@ -53,7 +53,7 @@ function Make(TD, CD, SH) {
               if (acc === "") {
                 return curr;
               } else {
-                return acc + (combMarkString + curr);
+                return "" + acc + "" + combMarkString + "" + curr + "";
               }
             }));
       var word$1 = Curry._1(TD.parse, compound);
