@@ -8,23 +8,59 @@ module Tooltip = {
         </span>
 }
 
-let wrapNoun = (noun, def): t =>
-    <span className="noun">
-        <span>{` ${noun}`->React.string}</span>
-        <Tooltip hint={def} />
-    </span>
+let wrapNoun = (tuples): t => {
+    let render = (prefix, (noun, def)) => 
+        <span className="noun">
+            <span>{`${prefix}${noun}`->React.string}</span>
+            <Tooltip hint={def} />
+        </span>;
+    switch tuples {
+        | list{(noun, def), ...next} => <>
+            {render(" ", (noun, def))}
+            {next
+            ->Belt.List.map(render("-"))
+            ->Belt.List.toArray
+            ->React.array}
+        </>
+        | list{} => <></>
+    }
+}
 
-let wrapVerb = (verb, def) =>
-    <span className="verb">
-        <span>{` ${verb}`->React.string}</span>
-        <Tooltip hint={def} />
-    </span>
+let wrapVerb = (tuples): t => {
+    let render = (prefix, (verb, def)) => 
+        <span className="verb">
+            <span>{`${prefix}${verb}`->React.string}</span>
+            <Tooltip hint={def} />
+        </span>
+    switch tuples {
+        | list{(verb, def), ...next} => <>
+            {render(" ", (verb, def))}
+            {next
+            ->Belt.List.map(render("-"))
+            ->Belt.List.toArray
+            ->React.array}
+        </>
+        | list{} => <></>
+    }
+}
 
-let wrapAd = (ad, def) =>
-    <span className="ad">
-        <span>{` ${ad}`->React.string}</span>
-        <Tooltip hint={def} />
-    </span>
+let wrapAd = (tuples): t => {
+    let render = (prefix, (ad, def)) => 
+        <span className="ad">
+            <span>{`${prefix}${ad}`->React.string}</span>
+            <Tooltip hint={def} />
+        </span>
+    switch tuples {
+        | list{(ad, def), ...next} => <>
+            {render(" ", (ad, def))}
+            {next
+            ->Belt.List.map(render("-"))
+            ->Belt.List.toArray
+            ->React.array}
+        </>
+        | list{} => <></>
+    }
+}
 
 let wrapConj = (conj, def) =>
     <span className="conj">

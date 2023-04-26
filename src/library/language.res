@@ -118,45 +118,57 @@ module Make = (
       let mem = str => parse(str) != End;
 
       let show = lex => {
-         let n = SH.wrapNoun;
-         let v = SH.wrapVerb;
-         let a = SH.wrapAd;
          let m = SH.wrapMark;
          let p = SH.wrapPunctuation;
-         let c = SH.wrapConj;
-         let nd = root => Roots.fold(root, t => t.noun, "unknown");
-         let vd = root => Roots.fold(root, t => t.verb, "unknown");
-         let ad = root => Roots.fold(root, t => t.ad, "unknown");
-         let cd = root => Conjs.fold(root, t => t.definition, "unknown");
+         let c = conj => SH.wrapConj(
+            Conjs.show(conj),
+            Conjs.fold(conj, t => t.definition, "unknown"),
+         );
+         let rec iterRoot = (readTerm, noun) => switch noun {
+            | Roots.Root(term, next) => list{(term.str, readTerm(term)), ...iterRoot(readTerm, next)}
+            | Roots.Prop(term) => list{(term, "unknown")}
+            | Roots.End => list{}
+         }
+         let n = root => SH.wrapNoun(iterRoot(term => term.noun, root))
+         let v = root => SH.wrapVerb(iterRoot(term => term.verb, root))
+         let a = root => SH.wrapAd(iterRoot(term => term.ad, root));
          let rec iter = lex => switch lex {
             | End => list{p(".")}
 
             | Noun(root, Ad(root', next))
-               => list{n(Roots.show(root), nd(root)), m(CD.adMark), ...iter(Ad(root', next))}
+               => list{
+                  n(root),
+                  m(CD.adMark),
+                  ...iter(Ad(root', next))
+               }
             | Verb(root, Ad(root', next))
-               => list{v(Roots.show(root), vd(root)), m(CD.adMark), ...iter(Ad(root', next))}
+               => list{v(root), m(CD.adMark), ...iter(Ad(root', next))}
 
             | Noun(root, Noun(root', next))
-               => list{n(Roots.show(root), nd(root)), m(CD.nounMark), ...iter(Noun(root', next))}
+               => list{
+                  n(root),
+                  m(CD.nounMark),
+                  ...iter(Noun(root', next)),
+               }
             | Verb(root, Verb(root', next))
-               => list{v(Roots.show(root), vd(root)), m(CD.verbMark), ...iter(Verb(root', next))}
+               => list{v(root), m(CD.verbMark), ...iter(Verb(root', next))}
 
             | Noun(root, next)
-               => list{n(Roots.show(root), nd(root)), ...iter(next)}
+               => list{n(root), ...iter(next)}
             | Verb(root, next)
-               => list{v(Roots.show(root), vd(root)), ...iter(next)}
+               => list{v(root), ...iter(next)}
 
             | Start(Ad(root, next))
                => list{m(CD.adMark), ...iter(Ad(root, next))}
             | Ad(root, Noun(root', next))
-               => list{a(Roots.show(root), ad(root)), m(CD.nounMark), ...iter(Noun(root', next))}
+               => list{a(root), m(CD.nounMark), ...iter(Noun(root', next))}
             | Ad(root, Verb(root', next))
-               => list{a(Roots.show(root), ad(root)), m(CD.verbMark), ...iter(Verb(root', next))}
+               => list{a(root), m(CD.verbMark), ...iter(Verb(root', next))}
             | Ad(root, next)
-               => list{a(Roots.show(root), ad(root)), ...iter(next)}
+               => list{a(root), ...iter(next)}
 
             | Con(conj, next)
-               => list{c(Conjs.show(conj), cd(conj)), ...iter(next)}
+               => list{c(conj), ...iter(next)}
             | Start(next) => iter(next)
          }
          iter(lex)

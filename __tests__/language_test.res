@@ -29,9 +29,12 @@ module MockConjDict: AbstractDict.CONJ_DICTIONARY = {
 
 module MockShower: AbstractDict.SHOWER with type t = string = {
    type t = string
-   let wrapNoun = (str, _) => str;
-   let wrapVerb = (str, _) => str;
-   let wrapAd = (str, _) => str;
+   let drawMock = (root: list<(string, string)>): string => root
+    ->Belt.List.map(((str, _)) => str)
+    ->Belt.List.reduce("", (acc, curr) => acc == "" ? curr : `${acc}-${curr}`)
+   let wrapNoun = drawMock;
+   let wrapVerb = drawMock;
+   let wrapAd = drawMock;
    let wrapConj = (str, _) => str;
    let wrapMark = str => str;
    let wrapPunctuation = _ => "";

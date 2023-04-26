@@ -55,16 +55,16 @@ var MockConjDict = {
   all: all$1
 };
 
-function wrapNoun(str, param) {
-  return str;
-}
-
-function wrapVerb(str, param) {
-  return str;
-}
-
-function wrapAd(str, param) {
-  return str;
+function drawMock(root) {
+  return Belt_List.reduce(Belt_List.map(root, (function (param) {
+                    return param[0];
+                  })), "", (function (acc, curr) {
+                if (acc === "") {
+                  return curr;
+                } else {
+                  return "" + acc + "-" + curr + "";
+                }
+              }));
 }
 
 function wrapConj(str, param) {
@@ -80,9 +80,9 @@ function wrapPunctuation(param) {
 }
 
 var MockShower = {
-  wrapNoun: wrapNoun,
-  wrapVerb: wrapVerb,
-  wrapAd: wrapAd,
+  wrapNoun: drawMock,
+  wrapVerb: drawMock,
+  wrapAd: drawMock,
   wrapConj: wrapConj,
   wrapMark: wrapMark,
   wrapPunctuation: wrapPunctuation
