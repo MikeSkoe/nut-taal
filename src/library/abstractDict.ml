@@ -4,6 +4,17 @@ module type PARSABLE = sig
    val parse : string -> t option
 end
 
+module type SHOWER = sig
+   type t
+   (* First string is the word, the second is translation *)
+   val wrapNoun : string -> string -> t
+   val wrapVerb : string -> string -> t
+   val wrapAd : string -> string -> t
+   val wrapConj : string -> string -> t
+   val wrapMark : string -> t
+   val wrapPunctuation : string -> t
+end
+
 module type CONJ_DICTIONARY = sig
    include PARSABLE
    val nounMark : string

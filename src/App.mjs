@@ -1,7 +1,6 @@
 
 
 import * as Lang from "./Lang.mjs";
-import * as Unit from "./components/Unit.mjs";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as Table from "./components/Table.mjs";
 import * as React from "react";
@@ -23,9 +22,7 @@ function App$Parser(props) {
     Curry._1(setInput, $$event.target.value);
   };
   return React.createElement(React.Fragment, undefined, React.createElement("div", undefined, Belt_List.toArray(Belt_List.map($$String.split_on_char(/* '.' */46, match[0]), (function (string) {
-                            return React.createElement(React.Fragment, undefined, React.createElement(Unit.El.make, {
-                                            pars: Curry._1(Lang.Lang.Lexs.parse, string.trim())
-                                          }), ".");
+                            return React.createElement(React.Fragment, undefined, Belt_List.toArray(Curry._1(Lang.Lang.Lexs.show, Curry._1(Lang.Lang.Lexs.parse, string))));
                           })))), React.createElement("textarea", {
                   inputMode: "text",
                   onChange: onChange

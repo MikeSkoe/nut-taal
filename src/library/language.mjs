@@ -8,12 +8,7 @@ import * as Caml_option from "rescript/lib/es6/caml_option.js";
 
 var combMarkString = "-";
 
-function log(a) {
-  console.log(a);
-  return a;
-}
-
-function Make(TD, CD) {
+function Make(TD, CD, SH) {
   var fold = function (t, fn, $$default) {
     if (typeof t === "number" || t.TAG !== /* Root */0) {
       return $$default;
@@ -141,7 +136,7 @@ function Make(TD, CD) {
       var conj = strs.hd;
       if (Curry._1(CD.mem, conj)) {
         return {
-                TAG: /* Con */3,
+                TAG: /* Con */4,
                 _0: parse$1(conj),
                 _1: iter(/* P_N */0, next)
               };
@@ -151,21 +146,21 @@ function Make(TD, CD) {
         var word = next.hd;
         if (conj === CD.nounMark && !isMark(word)) {
           return {
-                  TAG: /* Noun */0,
+                  TAG: /* Noun */1,
                   _0: parse(word),
                   _1: iter(/* P_V */1, next$1)
                 };
         }
         if (conj === CD.verbMark && !isMark(word)) {
           return {
-                  TAG: /* Verb */1,
+                  TAG: /* Verb */2,
                   _0: parse(word),
                   _1: iter(/* P_N */0, next$1)
                 };
         }
         if (conj === CD.adMark && !isMark(word)) {
           return {
-                  TAG: /* Ad */2,
+                  TAG: /* Ad */3,
                   _0: parse(word),
                   _1: iter(/* P_A */2, next$1)
                 };
@@ -175,205 +170,190 @@ function Make(TD, CD) {
       switch (pending) {
         case /* P_N */0 :
             return {
-                    TAG: /* Noun */0,
+                    TAG: /* Noun */1,
                     _0: parse(strs.hd),
                     _1: iter(/* P_V */1, strs.tl)
                   };
         case /* P_V */1 :
             return {
-                    TAG: /* Verb */1,
+                    TAG: /* Verb */2,
                     _0: parse(strs.hd),
                     _1: iter(/* P_N */0, strs.tl)
                   };
         case /* P_A */2 :
             return {
-                    TAG: /* Ad */2,
+                    TAG: /* Ad */3,
                     _0: parse(strs.hd),
                     _1: iter(/* P_A */2, strs.tl)
                   };
         
       }
     };
-    var a = iter(/* P_N */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str)));
-    console.log(a);
-    return a;
+    return {
+            TAG: /* Start */0,
+            _0: iter(/* P_N */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str)))
+          };
   };
   var mem = function (str) {
     return parse$2(str) !== /* End */0;
   };
   var show$2 = function (lex) {
-    var iter = function (lex) {
-      if (typeof lex === "number") {
-        return /* [] */0;
-      }
-      switch (lex.TAG | 0) {
-        case /* Noun */0 :
-            var next = lex._1;
-            var root = lex._0;
-            if (typeof next !== "number") {
-              switch (next.TAG | 0) {
-                case /* Noun */0 :
-                    return {
-                            hd: show(root),
-                            tl: {
-                              hd: CD.nounMark,
-                              tl: iter({
-                                    TAG: /* Noun */0,
-                                    _0: next._0,
-                                    _1: next._1
-                                  })
-                            }
-                          };
-                case /* Verb */1 :
-                    var match = next._1;
-                    if (typeof match !== "number" && match.TAG === /* Ad */2) {
-                      return {
-                              hd: show(root),
-                              tl: {
-                                hd: CD.verbMark,
-                                tl: iter({
-                                      TAG: /* Verb */1,
-                                      _0: next._0,
-                                      _1: {
-                                        TAG: /* Ad */2,
-                                        _0: match._0,
-                                        _1: match._1
-                                      }
-                                    })
-                              }
-                            };
-                    }
-                    break;
-                case /* Ad */2 :
-                    return {
-                            hd: show(root),
-                            tl: {
-                              hd: CD.adMark,
-                              tl: iter({
-                                    TAG: /* Ad */2,
-                                    _0: next._0,
-                                    _1: next._1
-                                  })
-                            }
-                          };
-                case /* Con */3 :
-                    break;
-                
+    var n = SH.wrapNoun;
+    var v = SH.wrapVerb;
+    var a = SH.wrapAd;
+    var m = SH.wrapMark;
+    var p = SH.wrapPunctuation;
+    var c = SH.wrapConj;
+    var iter = function (_lex) {
+      while(true) {
+        var lex = _lex;
+        if (typeof lex === "number") {
+          return {
+                  hd: Curry._1(p, "."),
+                  tl: /* [] */0
+                };
+        }
+        switch (lex.TAG | 0) {
+          case /* Start */0 :
+              var next = lex._0;
+              if (typeof next === "number") {
+                _lex = next;
+                continue ;
               }
-            }
-            return {
-                    hd: show(root),
-                    tl: iter(next)
-                  };
-        case /* Verb */1 :
-            var next$1 = lex._1;
-            var root$1 = lex._0;
-            if (typeof next$1 !== "number") {
-              switch (next$1.TAG | 0) {
-                case /* Noun */0 :
-                    var match$1 = next$1._1;
-                    if (typeof match$1 !== "number" && match$1.TAG === /* Ad */2) {
+              if (next.TAG === /* Ad */3) {
+                return {
+                        hd: Curry._1(m, CD.adMark),
+                        tl: iter({
+                              TAG: /* Ad */3,
+                              _0: next._0,
+                              _1: next._1
+                            })
+                      };
+              }
+              _lex = next;
+              continue ;
+          case /* Noun */1 :
+              var next$1 = lex._1;
+              var root = lex._0;
+              if (typeof next$1 !== "number") {
+                switch (next$1.TAG | 0) {
+                  case /* Noun */1 :
                       return {
-                              hd: show(root$1),
+                              hd: Curry._2(n, show(root), fold(root, TD.getNounDef, "unknown")),
                               tl: {
-                                hd: CD.verbMark,
+                                hd: Curry._1(m, CD.nounMark),
                                 tl: iter({
-                                      TAG: /* Verb */1,
+                                      TAG: /* Noun */1,
                                       _0: next$1._0,
-                                      _1: {
-                                        TAG: /* Ad */2,
-                                        _0: match$1._0,
-                                        _1: match$1._1
-                                      }
+                                      _1: next$1._1
                                     })
                               }
                             };
-                    }
-                    break;
-                case /* Verb */1 :
-                    return {
-                            hd: show(root$1),
-                            tl: {
-                              hd: CD.nounMark,
-                              tl: iter({
-                                    TAG: /* Verb */1,
-                                    _0: next$1._0,
-                                    _1: next$1._1
-                                  })
-                            }
-                          };
-                case /* Ad */2 :
-                    return {
-                            hd: show(root$1),
-                            tl: {
-                              hd: CD.adMark,
-                              tl: iter({
-                                    TAG: /* Ad */2,
-                                    _0: next$1._0,
-                                    _1: next$1._1
-                                  })
-                            }
-                          };
-                case /* Con */3 :
-                    break;
-                
+                  case /* Ad */3 :
+                      return {
+                              hd: Curry._2(n, show(root), fold(root, TD.getNounDef, "unknown")),
+                              tl: {
+                                hd: Curry._1(m, CD.adMark),
+                                tl: iter({
+                                      TAG: /* Ad */3,
+                                      _0: next$1._0,
+                                      _1: next$1._1
+                                    })
+                              }
+                            };
+                  default:
+                    
+                }
               }
-            }
-            return {
-                    hd: show(root$1),
-                    tl: iter(next$1)
-                  };
-        case /* Ad */2 :
-            var next$2 = lex._1;
-            var root$2 = lex._0;
-            if (typeof next$2 === "number") {
               return {
-                      hd: show(root$2),
+                      hd: Curry._2(n, show(root), fold(root, TD.getNounDef, "unknown")),
+                      tl: iter(next$1)
+                    };
+          case /* Verb */2 :
+              var next$2 = lex._1;
+              var root$1 = lex._0;
+              if (typeof next$2 !== "number") {
+                switch (next$2.TAG | 0) {
+                  case /* Verb */2 :
+                      return {
+                              hd: Curry._2(v, show(root$1), fold(root$1, TD.getVerbDef, "unknown")),
+                              tl: {
+                                hd: Curry._1(m, CD.verbMark),
+                                tl: iter({
+                                      TAG: /* Verb */2,
+                                      _0: next$2._0,
+                                      _1: next$2._1
+                                    })
+                              }
+                            };
+                  case /* Ad */3 :
+                      return {
+                              hd: Curry._2(v, show(root$1), fold(root$1, TD.getVerbDef, "unknown")),
+                              tl: {
+                                hd: Curry._1(m, CD.adMark),
+                                tl: iter({
+                                      TAG: /* Ad */3,
+                                      _0: next$2._0,
+                                      _1: next$2._1
+                                    })
+                              }
+                            };
+                  default:
+                    
+                }
+              }
+              return {
+                      hd: Curry._2(v, show(root$1), fold(root$1, TD.getVerbDef, "unknown")),
                       tl: iter(next$2)
                     };
-            }
-            switch (next$2.TAG | 0) {
-              case /* Noun */0 :
-                  return {
-                          hd: show(root$2),
-                          tl: {
-                            hd: CD.nounMark,
-                            tl: iter({
-                                  TAG: /* Noun */0,
-                                  _0: next$2._0,
-                                  _1: next$2._1
-                                })
-                          }
-                        };
-              case /* Verb */1 :
-                  return {
-                          hd: show(root$2),
-                          tl: {
-                            hd: CD.verbMark,
-                            tl: iter({
-                                  TAG: /* Verb */1,
-                                  _0: next$2._0,
-                                  _1: next$2._1
-                                })
-                          }
-                        };
-              default:
-                return {
-                        hd: show(root$2),
-                        tl: iter(next$2)
-                      };
-            }
-        case /* Con */3 :
-            return {
-                    hd: show$1(lex._0),
-                    tl: iter(lex._1)
-                  };
-        
-      }
+          case /* Ad */3 :
+              var next$3 = lex._1;
+              var root$2 = lex._0;
+              if (typeof next$3 !== "number") {
+                switch (next$3.TAG | 0) {
+                  case /* Noun */1 :
+                      return {
+                              hd: Curry._2(a, show(root$2), fold(root$2, TD.getAdDef, "unknown")),
+                              tl: {
+                                hd: Curry._1(m, CD.nounMark),
+                                tl: iter({
+                                      TAG: /* Noun */1,
+                                      _0: next$3._0,
+                                      _1: next$3._1
+                                    })
+                              }
+                            };
+                  case /* Verb */2 :
+                      return {
+                              hd: Curry._2(a, show(root$2), fold(root$2, TD.getAdDef, "unknown")),
+                              tl: {
+                                hd: Curry._1(m, CD.verbMark),
+                                tl: iter({
+                                      TAG: /* Verb */2,
+                                      _0: next$3._0,
+                                      _1: next$3._1
+                                    })
+                              }
+                            };
+                  default:
+                    
+                }
+              }
+              return {
+                      hd: Curry._2(a, show(root$2), fold(root$2, TD.getAdDef, "unknown")),
+                      tl: iter(next$3)
+                    };
+          case /* Con */4 :
+              var conj = lex._0;
+              return {
+                      hd: Curry._2(c, show$1(conj), fold$1(conj, CD.getDef, "unknown")),
+                      tl: iter(lex._1)
+                    };
+          
+        }
+      };
     };
-    return $$String.trim(List.fold_left((function (acc, curr) {
-                      return acc + (" " + curr);
-                    }), "", iter(lex)));
+    return iter(lex);
   };
   var Lexs = {
     isMark: isMark,
@@ -393,7 +373,6 @@ var combMark = /* '-' */45;
 export {
   combMark ,
   combMarkString ,
-  log ,
   Make ,
 }
 /* No side effect */

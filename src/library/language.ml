@@ -3,20 +3,17 @@ include AbstractDict
 let combMark = '-'
 let combMarkString = "-"
 
-let log a =
-   Js.log a;
-   a
-
 module Make
    (TD: TERMIN_DICTIONARY)
    (CD: CONJ_DICTIONARY)
+   (SH: SHOWER)
 = struct
    module Roots = struct
       type t =
          | Root of TD.t * t
          | Prop of string
          | End
-      
+
       let fold t fn default = match t with
          | Root (t, _) -> fn t
          | Prop _ | End -> default
@@ -67,11 +64,12 @@ module Make
 
    module Lexs = struct
       type t =
-         | End
+         | Start of t
          | Noun of Roots.t * t
          | Verb of Roots.t * t
          | Ad of Roots.t * t
          | Con of Conjs.t * t
+         | End
 
       let isMark str = List.mem str [CD.nounMark; CD.verbMark; CD.adMark]
 
@@ -103,46 +101,52 @@ module Make
             String.trim str
             |> String.split_on_char ' '
             |> iter P_N
-            |> log
+            |> fun lex -> Start lex
 
          let mem str = parse str != End
 
       let show lex =
+         let n = SH.wrapNoun in
+         let v = SH.wrapVerb in
+         let a = SH.wrapAd in
+         let m = SH.wrapMark in
+         let p = SH.wrapPunctuation in
+         let c = SH.wrapConj in
+         let nd root = Roots.(fold root TD.getNounDef "unknown") in
+         let vd root = Roots.(fold root TD.getVerbDef "unknown") in
+         let ad root = Roots.(fold root TD.getAdDef "unknown") in
+         let cd root = Conjs.(fold root CD.getDef "unknown") in
          let rec iter lex = match lex with
-            | End -> []
+            | End -> [p(".")]
 
             | Noun(root, Ad(root', next))
-               -> Roots.(show root) :: CD.adMark :: (iter @@ Ad(root', next))
+               -> n Roots.(show root)  (nd root) :: m(CD.adMark) :: (iter @@ Ad(root', next))
             | Verb(root, Ad(root', next))
-               -> Roots.(show root) :: CD.adMark :: (iter @@ Ad(root', next))
-
-            | Noun(root, Verb(root', Ad(root'', next)))
-               -> Roots.(show root) :: CD.verbMark :: (iter @@ Verb(root', Ad(root'', next)))
-            | Verb(root, Noun(root', Ad(root'', next)))
-               -> Roots.(show root) :: CD.verbMark :: (iter @@ Verb(root', Ad(root'', next)))
+               -> v Roots.(show root) (vd root) :: m(CD.adMark) :: (iter @@ Ad(root', next))
 
             | Noun(root, Noun(root', next))
-               -> Roots.(show root) :: CD.nounMark :: (iter @@ Noun(root', next))
+               -> n Roots.(show root) (nd root) :: m(CD.nounMark) :: (iter @@ Noun(root', next))
             | Verb(root, Verb(root', next))
-               -> Roots.(show root) :: CD.nounMark :: (iter @@ Verb(root', next))
+               -> v Roots.(show root) (vd root) :: m(CD.verbMark) :: (iter @@ Verb(root', next))
 
             | Noun(root, next)
-               -> Roots.(show root) :: iter next
+               -> n Roots.(show root) (nd root) :: iter next
             | Verb(root, next)
-               -> Roots.(show root) :: iter next
+               -> v Roots.(show root) (vd root) :: iter next
 
+            | Start(Ad(root, next))
+               -> (m CD.adMark) :: (iter @@ Ad(root, next))
             | Ad(root, Noun(root', next))
-               -> Roots.show root :: CD.nounMark :: (iter @@ Noun(root', next))
+               -> a Roots.(show root) (ad root) :: m(CD.nounMark) :: (iter @@ Noun(root', next))
             | Ad(root, Verb(root', next))
-               -> Roots.show root :: CD.verbMark :: (iter @@ Verb(root', next))
+               -> a Roots.(show root) (ad root) :: m(CD.verbMark) :: (iter @@ Verb(root', next))
             | Ad(root, next)
-               -> Roots.show root :: iter next
+               -> a Roots.(show root) (ad root) :: iter next
 
             | Con(conj, next)
-               -> Conjs.show conj :: iter next
+               -> c Conjs.(show conj) (cd conj) :: iter next
+            | Start(next) -> iter next
          in
          iter lex
-         |> List.fold_left (fun acc curr -> acc ^ " " ^ curr) ""
-         |> String.trim
    end
 end

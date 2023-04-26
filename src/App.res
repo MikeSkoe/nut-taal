@@ -11,9 +11,13 @@ module Parser = {
         <>
             <div>
                 {String.split_on_char('.', input)
-                ->Belt.List.map(string => <>
-                    <Unit.El pars={string->Js.String2.trim->Lang.Lexs.parse} />
-                    {"."->React.string}
+                ->Belt.List.map(string => <>{
+                    string
+                    ->Lang.Lexs.parse
+                    ->Lang.Lexs.show
+                    ->Belt.List.toArray
+                    ->React.array
+                }
                 </>)
                 ->Belt.List.toArray
                 ->React.array
