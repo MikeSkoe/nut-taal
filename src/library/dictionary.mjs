@@ -56,29 +56,9 @@ function show(param) {
   return param.str;
 }
 
-function getAdDef(param) {
-  return param.ad;
-}
-
-function getNounDef(param) {
-  return param.noun;
-}
-
-function getVerbDef(param) {
-  return param.verb;
-}
-
-function getDescription(param) {
-  return param.description;
-}
-
 var Term = {
   show: show,
   parse: parse,
-  getNounDef: getNounDef,
-  getVerbDef: getVerbDef,
-  getAdDef: getAdDef,
-  getDescription: getDescription,
   all: all
 };
 
@@ -112,14 +92,6 @@ function show$1(param) {
   return param.str;
 }
 
-function getDef(param) {
-  return param.definition;
-}
-
-function getDescription$1(param) {
-  return param.description;
-}
-
 var Conj = {
   show: show$1,
   parse: parse$1,
@@ -127,8 +99,6 @@ var Conj = {
   verbMark: "i",
   adMark: "e",
   mem: mem,
-  getDef: getDef,
-  getDescription: getDescription$1,
   all: all$1
 };
 

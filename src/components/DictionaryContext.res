@@ -1,5 +1,7 @@
-let termsContext: React.Context.t<list<Dictionary.Term.t>> = React.createContext(list{});
-let conjsContext: React.Context.t<list<Dictionary.Conj.t>> = React.createContext(list{}); 
+open AbstractDict;
+
+let termsContext: React.Context.t<list<term>> = React.createContext(list{});
+let conjsContext: React.Context.t<list<conjTerm>> = React.createContext(list{}); 
 
 module TermProvider = {
     let make = React.Context.provider(termsContext);

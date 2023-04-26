@@ -10,7 +10,7 @@ module Make
 = struct
    module Roots = struct
       type t =
-         | Root of TD.t * t
+         | Root of term * t
          | Prop of string
          | End
 
@@ -46,7 +46,7 @@ module Make
 
    module Conjs = struct
       type t =
-         | Conj of CD.t
+         | Conj of conjTerm
          | End
 
       let fold t fn default = match t with
@@ -112,10 +112,10 @@ module Make
          let m = SH.wrapMark in
          let p = SH.wrapPunctuation in
          let c = SH.wrapConj in
-         let nd root = Roots.(fold root TD.getNounDef "unknown") in
-         let vd root = Roots.(fold root TD.getVerbDef "unknown") in
-         let ad root = Roots.(fold root TD.getAdDef "unknown") in
-         let cd root = Conjs.(fold root CD.getDef "unknown") in
+         let nd root = Roots.(fold root (fun t -> t.noun) "unknown") in
+         let vd root = Roots.(fold root (fun t -> t.verb) "unknown") in
+         let ad root = Roots.(fold root (fun t -> t.ad) "unknown") in
+         let cd root = Conjs.(fold root (fun t-> t.definition) "unknown") in
          let rec iter lex = match lex with
             | End -> [p(".")]
 

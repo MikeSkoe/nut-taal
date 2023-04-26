@@ -24,15 +24,7 @@ module Utils = struct
 end
 
 module Term: TERMIN_DICTIONARY = struct
-   type t = {
-      str: string;
-      noun: string;
-      verb: string;
-      ad: string;
-      description: string;
-   }
-
-   let dict: t MyDict.t ref = ref MyDict.empty
+   let dict: term MyDict.t ref = ref MyDict.empty
 
    let dictProm = Utils.loadDict "dictionary.csv" dict
       (fun line -> ({
@@ -50,11 +42,7 @@ module Term: TERMIN_DICTIONARY = struct
       )
 
    let parse string = MyDict.(find_opt string dict.contents)
-   let show { str } = str
-   let getAdDef { ad } = ad
-   let getNounDef { noun } = noun
-   let getVerbDef { verb } = verb
-   let getDescription { description } = description
+   let show ({ str }: term) = str
 end
 
 module Conj: CONJ_DICTIONARY = struct
@@ -62,13 +50,7 @@ module Conj: CONJ_DICTIONARY = struct
    let verbMark = "i"
    let adMark = "e"
 
-   type t = {
-         str: string;
-         definition: string;
-         description: string;
-   }
-
-   let dict: t MyDict.t ref = ref MyDict.empty
+   let dict: conjTerm MyDict.t ref = ref MyDict.empty
    
    let dictProm = Utils.loadDict "particles.csv" dict
       (fun line -> ({
@@ -85,7 +67,5 @@ module Conj: CONJ_DICTIONARY = struct
 
    let mem key = Belt.Option.isSome MyDict.(find_opt key dict.contents)
    let parse key = MyDict.find_opt key dict.contents
-   let show { str } = str
-   let getDef { definition } = definition
-   let getDescription { description } = description
+   let show ({ str }: conjTerm) = str
 end

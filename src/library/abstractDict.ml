@@ -15,22 +15,31 @@ module type SHOWER = sig
    val wrapPunctuation : string -> t
 end
 
+type term = {
+   str: string;
+   noun: string;
+   verb: string;
+   ad: string;
+   description: string;
+}
+
+type conjTerm = {
+   str: string;
+   definition: string;
+   description: string;
+}
+
 module type CONJ_DICTIONARY = sig
-   include PARSABLE
+   include PARSABLE with type t := conjTerm
    val nounMark : string
    val verbMark : string
    val adMark : string
    val mem : string -> bool
-   val getDef : t -> string
-   val getDescription : t -> string
-   val all : t list promise
+   val all : conjTerm list promise
 end
 
 module type TERMIN_DICTIONARY = sig
-   include PARSABLE
-   val getNounDef : t -> string
-   val getVerbDef : t -> string
-   val getAdDef : t -> string
-   val getDescription : t -> string
-   val all : t list promise
+   include PARSABLE with type t := term
+   (* TODO: should "mem" function be implemented? *)
+   val all : term list promise
 end

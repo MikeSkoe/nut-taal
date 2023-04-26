@@ -1,26 +1,29 @@
 open Ava
+open AbstractDict
 
-module MockTermDict: AbstractDict.TERMIN_DICTIONARY with type t = string = {
-  type t = string;
-  let show = t => t
-  let parse = t => Some(t)
-  let getNounDef = _ => "noun"
-  let getVerbDef = _ => "verb"
-  let getAdDef = _ => "ad"
-  let getDescription = _ => "descr"
+module MockTermDict: AbstractDict.TERMIN_DICTIONARY = {
+  let show = (t: term) => t.str
+  let parse = str => Some({
+    str: str,
+    noun: str,
+    verb: str,
+    ad: str,
+    description: str,
+  })
   let all = Js.Promise.resolve(list{});
 }
 
-module MockConjDict: AbstractDict.CONJ_DICTIONARY with type t = string = {
-  type t = string
-  let show = t => t
-  let parse = t => Some(t)
+module MockConjDict: AbstractDict.CONJ_DICTIONARY = {
   let nounMark = "a"
   let verbMark = "i"
   let adMark = "e"
+  let show = (t: conjTerm) => t.str
+  let parse = str => Some({
+    str: str,
+    definition: str,
+    description: str,
+  })
   let mem = word => word == "en"
-  let getDef = _ => "def"
-  let getDescription = _ => "descr"
   let all = Js.Promise.resolve(list{})
 }
 

@@ -4,30 +4,19 @@ import Ava from "ava";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as Language from "../src/library/language.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
-import * as Caml_option from "rescript/lib/es6/caml_option.js";
 
 function show(t) {
-  return t;
+  return t.str;
 }
 
-function parse(t) {
-  return Caml_option.some(t);
-}
-
-function getNounDef(param) {
-  return "noun";
-}
-
-function getVerbDef(param) {
-  return "verb";
-}
-
-function getAdDef(param) {
-  return "ad";
-}
-
-function getDescription(param) {
-  return "descr";
+function parse(str) {
+  return {
+          str: str,
+          noun: str,
+          verb: str,
+          ad: str,
+          description: str
+        };
 }
 
 var all = Promise.resolve(/* [] */0);
@@ -35,31 +24,23 @@ var all = Promise.resolve(/* [] */0);
 var MockTermDict = {
   show: show,
   parse: parse,
-  getNounDef: getNounDef,
-  getVerbDef: getVerbDef,
-  getAdDef: getAdDef,
-  getDescription: getDescription,
   all: all
 };
 
 function show$1(t) {
-  return t;
+  return t.str;
 }
 
-function parse$1(t) {
-  return Caml_option.some(t);
+function parse$1(str) {
+  return {
+          str: str,
+          definition: str,
+          description: str
+        };
 }
 
 function mem(word) {
   return word === "en";
-}
-
-function getDef(param) {
-  return "def";
-}
-
-function getDescription$1(param) {
-  return "descr";
 }
 
 var all$1 = Promise.resolve(/* [] */0);
@@ -71,8 +52,6 @@ var MockConjDict = {
   verbMark: "i",
   adMark: "e",
   mem: mem,
-  getDef: getDef,
-  getDescription: getDescription$1,
   all: all$1
 };
 

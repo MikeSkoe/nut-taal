@@ -4,7 +4,6 @@ import * as List from "rescript/lib/es6/list.js";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
-import * as Caml_option from "rescript/lib/es6/caml_option.js";
 
 var combMarkString = "-";
 
@@ -61,7 +60,7 @@ function Make(TD, CD, SH) {
       if (word$1 !== undefined) {
         return {
                 TAG: /* Root */0,
-                _0: Caml_option.valFromOption(word$1),
+                _0: word$1,
                 _1: /* End */0
               };
       }
@@ -69,7 +68,7 @@ function Make(TD, CD, SH) {
       if (word$2 !== undefined) {
         return {
                 TAG: /* Root */0,
-                _0: Caml_option.valFromOption(word$2),
+                _0: word$2,
                 _1: iter(next)
               };
       } else {
@@ -104,7 +103,7 @@ function Make(TD, CD, SH) {
     var str$1 = Curry._1(CD.parse, str);
     if (str$1 !== undefined) {
       return /* Conj */{
-              _0: Caml_option.valFromOption(str$1)
+              _0: str$1
             };
     } else {
       return /* End */0;
@@ -204,6 +203,26 @@ function Make(TD, CD, SH) {
     var m = SH.wrapMark;
     var p = SH.wrapPunctuation;
     var c = SH.wrapConj;
+    var nd = function (root) {
+      return fold(root, (function (t) {
+                    return t.noun;
+                  }), "unknown");
+    };
+    var vd = function (root) {
+      return fold(root, (function (t) {
+                    return t.verb;
+                  }), "unknown");
+    };
+    var ad = function (root) {
+      return fold(root, (function (t) {
+                    return t.ad;
+                  }), "unknown");
+    };
+    var cd = function (root) {
+      return fold$1(root, (function (t) {
+                    return t.definition;
+                  }), "unknown");
+    };
     var iter = function (_lex) {
       while(true) {
         var lex = _lex;
@@ -239,7 +258,7 @@ function Make(TD, CD, SH) {
                 switch (next$1.TAG | 0) {
                   case /* Noun */1 :
                       return {
-                              hd: Curry._2(n, show(root), fold(root, TD.getNounDef, "unknown")),
+                              hd: Curry._2(n, show(root), nd(root)),
                               tl: {
                                 hd: Curry._1(m, CD.nounMark),
                                 tl: iter({
@@ -251,7 +270,7 @@ function Make(TD, CD, SH) {
                             };
                   case /* Ad */3 :
                       return {
-                              hd: Curry._2(n, show(root), fold(root, TD.getNounDef, "unknown")),
+                              hd: Curry._2(n, show(root), nd(root)),
                               tl: {
                                 hd: Curry._1(m, CD.adMark),
                                 tl: iter({
@@ -266,7 +285,7 @@ function Make(TD, CD, SH) {
                 }
               }
               return {
-                      hd: Curry._2(n, show(root), fold(root, TD.getNounDef, "unknown")),
+                      hd: Curry._2(n, show(root), nd(root)),
                       tl: iter(next$1)
                     };
           case /* Verb */2 :
@@ -276,7 +295,7 @@ function Make(TD, CD, SH) {
                 switch (next$2.TAG | 0) {
                   case /* Verb */2 :
                       return {
-                              hd: Curry._2(v, show(root$1), fold(root$1, TD.getVerbDef, "unknown")),
+                              hd: Curry._2(v, show(root$1), vd(root$1)),
                               tl: {
                                 hd: Curry._1(m, CD.verbMark),
                                 tl: iter({
@@ -288,7 +307,7 @@ function Make(TD, CD, SH) {
                             };
                   case /* Ad */3 :
                       return {
-                              hd: Curry._2(v, show(root$1), fold(root$1, TD.getVerbDef, "unknown")),
+                              hd: Curry._2(v, show(root$1), vd(root$1)),
                               tl: {
                                 hd: Curry._1(m, CD.adMark),
                                 tl: iter({
@@ -303,7 +322,7 @@ function Make(TD, CD, SH) {
                 }
               }
               return {
-                      hd: Curry._2(v, show(root$1), fold(root$1, TD.getVerbDef, "unknown")),
+                      hd: Curry._2(v, show(root$1), vd(root$1)),
                       tl: iter(next$2)
                     };
           case /* Ad */3 :
@@ -313,7 +332,7 @@ function Make(TD, CD, SH) {
                 switch (next$3.TAG | 0) {
                   case /* Noun */1 :
                       return {
-                              hd: Curry._2(a, show(root$2), fold(root$2, TD.getAdDef, "unknown")),
+                              hd: Curry._2(a, show(root$2), ad(root$2)),
                               tl: {
                                 hd: Curry._1(m, CD.nounMark),
                                 tl: iter({
@@ -325,7 +344,7 @@ function Make(TD, CD, SH) {
                             };
                   case /* Verb */2 :
                       return {
-                              hd: Curry._2(a, show(root$2), fold(root$2, TD.getAdDef, "unknown")),
+                              hd: Curry._2(a, show(root$2), ad(root$2)),
                               tl: {
                                 hd: Curry._1(m, CD.verbMark),
                                 tl: iter({
@@ -340,13 +359,13 @@ function Make(TD, CD, SH) {
                 }
               }
               return {
-                      hd: Curry._2(a, show(root$2), fold(root$2, TD.getAdDef, "unknown")),
+                      hd: Curry._2(a, show(root$2), ad(root$2)),
                       tl: iter(next$3)
                     };
           case /* Con */4 :
               var conj = lex._0;
               return {
-                      hd: Curry._2(c, show$1(conj), fold$1(conj, CD.getDef, "unknown")),
+                      hd: Curry._2(c, show$1(conj), cd(conj)),
                       tl: iter(lex._1)
                     };
           

@@ -3,7 +3,6 @@
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
-import * as Dictionary from "../library/dictionary.mjs";
 import * as DictionaryContext from "./DictionaryContext.mjs";
 
 function Table$Dict(props) {
@@ -45,15 +44,15 @@ function Table$Terms(props) {
               terms: terms,
               getColumns: (function (term) {
                   return {
-                          hd: Dictionary.Term.show(term),
+                          hd: term.str,
                           tl: {
-                            hd: Dictionary.Term.getNounDef(term),
+                            hd: term.noun,
                             tl: {
-                              hd: Dictionary.Term.getVerbDef(term),
+                              hd: term.verb,
                               tl: {
-                                hd: Dictionary.Term.getAdDef(term),
+                                hd: term.ad,
                                 tl: {
-                                  hd: Dictionary.Term.getDescription(term),
+                                  hd: term.description,
                                   tl: /* [] */0
                                 }
                               }
@@ -84,11 +83,11 @@ function Table$Conjs(props) {
               terms: conjs,
               getColumns: (function (conj) {
                   return {
-                          hd: Dictionary.Conj.show(conj),
+                          hd: conj.str,
                           tl: {
-                            hd: Dictionary.Conj.getDef(conj),
+                            hd: conj.definition,
                             tl: {
-                              hd: Dictionary.Conj.getDescription(conj),
+                              hd: conj.description,
                               tl: /* [] */0
                             }
                           }
