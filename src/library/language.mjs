@@ -211,6 +211,7 @@ function Make(TD, CD, SH) {
       if (noun.TAG !== /* Root */0) {
         return {
                 hd: [
+                  false,
                   noun._0,
                   "unknown"
                 ],
@@ -220,6 +221,7 @@ function Make(TD, CD, SH) {
       var term = noun._0;
       return {
               hd: [
+                true,
                 term.str,
                 Curry._1(readTerm, term)
               ],

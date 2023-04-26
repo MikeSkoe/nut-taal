@@ -57,7 +57,7 @@ var MockConjDict = {
 
 function drawMock(root) {
   return Belt_List.reduce(Belt_List.map(root, (function (param) {
-                    return param[0];
+                    return param[1];
                   })), "", (function (acc, curr) {
                 if (acc === "") {
                   return curr;

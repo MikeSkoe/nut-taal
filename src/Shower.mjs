@@ -1,5 +1,6 @@
 
 
+import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 
@@ -13,64 +14,39 @@ var Tooltip = {
   make: Shower$Tooltip
 };
 
-function wrapNoun(tuples) {
-  var render = function (prefix, param) {
-    return React.createElement("span", {
-                className: "noun"
-              }, React.createElement("span", undefined, "" + prefix + "" + param[0] + ""), React.createElement(Shower$Tooltip, {
-                    hint: param[1]
-                  }));
-  };
-  if (!tuples) {
-    return React.createElement(React.Fragment, undefined);
-  }
-  var match = tuples.hd;
-  return React.createElement(React.Fragment, undefined, render(" ", [
-                  match[0],
-                  match[1]
-                ]), Belt_List.toArray(Belt_List.map(tuples.tl, (function (param) {
-                        return render("-", param);
-                      }))));
+function render(className, prefix, param) {
+  var word = param[1];
+  return React.createElement("span", {
+              className: className
+            }, param[0] ? React.createElement(React.Fragment, undefined, React.createElement("span", undefined, "" + prefix + "" + word + ""), React.createElement(Shower$Tooltip, {
+                        hint: param[2]
+                      })) : React.createElement("u", undefined, "" + prefix + "" + word + ""));
 }
 
-function wrapVerb(tuples) {
-  var render = function (prefix, param) {
-    return React.createElement("span", {
-                className: "verb"
-              }, React.createElement("span", undefined, "" + prefix + "" + param[0] + ""), React.createElement(Shower$Tooltip, {
-                    hint: param[1]
-                  }));
-  };
-  if (!tuples) {
+function unit(render, tuples) {
+  if (tuples) {
+    return React.createElement(React.Fragment, undefined, Curry._2(render, " ", tuples.hd), Belt_List.toArray(Belt_List.map(tuples.tl, Curry._1(render, "-"))));
+  } else {
     return React.createElement(React.Fragment, undefined);
   }
-  var match = tuples.hd;
-  return React.createElement(React.Fragment, undefined, render(" ", [
-                  match[0],
-                  match[1]
-                ]), Belt_List.toArray(Belt_List.map(tuples.tl, (function (param) {
-                        return render("-", param);
-                      }))));
 }
 
-function wrapAd(tuples) {
-  var render = function (prefix, param) {
-    return React.createElement("span", {
-                className: "ad"
-              }, React.createElement("span", undefined, "" + prefix + "" + param[0] + ""), React.createElement(Shower$Tooltip, {
-                    hint: param[1]
-                  }));
-  };
-  if (!tuples) {
-    return React.createElement(React.Fragment, undefined);
-  }
-  var match = tuples.hd;
-  return React.createElement(React.Fragment, undefined, render(" ", [
-                  match[0],
-                  match[1]
-                ]), Belt_List.toArray(Belt_List.map(tuples.tl, (function (param) {
-                        return render("-", param);
-                      }))));
+function wrapNoun(param) {
+  return unit((function (param, param$1) {
+                return render("noun", param, param$1);
+              }), param);
+}
+
+function wrapVerb(param) {
+  return unit((function (param, param$1) {
+                return render("verb", param, param$1);
+              }), param);
+}
+
+function wrapAd(param) {
+  return unit((function (param, param$1) {
+                return render("ad", param, param$1);
+              }), param);
 }
 
 function wrapConj(conj, def) {
@@ -91,6 +67,8 @@ function wrapMark(mark) {
 
 export {
   Tooltip ,
+  render ,
+  unit ,
   wrapNoun ,
   wrapVerb ,
   wrapAd ,

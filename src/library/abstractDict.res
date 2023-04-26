@@ -7,9 +7,9 @@ module type PARSABLE = {
 module type SHOWER = {
    type t;
    // First string is the word, the second is translation
-   let wrapNoun : list<(string, string)> => t;
-   let wrapVerb : list<(string, string)> => t;
-   let wrapAd : list<(string, string)> => t;
+   let wrapNoun : list<(bool, string, string)> => t;
+   let wrapVerb : list<(bool, string, string)> => t;
+   let wrapAd : list<(bool, string, string)> => t;
    let wrapConj : (string, string) => t;
    let wrapMark : string => t;
    let wrapPunctuation : string => t;

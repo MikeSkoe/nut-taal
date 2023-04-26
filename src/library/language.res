@@ -125,8 +125,8 @@ module Make = (
             Conjs.fold(conj, t => t.definition, "unknown"),
          );
          let rec iterRoot = (readTerm, noun) => switch noun {
-            | Roots.Root(term, next) => list{(term.str, readTerm(term)), ...iterRoot(readTerm, next)}
-            | Roots.Prop(term) => list{(term, "unknown")}
+            | Roots.Root(term, next) => list{(true, term.str, readTerm(term)), ...iterRoot(readTerm, next)}
+            | Roots.Prop(term) => list{(false, term, "unknown")}
             | Roots.End => list{}
          }
          let n = root => SH.wrapNoun(iterRoot(term => term.noun, root))
