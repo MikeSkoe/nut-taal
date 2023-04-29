@@ -1,32 +1,104 @@
-# An application to easily read and translate text in code-ish
+# maklik-taal
+> A constructed auxiliary language with learnability in mind
 
+### A taste of the language:
+## [Try it out](https://mikeskoe.github.io/code-ish-app/)
+maklik-taal | English 
+-- | --
+my <u>lief</u> dit <u>doen</u> | I like to do this
+dit a kat e *my klein mooi* | This is my small beutiful cat
+e *dit-dag* a dit <u>wil</u> i <u>speel</u> **met** jy | Today, he wants to play with you
+
+---
 ## Grammar
+### Low level
+The language have three low-level language units:
+- [Root](#Root) - a building block of the language
+- [Mark](#Mark) - explains if the root a noun, verb or an ad
+- [Particle](#Particle) - introduces a [phrases](#Phrase), to make sentences richer
 
-Noun: `a _` (`a` can be omited at the begining of a sencence of right after particle)
+#### **Root**
+Can be collapsed to make a compound word, using a `*-*-*` pattern.
+It keeps vocabulary richer, and the dictionary shorter.
+The `maklik-taal`, for example, is a compound word built with `maklik` - *easy* and `taal` - *word*
 
-Verb: `i _`
+It can have three states, depending on position in a sentence:
+- noun - a thing
+- <u>verb</u> - an action
+- *ad* - a modification, like adjective or adverb
 
-Adjective / Adverb: `e _` or `NOUN _ _` or `VERB _ _` (fold to the left)
+#### **Mark**
+Placed before a root.
+There are three marks:
+- `a` - introduces a noun
+- `i` - introduces a verb
+- `e` - introduces a modificator
 
-Particle: `... AND ...`
+There are some cases, where the mark should be dropped.
 
-Compound: `STEM-STEM-STEM` (modifications fold to the right)
+#### **Particle**
+Placed before a [phrase](#Phrase).
+Examples of particles could be words like:
+- **want** - because
+- **in** - in
+- **vir** - to/for
 
-## Vocab
+---
+### Middle level
+Words are middle level units.
+They consist of roots and marks and can have three states: **noun**, **verb** and **ad**
+#### **Noun**
+Patterns:
+- `a *`
+- `[BEGINING OF THE SENTENCE] *`
+- `[PARTICLE] *`
+- `[VERB] *`
 
-Ex:
-    `a vra` - a question
-    `i vra` - to ask
-    `e vra` - curious
+#### **Verb**
+Patterns: 
+- `i *`
+- `[NOUN] *`
 
-## Why Afrikaans? 
-First of all, the vocabulary is not tightly coupled with Afrikaans dictionary. The language is written the way that is it easy to replace the hole dictionary with another
+#### **Ad**
+Patterns: 
+- `e *`
+- `[AD] *`
 
-Choosing between "few words from all languages" and "all words from one language that mixes stems from different language families" I prefer the second, because this way the vocab much more predictable.
-Also this way we have a vocab that sounds good, natural and distinguishable.
+---
+### High level
+#### Phrase
+The phrase is a cluster of words.
 
-I personaly find Afrikaans the best option because:
-- It is a Germainc language, located at Africa, that includes Romance and neighbour languages stems
-- It is simplified language from Dutch, that is itself already relatively simple and regular
-- It sound awesome
-- A lot of stems are really short
+#### Subject
+The first noun in a phrase
+
+#### Infinitive
+The second verb in a phrase
+
+#### Object
+The second noun in a phrase
+
+---
+## Vocabulary
+Ideally every root should meen something be it a noun, verb or ad, as long as it clear and makes sence.
+Therefore related words could be collapsed to a single root.
+For example a root `vraag` could mean **question** as a noun, **to ask** as a verb and **curious/curiously** as an ad.
+
+At the same time a single root should not cover too wide range or meaning.
+The dictionary should be optimised, not limited.
+Additionally there should not be a root, like English **like**, that could mean **alike** and **to love**, since these are completely different meanings
+
+The dictionary also includes some compound roots, whose meanings may be not clear, but they form commonly used words.
+
+### Why Afrikaans?
+> The dictionary is not tightly coupled with the language.
+It is rather a dependency.
+
+At the moment all roots come from Afrikaans.
+I did it for few reasons:
+- I think it is better to have only one source of roots.
+It builds more predictable intuition about the dictionary.
+Plus there will always be someone who does not know a single word in any possible conlang
+- It one of the simples natural languages.
+It is a simplified Dutch, which is a Germanic language (like German and English), located at Africa!
+- It is much simpler to read and pronounce than English, since spelling is regular
