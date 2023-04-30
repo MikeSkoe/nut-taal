@@ -1,5 +1,5 @@
-# maklik-taal
-> A constructed auxiliary language with learnability in mind
+# taal
+> A constructed language that is parsable by both computer and human
 
 ### A taste of the language:
 ## [Try it out](https://mikeskoe.github.io/code-ish-app/)
@@ -14,13 +14,12 @@ e *dit-dag* a dit <u>wil</u> i <u>speel</u> **met** jy | Today, he wants to play
 ### Low level
 The language have three low-level language units:
 - [Root](#Root) - a building block of the language
-- [Mark](#Mark) - explains if the root a noun, verb or an ad
+- [Mark](#Mark) - explains if the root a noun, verb or an ad (a modificator)
 - [Particle](#Particle) - introduces a [phrases](#Phrase), to make sentences richer
 
 #### **Root**
 Can be collapsed to make a compound word, using a `*-*-*` pattern.
-It keeps vocabulary richer, and the dictionary shorter.
-The `maklik-taal`, for example, is a compound word built with `maklik` - *easy* and `taal` - *word*
+It keeps vocabulary richer and the dictionary shorter.
 
 It can have three states, depending on position in a sentence:
 - noun - a thing
@@ -28,13 +27,13 @@ It can have three states, depending on position in a sentence:
 - *ad* - a modification, like adjective or adverb
 
 #### **Mark**
-Placed before a root.
-There are three marks:
+Placed before a root
 - `a` - introduces a noun
 - `i` - introduces a verb
 - `e` - introduces a modificator
 
 There are some cases, where the mark should be dropped.
+See [patterns](#patterns)
 
 #### **Particle**
 Placed before a [phrase](#Phrase).
@@ -47,22 +46,14 @@ Examples of particles could be words like:
 ### Middle level
 Words are middle level units.
 They consist of roots and marks and can have three states: **noun**, **verb** and **ad**
-#### **Noun**
-Patterns:
-- `a *`
-- `[BEGINING OF THE SENTENCE] *`
-- `[PARTICLE] *`
-- `[VERB] *`
 
-#### **Verb**
-Patterns: 
-- `i *`
-- `[NOUN] *`
-
-#### **Ad**
-Patterns: 
-- `e *`
-- `[AD] *`
+#### Patterns
+Noun | Verb | Ad
+-- | -- | --- 
+`a *` | `i *` | `e *`
+`[BEGINING OF THE SENTENCE] *` | `[NOUN] *` | `[AD] *`
+`[PARTICLE] *` ||
+`[VERB] *` ||
 
 ---
 ### High level
@@ -84,9 +75,9 @@ Ideally every root should meen something be it a noun, verb or ad, as long as it
 Therefore related words could be collapsed to a single root.
 For example a root `vraag` could mean **question** as a noun, **to ask** as a verb and **curious/curiously** as an ad.
 
-At the same time a single root should not cover too wide range or meaning.
+At the same time, to prevent ambiguity, a single root should not cover too wide range or meanings.
 The dictionary should be optimised, not limited.
-Additionally there should not be a root, like English **like**, that could mean **alike** and **to love**, since these are completely different meanings
+Additionally there should not be a root, like English **like**, that could mean **alike** and **to love**, since these are two completely different meanings
 
 The dictionary also includes some compound roots, whose meanings may be not clear, but they form commonly used words.
 
