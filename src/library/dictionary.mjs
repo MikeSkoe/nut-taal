@@ -15,7 +15,7 @@ var MyDict = $$Map.Make({
 function loadDict(url, dict, makeEntity) {
   return Js_promise.then_((function (text) {
                 var words = Belt_List.map($$String.split_on_char(/* '\n' */10, text), (function (param) {
-                        return $$String.split_on_char(/* ';' */59, param);
+                        return $$String.split_on_char(/* ',' */44, param);
                       }));
                 dict.contents = Belt_List.reduce(words, dict.contents, (function (acc, line) {
                         return Curry._3(MyDict.add, Belt_List.getExn(line, 0), Curry._1(makeEntity, line), acc);

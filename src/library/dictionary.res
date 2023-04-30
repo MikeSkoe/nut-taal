@@ -10,7 +10,7 @@ module Utils = {
          let words = 
             text
             ->String.split_on_char('\n', _)
-            ->Belt.List.map(String.split_on_char(';'));
+            ->Belt.List.map(String.split_on_char(','));
          dict :=
             words
             ->Belt.List.reduce(

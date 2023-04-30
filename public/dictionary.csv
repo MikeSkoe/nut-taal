@@ -1,112 +1,112 @@
-buite-gaan;going out;to go out;;Compound
-inter-gaan;coming in;to come in;;Compound
-buite;distance;to pull out;outside;Direction
-inter;interior;to put inside;inside/between/inter;Direction
-kant;side/direction;to turn;;Direction
-of;bottom;to loose;under/down;Direction
-op;top;to win;above/up;Direction
-post;consequence;to follow;post/after;Direction
-pre;reason;to guide;before;Direction
-al;finish/end;to finish;already/yet/all;Numbers
-alles;everything;;all/every;Numbers
-bi;two;;;Numbers
-een;one;;;Numbers
-nie;negotiation/none;to refuse;not;Numbers
-dat;that/he/she/they;;that;Pronoun
-dit;it/he/she/this;;this;Pronoun
-jy;you;;your;Pronoun
-my;I/me;;my;Pronoun
-ander;alian;to change;another;
-basis;base/ground;to base on;;
-bedien;server;to serve;;
-beeld;image;to draw;drawn;
-begin;begining;to start/to begin;;
-besig;business;to occupy;busy;
-bou;building;to build;built;
-bruik;tool;to use;;
-brutaal;;;angry/brutal;
-dag;day;;;
-data;data/info;to write/to note;of info;
-demo;demo;to show/to present;;
-dier;animal;;;
-doen;;to do/to make;;
-donker;darkness;;;
-drink;;to drink;;
-funksie;function;;;
-gaan;;to go;;
-gee;;to give;;
-goed;good;;;
-grasie;grace;to thank;graceful;
-groot;;;big;
-hard;difficulty;to make hard;intensive;
-hart;heart;;;
-help;help;to help;;
-het;property/possession;to have;available;
-hoop;hope;to believe/to hope;hopeful;
-kan;ability;to able to;able;
-leer;lesson;to learn;learning;
-lief;love;to love;lovely/dear;
-lig;light;to glow;light;
-loop;walk;to walk;walking;
-luk;luck/happiness;to try a luck;lucky/happy;
-lyk;vision;to see/to watch/to browse;visible;
-maklik;ease;to simplify;easy;
-man;male;;male;
-meer;amount;to increase;more, many, a lot;
-mens;human;humanize;humane;
-minder;absence;to reduce/to fold;less, few;
-moet;duty;to be on duty;obligated;
-mooi;beauty;to beautify;beautiful/pretty;
-masjien;car/machine;to drive a car;machine;
-naam;name/word;to call, to name;called, named;
-nodig;need/requirement;to need;required;
-nuwe;news;update;new;
-opsie;option;to choose/to decide;;
-plan;plan;to plan;planned;
-plant;plant;to plant;plant;
-probeer;try;to try;trial;
-rede;reason;reason;casual;
-roete;route;to go for;nomad;
-rond;rond/circle;surround/round up;around;
-sag;soft;soften;soft;
-sit;sit;to sit/to put;sitting;
-som;something;;some;
-soos;alike;reminds of;alike;
-speel;game/training;to play/to train;entertaining;
-stof;substance/material;to materialise;material;
-stoor;savings;to save;saved;
-taal;language;to speak;talking;
-teen;opponent;to battle/to dispute;against;
-trek;luggage;to take;attractive/interesting;
-tyd;time;to spend time;temporal;
-verstaan;understanding;;;
-vind;finding;to find;found;
-vis;fish;to swim;fish/swimming;
-vloei;flow;to flow;flow/smooth;
-vraag;question;to ask;curious;
-vrees;fear;to scear;scary;
-vrou;female;;female;
-vry;freedom/liberty;to release;free/available;
-wag;expectation;to wait;expected;
-was;was;was;past;
-wat;what/which;what to do;which;
-water;water;to wet/to water;wet;
-weet;knowledge;to know;known;
-werk;job/work;to work;work;
-wil;will;to want;future;
-woord;word;;word;
-word;appeal;to become;became;
-huis;house/home;to shelter;house;
-eet;food;to eat;food;
-tel;amount;to count;many/a lot;
-enige;;;any/some;
-kind;child;to born;;
-voel;feeling/access;to feel/to access;accessable;
-regt;correction;to turn right/to correct;right/correct;
-familie;family/group;to group;family;
-ligging;location;to locate/to place;local;
-draai;twist;to turn/to rotate;turned/rotated;
-taak;task;ser a task;;
-deel;part;to share;shared;
-plek;place/location;to place;placed/located;
-druk;;to push;;
+buite-gaan,going out,to go out,Compound
+inter-gaan,coming in,to come in,,Compound
+buite,distance,to pull out,outside,Direction
+inter,interior,to put inside,inside/between/inter,Direction
+kant,side/direction,to turn,,Direction
+of,bottom,to loose,under/down,Direction
+op,top,to win,above/up,Direction
+post,consequence,to follow,post/after,Direction
+pre,reason,to guide,before,Direction
+al,finish/end,to finish,already/yet/all,Numbers
+alles,everything,,all/every,Numbers
+bi,two,,,Numbers
+een,one,,,Numbers
+nie,negotiation/none,to refuse,not,Numbers
+dat,that/he/she/they,,that,Pronoun
+dit,it/he/she/this,,this,Pronoun
+jy,you,,your,Pronoun
+my,I/me,,my,Pronoun
+ander,alian,to change,another,
+basis,base/ground,to base on,,
+bedien,server,to serve,,
+beeld,image,to draw,drawn,
+begin,begining,to start/to begin,,
+besig,business,to occupy,busy,
+bou,building,to build,built,
+bruik,tool,to use,,
+brutaal,,,angry/brutal,
+dag,day,,,
+data,data/info,to write/to note,of info,
+demo,demo,to show/to present,,
+dier,animal,,,
+doen,,to do/to make,,
+donker,darkness,,,
+drink,,to drink,,
+funksie,function,,,
+gaan,,to go,,
+gee,,to give,,
+goed,good,,,
+grasie,grace,to thank,graceful,
+groot,,,big,
+hard,difficulty,to make hard,intensive,
+hart,heart,,,
+help,help,to help,,
+het,property/possession,to have,available,
+hoop,hope,to believe/to hope,hopeful,
+kan,ability,to able to,able,
+leer,lesson,to learn,learning,
+lief,love,to love,lovely/dear,
+lig,light,to glow,light,
+loop,walk,to walk,walking,
+luk,luck/happiness,to try a luck,lucky/happy,
+lyk,vision,to see/to watch/to browse,visible,
+maklik,ease,to simplify,easy,
+man,male,,male,
+meer,amount,to increase,more/many/a lot,
+mens,human,humanize,humane,
+minder,absence,to reduce/to fold,less/few,
+moet,duty,to be on duty,obligated,
+mooi,beauty,to beautify,beautiful/pretty,
+masjien,car/machine,to drive a car,machine,
+naam,name/word,to call/to name,called/named,
+nodig,need/requirement,to need,required,
+nuwe,news,update,new,
+opsie,option,to choose/to decide,,
+plan,plan,to plan,planned,
+plant,plant,to plant,plant,
+probeer,try,to try,trial,
+rede,reason,reason,casual,
+roete,route,to go for,nomad,
+rond,rond/circle,surround/round up,around,
+sag,soft,soften,soft,
+sit,sit,to sit/to put,sitting,
+som,something,,some,
+soos,alike,reminds of,alike,
+speel,game/training,to play/to train,entertaining,
+stof,substance/material,to materialise,material,
+stoor,savings,to save,saved,
+taal,language,to speak,talking,
+teen,opponent,to battle/to dispute,against,
+trek,luggage,to take,attractive/interesting,
+tyd,time,to spend time,temporal,
+verstaan,understanding,,,
+vind,finding,to find,found,
+vis,fish,to swim,fish/swimming,
+vloei,flow,to flow,flow/smooth,
+vraag,question,to ask,curious,
+vrees,fear,to scear,scary,
+vrou,female,,female,
+vry,freedom/liberty,to release,free/available,
+wag,expectation,to wait,expected,
+was,was,was,past,
+wat,what/which,what to do,which,
+water,water,to wet/to water,wet,
+weet,knowledge,to know,known,
+werk,job/work,to work,work,
+wil,will,to want,future,
+woord,word,,word,
+word,appeal,to become,became,
+huis,house/home,to shelter,house,
+eet,food,to eat,food,
+tel,amount,to count,many/a lot,
+enige,,,any/some,
+kind,child,to born,,
+voel,feeling/access,to feel/to access,accessable,
+regt,correction,to turn right/to correct,right/correct,
+familie,family/group,to group,family,
+ligging,location,to locate/to place,local,
+draai,twist,to turn/to rotate,turned/rotated,
+taak,task,ser a task,,
+deel,part,to share,shared,
+plek,place/location,to place,placed/located,
+druk,,to push,,
