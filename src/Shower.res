@@ -14,10 +14,11 @@ module Word = {
     @react.component
     let make = (~className, ~data) => {
         let (known, word, def) = data;
+        let onClick = React.useContext(DictionaryContext.onWordClickContext); 
 
         known
             ? <Tooltip hint={def}>
-                <span className>
+                <span className onClick={_ => onClick(word)}>
                     {`${word}`->React.string}
                 </span>
             </Tooltip>

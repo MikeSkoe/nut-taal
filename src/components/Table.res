@@ -26,39 +26,3 @@ module Dict = {
             </tbody>
         </table>
 }
-
-module Terms = {
-    @react.component
-    let make = () => {
-        let terms = React.useContext(DictionaryContext.termsContext)
-
-        <Dict
-            terms={terms}
-            titles={list{"term", "noun", "verb", "ad", "description"}}
-            getColumns={term => list{
-                term.str,
-                term.noun,
-                term.verb,
-                term.ad,
-                term.description,
-            }}
-        />
-    }
-}
-
-module Conjs = {
-    @react.component
-    let make = () => {
-        let conjs = React.useContext(DictionaryContext.conjsContext);
-
-        <Dict
-            terms={conjs}
-            titles={list{"term", "translation", "description"}}
-            getColumns={conj => list{
-                conj.str,
-                conj.definition,
-                conj.description,
-            }}
-        />
-    }
-}

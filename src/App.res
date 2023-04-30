@@ -2,6 +2,19 @@
 
 open Lang
 
+module Links = {
+    let dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
+    let particlesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/particles.csv";
+    let examplesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv";
+
+    @react.component
+    let make = () => <>
+        <p><a href={dicrionaryURL}>{"Dictionary"->React.string}</a></p>
+        <p><a href={particlesURL}>{"Particles"->React.string}</a></p>
+        <p><a href={examplesURL}>{"Examples"->React.string}</a></p>
+    </>;
+}
+
 module Parser = {
     @react.component
     let make = () => {
@@ -37,42 +50,6 @@ module Parser = {
     }
 }
 
-module VocabPage = {
-    @react.component
-    let make = () => {
-        let conjs = React.useContext(DictionaryContext.conjsContext);
-        let terms = React.useContext(DictionaryContext.termsContext)
-        let (query, setQuery) = React.useState(_ => "");
-        let onChange = event => setQuery((event->ReactEvent.Form.target)["value"]);
-
-        <div className="flex" direction="column">
-            <a href="/">{"parse text"->React.string}</a>
-            <input onChange inputMode="text"/>
-            <Table.Dict
-                terms={conjs->Belt.List.keep(conjTerm => conjTerm.str->Js.String2.includes(query))}
-                titles={list{"term", "translation", "description"}}
-                getColumns={conj => list{
-                    conj.str,
-                    conj.definition,
-                    conj.description,
-                }}
-            />
-            <Table.Dict
-                terms={terms->Belt.List.keep(conjTerm => conjTerm.str->Js.String2.includes(query))}
-                titles={list{"term", "noun", "verb", "ad", "description"}}
-                getColumns={term => list{
-                    term.str,
-                    term.noun,
-                    term.verb,
-                    term.ad,
-                    term.description,
-                }}
-            />
-        </div>
-        
-    }
-}
-
 module InputPage = {
     @react.component
     let make = () => {
@@ -93,7 +70,7 @@ module InputPage = {
 
         <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
             <Parser />
-            <a href="/vocab">{"see vocab"->React.string}</a>
+            <Links />
             {hint
             ->Belt.Option.map((term: AbstractDict.term) => 
                 <Table.Dict
@@ -114,14 +91,7 @@ module InputPage = {
 
 @react.component
 let make = () => {
-    let url = RescriptReactRouter.useUrl();
-
     <DictionaryContext>
-        <>
-            {switch url.path {
-                | list{"vocab"} => <VocabPage />
-                | _ => <InputPage />
-            }}
-        </>
+        <InputPage />
     </DictionaryContext>
 }

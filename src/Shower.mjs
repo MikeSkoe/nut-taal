@@ -1,7 +1,9 @@
 
 
+import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
+import * as DictionaryContext from "./components/DictionaryContext.mjs";
 
 function Shower$Tooltip(props) {
   return React.createElement(React.Fragment, undefined, React.cloneElement(props.children, {
@@ -17,10 +19,14 @@ var Tooltip = {
 function Shower$Word(props) {
   var data = props.data;
   var word = data[1];
+  var onClick = React.useContext(DictionaryContext.onWordClickContext);
   if (data[0]) {
     return React.createElement(Shower$Tooltip, {
                 children: React.createElement("span", {
-                      className: props.className
+                      className: props.className,
+                      onClick: (function (param) {
+                          Curry._1(onClick, word);
+                        })
                     }, "" + word + ""),
                 hint: data[2]
               });

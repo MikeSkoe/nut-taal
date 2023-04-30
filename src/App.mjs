@@ -10,10 +10,19 @@ import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as DictionaryContext from "./components/DictionaryContext.mjs";
-import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
 
 import './app.css'
 ;
+
+function App$Links(props) {
+  return React.createElement(React.Fragment, undefined, React.createElement("p", undefined, React.createElement("a", {
+                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv"
+                    }, "Dictionary")), React.createElement("p", undefined, React.createElement("a", {
+                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/particles.csv"
+                    }, "Particles")), React.createElement("p", undefined, React.createElement("a", {
+                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv"
+                    }, "Examples")));
+}
 
 function App$Parser(props) {
   var match = React.useState(function () {
@@ -49,92 +58,6 @@ function App$Parser(props) {
                 }));
 }
 
-function App$VocabPage(props) {
-  var conjs = React.useContext(DictionaryContext.conjsContext);
-  var terms = React.useContext(DictionaryContext.termsContext);
-  var match = React.useState(function () {
-        return "";
-      });
-  var setQuery = match[1];
-  var query = match[0];
-  var onChange = function ($$event) {
-    Curry._1(setQuery, $$event.target.value);
-  };
-  return React.createElement("div", {
-              className: "flex",
-              direction: "column"
-            }, React.createElement("a", {
-                  href: "/"
-                }, "parse text"), React.createElement("input", {
-                  inputMode: "text",
-                  onChange: onChange
-                }), React.createElement(Table.Dict.make, {
-                  titles: {
-                    hd: "term",
-                    tl: {
-                      hd: "translation",
-                      tl: {
-                        hd: "description",
-                        tl: /* [] */0
-                      }
-                    }
-                  },
-                  terms: Belt_List.keep(conjs, (function (conjTerm) {
-                          return conjTerm.str.includes(query);
-                        })),
-                  getColumns: (function (conj) {
-                      return {
-                              hd: conj.str,
-                              tl: {
-                                hd: conj.definition,
-                                tl: {
-                                  hd: conj.description,
-                                  tl: /* [] */0
-                                }
-                              }
-                            };
-                    })
-                }), React.createElement(Table.Dict.make, {
-                  titles: {
-                    hd: "term",
-                    tl: {
-                      hd: "noun",
-                      tl: {
-                        hd: "verb",
-                        tl: {
-                          hd: "ad",
-                          tl: {
-                            hd: "description",
-                            tl: /* [] */0
-                          }
-                        }
-                      }
-                    }
-                  },
-                  terms: Belt_List.keep(terms, (function (conjTerm) {
-                          return conjTerm.str.includes(query);
-                        })),
-                  getColumns: (function (term) {
-                      return {
-                              hd: term.str,
-                              tl: {
-                                hd: term.noun,
-                                tl: {
-                                  hd: term.verb,
-                                  tl: {
-                                    hd: term.ad,
-                                    tl: {
-                                      hd: term.description,
-                                      tl: /* [] */0
-                                    }
-                                  }
-                                }
-                              }
-                            };
-                    })
-                }));
-}
-
 function App$InputPage(props) {
   var match = React.useState(function () {
         return "begin";
@@ -161,9 +84,7 @@ function App$InputPage(props) {
                         }));
                 }),
               children: null
-            }, React.createElement(App$Parser, {}), React.createElement("a", {
-                  href: "/vocab"
-                }, "see vocab"), Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (term) {
+            }, React.createElement(App$Parser, {}), React.createElement(App$Links, {}), Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (term) {
                         return React.createElement(Table.Dict.make, {
                                     titles: {
                                       hd: "term",
@@ -208,12 +129,8 @@ function App$InputPage(props) {
 }
 
 function App(props) {
-  var url = RescriptReactRouter.useUrl(undefined, undefined);
-  var match = url.path;
-  var tmp;
-  tmp = match && match.hd === "vocab" && !match.tl ? React.createElement(App$VocabPage, {}) : React.createElement(App$InputPage, {});
   return React.createElement(DictionaryContext.make, {
-              children: React.createElement(React.Fragment, undefined, tmp)
+              children: React.createElement(App$InputPage, {})
             });
 }
 
