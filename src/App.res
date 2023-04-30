@@ -15,6 +15,15 @@ module Parser = {
                     string
                     ->Lang.Lexs.parse
                     ->Lang.Lexs.show
+                    ->Belt.List.reduce(list{}, (acc, curr) =>
+                        acc == list{}
+                            ? list{curr}
+                            : list{
+                                ...acc,
+                                {" "->React.string},
+                                curr,
+                            }
+                    )
                     ->Belt.List.toArray
                     ->React.array
                 }

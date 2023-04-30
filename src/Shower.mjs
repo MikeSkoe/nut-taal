@@ -1,9 +1,7 @@
 
 
-import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
-import * as DictionaryContext from "./components/DictionaryContext.mjs";
 
 function Shower$Tooltip(props) {
   return React.createElement(React.Fragment, undefined, React.cloneElement(props.children, {
@@ -16,52 +14,79 @@ var Tooltip = {
   make: Shower$Tooltip
 };
 
-function render(className, prefix, param) {
-  var word = param[1];
-  var onClick = React.useContext(DictionaryContext.onWordClickContext);
-  return React.createElement("span", {
-              className: className
-            }, param[0] ? React.createElement(Shower$Tooltip, {
-                    children: React.createElement("span", {
-                          onClick: (function (param) {
-                              Curry._1(onClick, word);
-                            })
-                        }, "" + prefix + "" + word + ""),
-                    hint: param[2]
-                  }) : React.createElement("u", undefined, "" + prefix + "" + word + ""));
-}
-
-function unit(render, tuples) {
-  if (tuples) {
-    return React.createElement(React.Fragment, undefined, Curry._2(render, " ", tuples.hd), Belt_List.toArray(Belt_List.map(tuples.tl, Curry._1(render, "-"))));
+function Shower$Word(props) {
+  var data = props.data;
+  var word = data[1];
+  if (data[0]) {
+    return React.createElement(Shower$Tooltip, {
+                children: React.createElement("span", {
+                      className: props.className
+                    }, "" + word + ""),
+                hint: data[2]
+              });
   } else {
-    return React.createElement(React.Fragment, undefined);
+    return React.createElement("u", undefined, "" + word + "");
   }
 }
 
-function wrapNoun(param) {
-  return unit((function (param, param$1) {
-                return render("noun", param, param$1);
-              }), param);
+var Word = {
+  make: Shower$Word
+};
+
+function collapse(elements) {
+  return Belt_List.reduce(elements, /* [] */0, (function (acc, curr) {
+                if (acc === /* [] */0) {
+                  return {
+                          hd: curr,
+                          tl: /* [] */0
+                        };
+                } else {
+                  return Belt_List.concatMany([
+                              acc,
+                              {
+                                hd: "-",
+                                tl: {
+                                  hd: curr,
+                                  tl: /* [] */0
+                                }
+                              }
+                            ]);
+                }
+              }));
 }
 
-function wrapVerb(param) {
-  return unit((function (param, param$1) {
-                return render("verb", param, param$1);
-              }), param);
+function wrapNoun(data) {
+  return React.createElement(React.Fragment, undefined, Belt_List.toArray(collapse(Belt_List.map(data, (function (data) {
+                            return React.createElement(Shower$Word, {
+                                        className: "noun",
+                                        data: data
+                                      });
+                          })))));
 }
 
-function wrapAd(param) {
-  return unit((function (param, param$1) {
-                return render("ad", param, param$1);
-              }), param);
+function wrapVerb(data) {
+  return React.createElement(React.Fragment, undefined, Belt_List.toArray(collapse(Belt_List.map(data, (function (data) {
+                            return React.createElement(Shower$Word, {
+                                        className: "verb",
+                                        data: data
+                                      });
+                          })))));
+}
+
+function wrapAd(data) {
+  return React.createElement(React.Fragment, undefined, Belt_List.toArray(collapse(Belt_List.map(data, (function (data) {
+                            return React.createElement(Shower$Word, {
+                                        className: "ad",
+                                        data: data
+                                      });
+                          })))));
 }
 
 function wrapConj(conj, def) {
   return React.createElement("span", {
               className: "conj"
             }, React.createElement(Shower$Tooltip, {
-                  children: React.createElement("span", undefined, " " + conj + ""),
+                  children: React.createElement("span", undefined, conj),
                   hint: def
                 }));
 }
@@ -71,13 +96,13 @@ function wrapPunctuation(str) {
 }
 
 function wrapMark(mark) {
-  return React.createElement("span", undefined, " " + mark + "");
+  return React.createElement("span", undefined, mark);
 }
 
 export {
   Tooltip ,
-  render ,
-  unit ,
+  Word ,
+  collapse ,
   wrapNoun ,
   wrapVerb ,
   wrapAd ,

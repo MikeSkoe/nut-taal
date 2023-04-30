@@ -10,41 +10,63 @@ module Tooltip = {
     </>
 }
 
-let render = (className, prefix, (known, word, def)) => {
-    let onClick = React.useContext(DictionaryContext.onWordClickContext);
+module Word = {
+    @react.component
+    let make = (~className, ~data) => {
+        let (known, word, def) = data;
 
-    <span className>
-        {known
+        known
             ? <Tooltip hint={def}>
-                <span onClick={_ => onClick(word)}>{`${prefix}${word}`->React.string}</span>
+                <span className>
+                    {`${word}`->React.string}
+                </span>
             </Tooltip>
-            : <u>{`${prefix}${word}`->React.string}</u>
-        }
-    </span>;
+            : <u>{`${word}`->React.string}</u>
+    }
 }
 
-let unit = (render, tuples): t => switch tuples {
-    | list{data, ...next} => <>
-        {render(" ", data)}
-        {next
-        ->Belt.List.map(render("-"))
-        ->Belt.List.toArray
-        ->React.array}
+let collapse = (elements): list<t> =>
+    elements
+    ->Belt.List.reduce(list{}, (acc, curr) =>
+        acc == list{}
+            ? list{curr}
+            : list{
+                ...acc,
+                "-"->React.string,
+                curr,
+            });
+
+let wrapNoun = (data: list<(bool, string, string)>) =>
+    <>
+        {collapse(
+            data
+            ->Belt.List.map(data => <Word className="noun" data />)
+        )->Belt.List.toArray->React.array}
     </>
-    | list{} => <></>
-}
 
-let wrapNoun = unit(render("noun"));
-let wrapVerb = unit(render("verb"));
-let wrapAd = unit(render("ad"))
+let wrapVerb = (data: list<(bool, string, string)>) =>
+    <>
+        {collapse(
+            data
+            ->Belt.List.map(data => <Word className="verb" data />)
+        )->Belt.List.toArray->React.array}
+    </>
+
+let wrapAd = (data: list<(bool, string, string)>) =>
+    <>
+        {collapse(
+            data
+            ->Belt.List.map(data => <Word className="ad" data />)
+        )->Belt.List.toArray->React.array}
+    </>
 
 let wrapConj = (conj, def) =>
     <span className="conj">
         <Tooltip hint={def}>
-            <span>{` ${conj}`->React.string}</span>
+            <span>{conj->React.string}</span>
         </Tooltip>
     </span>
 
 let wrapPunctuation = str => <span>{str->React.string}</span>
 
-let wrapMark = mark => <span>{` ${mark}`->React.string}</span>
+let wrapMark = mark => <span>{mark->React.string}</span>

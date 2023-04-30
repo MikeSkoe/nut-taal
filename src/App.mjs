@@ -24,7 +24,25 @@ function App$Parser(props) {
     Curry._1(setInput, $$event.target.value);
   };
   return React.createElement(React.Fragment, undefined, React.createElement("div", undefined, Belt_List.toArray(Belt_List.map($$String.split_on_char(/* '.' */46, match[0]), (function (string) {
-                            return React.createElement(React.Fragment, undefined, Belt_List.toArray(Curry._1(Lang.Lang.Lexs.show, Curry._1(Lang.Lang.Lexs.parse, string))));
+                            return React.createElement(React.Fragment, undefined, Belt_List.toArray(Belt_List.reduce(Curry._1(Lang.Lang.Lexs.show, Curry._1(Lang.Lang.Lexs.parse, string)), /* [] */0, (function (acc, curr) {
+                                                  if (acc === /* [] */0) {
+                                                    return {
+                                                            hd: curr,
+                                                            tl: /* [] */0
+                                                          };
+                                                  } else {
+                                                    return Belt_List.concatMany([
+                                                                acc,
+                                                                {
+                                                                  hd: " ",
+                                                                  tl: {
+                                                                    hd: curr,
+                                                                    tl: /* [] */0
+                                                                  }
+                                                                }
+                                                              ]);
+                                                  }
+                                                }))));
                           })))), React.createElement("textarea", {
                   inputMode: "text",
                   onChange: onChange
