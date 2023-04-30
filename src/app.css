@@ -33,21 +33,3 @@ body {
     position: relative;
     font-weight: bolder;
 }
-
-.tooltip {
-    visibility: hidden;
-    position: absolute;
-    top: 110%;
-    left: 0;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 4px 8px;
-    background: var(--dark);
-    border-radius: 4px;
-    width: fit-content;
-    white-space: nowrap;
-    box-shadow: rgba(0, 0, 0, 0.2);
-}
-
-*:hover > .tooltip {
-    visibility: visible;
-}

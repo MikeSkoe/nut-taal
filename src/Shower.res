@@ -2,10 +2,12 @@ type t = React.element;
 
 module Tooltip = {
     @react.component
-    let make = (~hint) =>
-        <span className="tooltip">
-            {hint->React.string}
-        </span>
+    let make = (~children, ~hint: string) => <>
+        {React.cloneElement(
+            children,
+            { "data-tooltip": hint, "tooltip-pos": "up"},
+        )}
+    </>
 }
 
 let render = (className, prefix, (known, word, def)) => {
@@ -13,10 +15,9 @@ let render = (className, prefix, (known, word, def)) => {
 
     <span className>
         {known
-            ? <>
+            ? <Tooltip hint={def}>
                 <span onClick={_ => onClick(word)}>{`${prefix}${word}`->React.string}</span>
-                <Tooltip hint={def} />
-            </>
+            </Tooltip>
             : <u>{`${prefix}${word}`->React.string}</u>
         }
     </span>;
@@ -39,8 +40,9 @@ let wrapAd = unit(render("ad"))
 
 let wrapConj = (conj, def) =>
     <span className="conj">
-        <span>{` ${conj}`->React.string}</span>
-        <Tooltip hint={def} />
+        <Tooltip hint={def}>
+            <span>{` ${conj}`->React.string}</span>
+        </Tooltip>
     </span>
 
 let wrapPunctuation = str => <span>{str->React.string}</span>
