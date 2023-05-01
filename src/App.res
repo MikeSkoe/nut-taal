@@ -50,10 +50,41 @@ module Parser = {
     }
 }
 
+module Hint = {
+    @react.component
+    let make = (~hint) => {
+        <div>
+            {hint
+            ->Belt.Option.map((({ str, noun, verb, ad, description }): AbstractDict.term) =>
+                <>
+                    <p><b>{"term: "->React.string}</b>{str->React.string}</p>
+                    {noun != ""
+                        ? <p><b>{"noun: "->React.string}</b>{noun->React.string}</p>
+                        : React.null
+                    }
+                    {verb != ""
+                        ? <p><b>{"verb: "->React.string}</b>{verb->React.string}</p>
+                        : React.null
+                    }
+                    {ad != ""
+                        ? <p><b>{"ad: "->React.string}</b>{ad->React.string}</p>
+                        : React.null
+                    }
+                    {description != ""
+                        ?  <p><b>{"description: "->React.string}</b>{description->React.string}</p>
+                        : React.null
+                    }
+                </>
+            )
+            ->Belt.Option.getWithDefault(<></>)}
+        </div>
+    }
+}
+
 module InputPage = {
     @react.component
     let make = () => {
-        let (query, setQuery) = React.useState(_ => "begin");
+        let (query, setQuery) = React.useState(_ => "");
         let (hint, setHint) = React.useState(_ => None);
 
         React.useEffect1(() => {
@@ -71,20 +102,7 @@ module InputPage = {
         <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
             <Parser />
             <Links />
-            {hint
-            ->Belt.Option.map((term: AbstractDict.term) => 
-                <Table.Dict
-                    terms={list{term}}
-                    titles={list{"term", "noun", "verb", "ad", "description"}}
-                    getColumns={term => list{
-                        term.str,
-                        term.noun,
-                        term.verb,
-                        term.ad,
-                        term.description,
-                    }}
-                />)
-            ->Belt.Option.getWithDefault(<></>)}
+            <Hint hint={hint} />
         </DictionaryContext.OnWordClickProvider>
     }
 }

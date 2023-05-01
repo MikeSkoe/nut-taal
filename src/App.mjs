@@ -2,7 +2,6 @@
 
 import * as Lang from "./Lang.mjs";
 import * as Curry from "rescript/lib/es6/curry.js";
-import * as Table from "./components/Table.mjs";
 import * as React from "react";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
@@ -58,9 +57,19 @@ function App$Parser(props) {
                 }));
 }
 
+function App$Hint(props) {
+  return React.createElement("div", undefined, Belt_Option.getWithDefault(Belt_Option.map(props.hint, (function (param) {
+                        var description = param.description;
+                        var ad = param.ad;
+                        var verb = param.verb;
+                        var noun = param.noun;
+                        return React.createElement(React.Fragment, undefined, React.createElement("p", undefined, React.createElement("b", undefined, "term: "), param.str), noun !== "" ? React.createElement("p", undefined, React.createElement("b", undefined, "noun: "), noun) : null, verb !== "" ? React.createElement("p", undefined, React.createElement("b", undefined, "verb: "), verb) : null, ad !== "" ? React.createElement("p", undefined, React.createElement("b", undefined, "ad: "), ad) : null, description !== "" ? React.createElement("p", undefined, React.createElement("b", undefined, "description: "), description) : null);
+                      })), React.createElement(React.Fragment, undefined)));
+}
+
 function App$InputPage(props) {
   var match = React.useState(function () {
-        return "begin";
+        return "";
       });
   var setQuery = match[1];
   var query = match[0];
@@ -84,48 +93,9 @@ function App$InputPage(props) {
                         }));
                 }),
               children: null
-            }, React.createElement(App$Parser, {}), React.createElement(App$Links, {}), Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (term) {
-                        return React.createElement(Table.Dict.make, {
-                                    titles: {
-                                      hd: "term",
-                                      tl: {
-                                        hd: "noun",
-                                        tl: {
-                                          hd: "verb",
-                                          tl: {
-                                            hd: "ad",
-                                            tl: {
-                                              hd: "description",
-                                              tl: /* [] */0
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    terms: {
-                                      hd: term,
-                                      tl: /* [] */0
-                                    },
-                                    getColumns: (function (term) {
-                                        return {
-                                                hd: term.str,
-                                                tl: {
-                                                  hd: term.noun,
-                                                  tl: {
-                                                    hd: term.verb,
-                                                    tl: {
-                                                      hd: term.ad,
-                                                      tl: {
-                                                        hd: term.description,
-                                                        tl: /* [] */0
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              };
-                                      })
-                                  });
-                      })), React.createElement(React.Fragment, undefined)));
+            }, React.createElement(App$Parser, {}), React.createElement(App$Links, {}), React.createElement(App$Hint, {
+                  hint: match$1[0]
+                }));
 }
 
 function App(props) {
