@@ -119,7 +119,6 @@ module Make = (
 
       let show = lex => {
          let m = SH.wrapMark;
-         let p = SH.wrapPunctuation;
          let c = conj => SH.wrapConj(
             Conjs.show(conj),
             Conjs.fold(conj, t => t.definition, "unknown"),
@@ -133,7 +132,7 @@ module Make = (
          let v = root => SH.wrapVerb(iterRoot(term => term.verb, root))
          let a = root => SH.wrapAd(iterRoot(term => term.ad, root));
          let rec iter = lex => switch lex {
-            | End => list{p(".")}
+            | End => list{}
 
             | Noun(root, Ad(root', next))
                => list{
@@ -167,6 +166,10 @@ module Make = (
             | Ad(root, next)
                => list{a(root), ...iter(next)}
 
+            | Con(conj, Ad(root, next))
+               => list{c(conj), m(CD.adMark), ...iter(Ad(root, next))}
+            | Con(conj, Verb(root, next))
+               => list{c(conj), m(CD.verbMark), ...iter(Verb(root, next))}
             | Con(conj, next)
                => list{c(conj), ...iter(next)}
             | Start(next) => iter(next)

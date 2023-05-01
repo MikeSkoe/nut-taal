@@ -19,11 +19,12 @@ var Tooltip = {
 function Shower$Word(props) {
   var data = props.data;
   var word = data[1];
+  var className = props.className;
   var onClick = React.useContext(DictionaryContext.onWordClickContext);
   if (data[0]) {
     return React.createElement(Shower$Tooltip, {
                 children: React.createElement("span", {
-                      className: props.className,
+                      className: className,
                       onClick: (function (param) {
                           Curry._1(onClick, word);
                         })
@@ -31,7 +32,9 @@ function Shower$Word(props) {
                 hint: data[2]
               });
   } else {
-    return React.createElement("u", undefined, "" + word + "");
+    return React.createElement("u", {
+                className: className
+              }, "" + word + "");
   }
 }
 

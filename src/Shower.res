@@ -22,7 +22,7 @@ module Word = {
                     {`${word}`->React.string}
                 </span>
             </Tooltip>
-            : <u>{`${word}`->React.string}</u>
+            : <u className>{`${word}`->React.string}</u>
     }
 }
 

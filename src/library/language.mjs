@@ -198,7 +198,6 @@ function Make(TD, CD, SH) {
   };
   var show$2 = function (lex) {
     var m = SH.wrapMark;
-    var p = SH.wrapPunctuation;
     var c = function (conj) {
       return Curry._2(SH.wrapConj, show$1(conj), fold$1(conj, (function (t) {
                         return t.definition;
@@ -247,10 +246,7 @@ function Make(TD, CD, SH) {
       while(true) {
         var lex = _lex;
         if (typeof lex === "number") {
-          return {
-                  hd: Curry._1(p, "."),
-                  tl: /* [] */0
-                };
+          return /* [] */0;
         }
         switch (lex.TAG | 0) {
           case /* Start */0 :
@@ -392,10 +388,45 @@ function Make(TD, CD, SH) {
                         };
               }
           case /* Con */4 :
-              return {
-                      hd: c(lex._0),
-                      tl: iter(lex._1)
-                    };
+              var next$4 = lex._1;
+              var conj = lex._0;
+              if (typeof next$4 === "number") {
+                return {
+                        hd: c(conj),
+                        tl: iter(next$4)
+                      };
+              }
+              switch (next$4.TAG | 0) {
+                case /* Verb */2 :
+                    return {
+                            hd: c(conj),
+                            tl: {
+                              hd: Curry._1(m, CD.verbMark),
+                              tl: iter({
+                                    TAG: /* Verb */2,
+                                    _0: next$4._0,
+                                    _1: next$4._1
+                                  })
+                            }
+                          };
+                case /* Ad */3 :
+                    return {
+                            hd: c(conj),
+                            tl: {
+                              hd: Curry._1(m, CD.adMark),
+                              tl: iter({
+                                    TAG: /* Ad */3,
+                                    _0: next$4._0,
+                                    _1: next$4._1
+                                  })
+                            }
+                          };
+                default:
+                  return {
+                          hd: c(conj),
+                          tl: iter(next$4)
+                        };
+              }
           
         }
       };
