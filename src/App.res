@@ -8,75 +8,62 @@ module Links = {
     let examplesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv";
 
     @react.component
-    let make = () => <>
+    let make = () => <div className="samples">
         <p><a href={dicrionaryURL}>{"Dictionary"->React.string}</a></p>
         <p><a href={particlesURL}>{"Particles"->React.string}</a></p>
         <p><a href={examplesURL}>{"Examples"->React.string}</a></p>
-    </>;
+    </div>;
 }
 
 module Parser = {
     @react.component
-    let make = () => {
-        let (input, setInput) = React.useState(_ => "");
-        let onChange = event => setInput((event->ReactEvent.Form.target)["value"]);
-
-        <>
-            <div>
-                {String.split_on_char('.', input)
-                ->Belt.List.map(string => <>{
-                    string
-                    ->Lang.Lexs.parse
-                    ->Lang.Lexs.show
-                    ->Belt.List.reduce(list{}, (acc, curr) =>
-                        acc == list{}
-                            ? list{curr}
-                            : list{
-                                ...acc,
-                                {" "->React.string},
-                                curr,
-                            }
-                    )
-                    ->Belt.List.toArray
-                    ->React.array
-                }
-                </>)
+    let make = (~text) => {
+        <div className="parsed">
+            {String.split_on_char('\n', text)
+            ->Belt.List.map(string => <>
+                {string
+                ->Lang.Lexs.parse
+                ->Lang.Lexs.show
+                ->Belt.List.reduce(list{}, (acc, curr) =>
+                    acc == list{}
+                        ? list{curr}
+                        : list{...acc, {" "->React.string}, curr}
+                )
                 ->Belt.List.toArray
                 ->React.array
                 }
-            </div>
-            <textarea onChange inputMode="text"/>
-        </>
+            </>)
+            ->Belt.List.reduce(list{}, (acc, curr) =>
+                acc == list{}
+                    ? list{curr}
+                    : list{...acc, <br />, curr}
+            )
+            ->Belt.List.toArray
+            ->React.array
+            }
+        </div>
     }
 }
 
 module Hint = {
     @react.component
     let make = (~hint) => {
-        <div>
+        <div className="box hint">
             {hint
             ->Belt.Option.map((({ str, noun, verb, ad, description }): AbstractDict.term) =>
                 <>
-                    <p><b>{"term: "->React.string}</b>{str->React.string}</p>
-                    {noun != ""
-                        ? <p><b>{"noun: "->React.string}</b>{noun->React.string}</p>
-                        : React.null
-                    }
-                    {verb != ""
-                        ? <p><b>{"verb: "->React.string}</b>{verb->React.string}</p>
-                        : React.null
-                    }
-                    {ad != ""
-                        ? <p><b>{"ad: "->React.string}</b>{ad->React.string}</p>
-                        : React.null
-                    }
-                    {description != ""
-                        ?  <p><b>{"description: "->React.string}</b>{description->React.string}</p>
-                        : React.null
-                    }
+                    <h3>{str->React.string}</h3>
+                    {`noun: ${noun}`->React.string}
+                    <br/>
+                    <span className="verb">{`verb: ${verb}`->React.string}</span>
+                    <br/>
+                    <span className="ad">{`ad: ${ad}`->React.string}</span>
+                    <br/>
+                    {`description: ${description}`->React.string}
                 </>
             )
             ->Belt.Option.getWithDefault(<></>)}
+            <Links />
         </div>
     }
 }
@@ -84,8 +71,22 @@ module Hint = {
 module InputPage = {
     @react.component
     let make = () => {
-        let (query, setQuery) = React.useState(_ => "");
+        let (query, setQuery) = React.useState(_ => "my");
+        let divRef = React.useRef(Js.Nullable.null);
         let (hint, setHint) = React.useState(_ => None);
+        let (isEditMode, setIsEditMode) = React.useState(_ => true);
+        let (input, setInput) = React.useState(_ => "");
+        let onChange = event => {
+            let target = (event->ReactEvent.Form.target)
+            let innerText: string = target["innerText"];
+            let innerHtml: string = target["innerHTML"];
+            setInput(_ => innerText);
+            if innerHtml->Js.String2.includes("<p") {
+                Js.log(innerText);
+                Js.log(innerHtml);
+                target["innerText"] = innerText
+            }
+        }
 
         React.useEffect1(() => {
             Dictionary.Term.all
@@ -100,9 +101,21 @@ module InputPage = {
         }, [query])
 
         <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
-            <Parser />
-            <Links />
-            <Hint hint={hint} />
+            <div className="box area">
+                <Parser text={input} />
+                <div
+                    ref={ReactDOM.Ref.domRef(divRef)}
+                    className={isEditMode ? "editable" : "nonEditable"}
+                    spellCheck={false}
+                    contentEditable={true}
+                    onInput={onChange}
+                    inputMode="text"
+                />
+            </div>
+            <input onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
+            {isEditMode
+                ? React.null
+                : <Hint hint={hint} />}
         </DictionaryContext.OnWordClickProvider>
     }
 }
@@ -110,6 +123,7 @@ module InputPage = {
 @react.component
 let make = () => {
     <DictionaryContext>
+        <h1><b>{"taal"->React.string}</b></h1>
         <InputPage />
     </DictionaryContext>
 }

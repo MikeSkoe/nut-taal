@@ -11,7 +11,7 @@ module Make = (
    module Roots = {
       type rec t =
          | Root(term, t)
-         | Prop(string)
+         | Prop(string, t)
          | End
 
       let fold = (t, fn, default) => switch t {
@@ -22,7 +22,7 @@ module Make = (
       let show = t => {
          let rec iter = t => switch t {
             | Root(term, next) => list{TD.show(term), ...iter(next)}
-            | Prop(str) => list{str}
+            | Prop(str, next) => list{str, ...iter(next)}
             | End => list{}
          }
          iter(t)
@@ -43,7 +43,7 @@ module Make = (
                   | Some(word) => Root(word, End)
                   | None => switch TD.parse(word) {
                      | Some(word) => Root(word, iter(next))
-                     | None => Prop(word)
+                     | None => Prop(word, iter(next))
                   }
                }
             }
@@ -125,7 +125,7 @@ module Make = (
          );
          let rec iterRoot = (readTerm, noun) => switch noun {
             | Roots.Root(term, next) => list{(true, term.str, readTerm(term)), ...iterRoot(readTerm, next)}
-            | Roots.Prop(term) => list{(false, term, "unknown")}
+            | Roots.Prop(term, next) => list{(false, term, term), ...iterRoot(readTerm, next)}
             | Roots.End => list{}
          }
          let n = root => SH.wrapNoun(iterRoot(term => term.noun, root))
@@ -159,6 +159,9 @@ module Make = (
 
             | Start(Ad(root, next))
                => list{m(CD.adMark), ...iter(Ad(root, next))}
+            | Start(Verb(root, next))
+               => list{m(CD.verbMark), ...iter(Ad(root, next))}
+
             | Ad(root, Noun(root', next))
                => list{a(root), m(CD.nounMark), ...iter(Noun(root', next))}
             | Ad(root, Verb(root', next))

@@ -27,7 +27,7 @@ function Make(TD, CD, SH) {
       } else {
         return {
                 hd: t._0,
-                tl: /* [] */0
+                tl: iter(t._1)
               };
       }
     };
@@ -74,7 +74,8 @@ function Make(TD, CD, SH) {
       } else {
         return {
                 TAG: /* Prop */1,
-                _0: word
+                _0: word,
+                _1: iter(next)
               };
       }
     };
@@ -207,22 +208,23 @@ function Make(TD, CD, SH) {
       if (typeof noun === "number") {
         return /* [] */0;
       }
-      if (noun.TAG !== /* Root */0) {
+      if (noun.TAG === /* Root */0) {
+        var term = noun._0;
         return {
                 hd: [
-                  false,
-                  noun._0,
-                  "unknown"
+                  true,
+                  term.str,
+                  Curry._1(readTerm, term)
                 ],
-                tl: /* [] */0
+                tl: iterRoot(readTerm, noun._1)
               };
       }
-      var term = noun._0;
+      var term$1 = noun._0;
       return {
               hd: [
-                true,
-                term.str,
-                Curry._1(readTerm, term)
+                false,
+                term$1,
+                term$1
               ],
               tl: iterRoot(readTerm, noun._1)
             };
@@ -255,18 +257,29 @@ function Make(TD, CD, SH) {
                 _lex = next;
                 continue ;
               }
-              if (next.TAG === /* Ad */3) {
-                return {
-                        hd: Curry._1(m, CD.adMark),
-                        tl: iter({
-                              TAG: /* Ad */3,
-                              _0: next._0,
-                              _1: next._1
-                            })
-                      };
+              switch (next.TAG | 0) {
+                case /* Verb */2 :
+                    return {
+                            hd: Curry._1(m, CD.verbMark),
+                            tl: iter({
+                                  TAG: /* Ad */3,
+                                  _0: next._0,
+                                  _1: next._1
+                                })
+                          };
+                case /* Ad */3 :
+                    return {
+                            hd: Curry._1(m, CD.adMark),
+                            tl: iter({
+                                  TAG: /* Ad */3,
+                                  _0: next._0,
+                                  _1: next._1
+                                })
+                          };
+                default:
+                  _lex = next;
+                  continue ;
               }
-              _lex = next;
-              continue ;
           case /* Noun */1 :
               var next$1 = lex._1;
               var root = lex._0;
