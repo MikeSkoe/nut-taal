@@ -7,6 +7,7 @@ import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
+import * as AbstractDict from "./abstractDict.mjs";
 
 var MyDict = $$Map.Make({
       compare: $$String.compare
@@ -53,17 +54,12 @@ async function translate(string) {
               }));
 }
 
-function parse(string) {
-  return Curry._2(MyDict.find_opt, string, dict.contents);
-}
-
 function show(param) {
   return param.str;
 }
 
 var Term = {
   show: show,
-  parse: parse,
   translate: translate
 };
 
@@ -95,25 +91,26 @@ function mem(key) {
   return Belt_Option.isSome(Curry._2(MyDict.find_opt, key, dict$1.contents));
 }
 
-function parse$1(key) {
-  return Curry._2(MyDict.find_opt, key, dict$1.contents);
-}
-
 function show$1(param) {
   return param.str;
 }
 
 var Conj = {
-  show: show$1,
-  parse: parse$1,
   nounMark: "a",
   verbMark: "i",
   adMark: "e",
   mem: mem,
+  show: show$1,
   translate: translate$1
 };
 
+var emptyTerm = AbstractDict.emptyTerm;
+
+var emptyConjTerm = AbstractDict.emptyConjTerm;
+
 export {
+  emptyTerm ,
+  emptyConjTerm ,
   MyDict ,
   Utils ,
   Term ,

@@ -1,1 +1,22 @@
-/* This output is empty. Its source's type definitions, externals and/or unused code got optimized away. */
+
+
+
+var emptyTerm = {
+  str: "",
+  noun: "",
+  verb: "",
+  ad: "",
+  description: ""
+};
+
+var emptyConjTerm = {
+  str: "",
+  definition: "",
+  description: ""
+};
+
+export {
+  emptyTerm ,
+  emptyConjTerm ,
+}
+/* No side effect */

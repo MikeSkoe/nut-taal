@@ -4,6 +4,8 @@ import * as List from "rescript/lib/es6/list.js";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
+import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
+import * as AbstractDict from "./abstractDict.mjs";
 
 var combMarkString = "-";
 
@@ -39,8 +41,8 @@ function Make(TD, CD, SH) {
                   }
                 }));
   };
-  var parse = function (str) {
-    var iter = function (str) {
+  var translate = function (str) {
+    var iter = async function (str) {
       if (!str) {
         return /* End */0;
       }
@@ -56,7 +58,7 @@ function Make(TD, CD, SH) {
                 return "" + acc + "" + combMarkString + "" + curr + "";
               }
             }));
-      var word$1 = Curry._1(TD.parse, compound);
+      var word$1 = await Curry._1(TD.translate, compound);
       if (word$1 !== undefined) {
         return {
                 TAG: /* Root */0,
@@ -64,60 +66,49 @@ function Make(TD, CD, SH) {
                 _1: /* End */0
               };
       }
-      var word$2 = Curry._1(TD.parse, word);
+      var word$2 = await Curry._1(TD.translate, word);
       if (word$2 !== undefined) {
-        return {
-                TAG: /* Root */0,
-                _0: word$2,
-                _1: iter(next)
-              };
+        return Belt_Option.map(await iter(next), (function (next) {
+                      return {
+                              TAG: /* Root */0,
+                              _0: word$2,
+                              _1: next
+                            };
+                    }));
       } else {
-        return {
-                TAG: /* Prop */1,
-                _0: word,
-                _1: iter(next)
-              };
+        return Belt_Option.map(await iter(next), (function (next) {
+                      return {
+                              TAG: /* Prop */1,
+                              _0: word,
+                              _1: next
+                            };
+                    }));
       }
     };
     return iter($$String.split_on_char(/* '-' */45, str));
   };
-  var Roots_translate = TD.translate;
   var Roots = {
     fold: fold,
     show: show,
-    parse: parse,
-    translate: Roots_translate
+    translate: translate
   };
-  var fold$1 = function (t, fn, $$default) {
-    if (t) {
-      return Curry._1(fn, t._0);
-    } else {
-      return $$default;
-    }
+  var show$1 = function (str) {
+    return Curry._1(CD.show, str._0);
   };
-  var show$1 = function (t) {
-    if (t) {
-      return Curry._1(CD.show, t._0);
-    } else {
-      return "";
-    }
+  var fold$1 = function (conjTerm, fn) {
+    return Curry._1(fn, conjTerm._0);
   };
-  var parse$1 = function (str) {
-    var str$1 = Curry._1(CD.parse, str);
-    if (str$1 !== undefined) {
-      return /* Conj */{
-              _0: str$1
-            };
-    } else {
-      return /* End */0;
-    }
+  var translate$1 = async function (str) {
+    return Belt_Option.map(await Curry._1(CD.translate, str), (function (str) {
+                  return /* Conj */{
+                          _0: str
+                        };
+                }));
   };
-  var Conjs_translate = CD.translate;
   var Conjs = {
-    fold: fold$1,
     show: show$1,
-    parse: parse$1,
-    translate: Conjs_translate
+    fold: fold$1,
+    translate: translate$1
   };
   var isMark = function (__x) {
     return List.mem(__x, {
@@ -131,82 +122,121 @@ function Make(TD, CD, SH) {
                 }
               });
   };
-  var parse$2 = function (str) {
-    var iter = function (pending, strs) {
+  var parse = async function (str) {
+    var iter = async function (pending, strs) {
       if (!strs) {
         return /* End */0;
       }
       var next = strs.tl;
       var conj = strs.hd;
       if (Curry._1(CD.mem, conj)) {
-        return {
-                TAG: /* Con */4,
-                _0: parse$1(conj),
-                _1: iter(/* P_N */0, next)
-              };
+        var conj$1 = await translate$1(conj);
+        var next$1 = await iter(/* P_N */0, next);
+        return Belt_Option.flatMap(conj$1, (function (conj) {
+                      return Belt_Option.flatMap(next$1, (function (next) {
+                                    return {
+                                            TAG: /* Con */4,
+                                            _0: conj,
+                                            _1: next
+                                          };
+                                  }));
+                    }));
       }
       if (next) {
-        var next$1 = next.tl;
+        var next$2 = next.tl;
         var word = next.hd;
         if (conj === CD.nounMark && !isMark(word)) {
-          return {
-                  TAG: /* Noun */1,
-                  _0: parse(word),
-                  _1: iter(/* P_V */1, next$1)
-                };
+          var word$1 = await translate(word);
+          var next$3 = await iter(/* P_V */1, next$2);
+          return Belt_Option.flatMap(word$1, (function (word) {
+                        return Belt_Option.flatMap(next$3, (function (next) {
+                                      return {
+                                              TAG: /* Noun */1,
+                                              _0: word,
+                                              _1: next
+                                            };
+                                    }));
+                      }));
         }
         if (conj === CD.verbMark && !isMark(word)) {
-          return {
-                  TAG: /* Verb */2,
-                  _0: parse(word),
-                  _1: iter(/* P_N */0, next$1)
-                };
+          var word$2 = await translate(word);
+          var next$4 = await iter(/* P_N */0, next$2);
+          return Belt_Option.flatMap(word$2, (function (word) {
+                        return Belt_Option.flatMap(next$4, (function (next) {
+                                      return {
+                                              TAG: /* Verb */2,
+                                              _0: word,
+                                              _1: next
+                                            };
+                                    }));
+                      }));
         }
         if (conj === CD.adMark && !isMark(word)) {
-          return {
-                  TAG: /* Ad */3,
-                  _0: parse(word),
-                  _1: iter(/* P_A */2, next$1)
-                };
+          var word$3 = await translate(word);
+          var next$5 = await iter(/* P_A */2, next$2);
+          return Belt_Option.flatMap(word$3, (function (word) {
+                        return Belt_Option.flatMap(next$5, (function (next) {
+                                      return {
+                                              TAG: /* Ad */3,
+                                              _0: word,
+                                              _1: next
+                                            };
+                                    }));
+                      }));
         }
         
       }
       switch (pending) {
         case /* P_N */0 :
-            return {
-                    TAG: /* Noun */1,
-                    _0: parse(strs.hd),
-                    _1: iter(/* P_V */1, strs.tl)
-                  };
+            var word$4 = await translate(strs.hd);
+            var next$6 = await iter(/* P_V */1, strs.tl);
+            return Belt_Option.flatMap(word$4, (function (word) {
+                          return Belt_Option.flatMap(next$6, (function (next) {
+                                        return {
+                                                TAG: /* Noun */1,
+                                                _0: word,
+                                                _1: next
+                                              };
+                                      }));
+                        }));
         case /* P_V */1 :
-            return {
-                    TAG: /* Verb */2,
-                    _0: parse(strs.hd),
-                    _1: iter(/* P_N */0, strs.tl)
-                  };
+            var word$5 = await translate(strs.hd);
+            var next$7 = await iter(/* P_N */0, strs.tl);
+            return Belt_Option.flatMap(word$5, (function (word) {
+                          return Belt_Option.flatMap(next$7, (function (next) {
+                                        return {
+                                                TAG: /* Verb */2,
+                                                _0: word,
+                                                _1: next
+                                              };
+                                      }));
+                        }));
         case /* P_A */2 :
-            return {
-                    TAG: /* Ad */3,
-                    _0: parse(strs.hd),
-                    _1: iter(/* P_A */2, strs.tl)
-                  };
+            var word$6 = await translate(strs.hd);
+            var next$8 = await iter(/* P_A */2, strs.tl);
+            return Belt_Option.flatMap(word$6, (function (word) {
+                          return Belt_Option.flatMap(next$8, (function (next) {
+                                        return {
+                                                TAG: /* Ad */3,
+                                                _0: word,
+                                                _1: next
+                                              };
+                                      }));
+                        }));
         
       }
     };
-    return {
-            TAG: /* Start */0,
-            _0: iter(/* P_N */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str)))
-          };
-  };
-  var mem = function (str) {
-    return parse$2(str) !== /* End */0;
+    return Belt_Option.map(await iter(/* P_N */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str))), (function (lex) {
+                  return {
+                          TAG: /* Start */0,
+                          _0: lex
+                        };
+                }));
   };
   var show$2 = function (lex) {
     var m = SH.wrapMark;
     var c = function (conj) {
-      return Curry._2(SH.wrapConj, show$1(conj), fold$1(conj, (function (t) {
-                        return t.definition;
-                      }), "unknown"));
+      return Curry._2(SH.wrapConj, Curry._1(CD.show, conj._0), conj._0.definition);
     };
     var iterRoot = function (readTerm, noun) {
       if (typeof noun === "number") {
@@ -452,8 +482,7 @@ function Make(TD, CD, SH) {
   };
   var Lexs = {
     isMark: isMark,
-    parse: parse$2,
-    mem: mem,
+    parse: parse,
     show: show$2
   };
   return {
@@ -463,9 +492,15 @@ function Make(TD, CD, SH) {
         };
 }
 
+var emptyTerm = AbstractDict.emptyTerm;
+
+var emptyConjTerm = AbstractDict.emptyConjTerm;
+
 var combMark = /* '-' */45;
 
 export {
+  emptyTerm ,
+  emptyConjTerm ,
   combMark ,
   combMarkString ,
   Make ,

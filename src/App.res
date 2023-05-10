@@ -18,28 +18,50 @@ module Links = {
 module Parser = {
     @react.component
     let make = (~text) => {
+        let (parsed, setParsed) = React.useState(_ => []);
+
+        React.useEffect1(() => {
+            String.split_on_char('\n', text)
+            -> Belt.List.map(Lang.Lexs.parse)
+            -> Belt.List.toArray
+            -> Js.Promise.all
+            -> Js.Promise.then_(arr => 
+                arr
+                -> Belt.Array.reduce(
+                    [],
+                    (acc: array<Lang.Lexs.t>, curr) => switch curr {
+                        | Some(parsed) => Belt.Array.concat(acc, [parsed])
+                        | None => acc
+                    }
+                )
+                -> res => Js.Promise.resolve(setParsed(_ => res))
+            , _)
+            -> ignore;
+
+            None;
+        }, [text]);
+
         <div className="parsed">
-            {String.split_on_char('\n', text)
-            ->Belt.List.map(string => <>
-                {string
-                ->Lang.Lexs.parse
-                ->Lang.Lexs.show
-                ->Belt.List.reduce(list{}, (acc, curr) =>
+            {parsed
+            -> Belt.Array.map(lex => <>{
+                lex
+                -> Lang.Lexs.show
+                -> Belt.List.reduce(list{}, (acc, curr) =>
                     acc == list{}
                         ? list{curr}
                         : list{...acc, {" "->React.string}, curr}
                 )
-                ->Belt.List.toArray
-                ->React.array
-                }
-            </>)
-            ->Belt.List.reduce(list{}, (acc, curr) =>
+                -> Belt.List.toArray
+                -> React.array
+            }</>)
+            -> Belt.List.fromArray
+            -> Belt.List.reduce(list{}, (acc, curr) =>
                 acc == list{}
                     ? list{curr}
                     : list{...acc, <br />, curr}
             )
-            ->Belt.List.toArray
-            ->React.array
+            -> Belt.List.toArray
+            -> React.array
             }
         </div>
     }
@@ -90,7 +112,12 @@ module InputPage = {
 
         React.useEffect1(() => {
             Lang.Roots.translate(query)
-            |> Js.Promise.then_(term => Promise.resolve(setHint(_ => term)))
+            |> Js.Promise.then_(term => Js.Promise.resolve(
+                term -> Belt.Option.forEach(term => switch term {
+                    | Lang.Roots.Root(term, _) => setHint(_ => Some(term))
+                    | _ => ()
+                })
+            ))
             |> ignore;
             None;
         }, [query])

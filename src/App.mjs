@@ -5,6 +5,7 @@ import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
+import * as Belt_Array from "rescript/lib/es6/belt_Array.js";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
@@ -26,29 +27,49 @@ function App$Links(props) {
 }
 
 function App$Parser(props) {
+  var text = props.text;
+  var match = React.useState(function () {
+        return [];
+      });
+  var setParsed = match[1];
+  React.useEffect((function () {
+          var __x = Promise.all(Belt_List.toArray(Belt_List.map($$String.split_on_char(/* '\n' */10, text), Lang.Lang.Lexs.parse)));
+          Js_promise.then_((function (arr) {
+                  var res = Belt_Array.reduce(arr, [], (function (acc, curr) {
+                          if (curr !== undefined) {
+                            return Belt_Array.concat(acc, [curr]);
+                          } else {
+                            return acc;
+                          }
+                        }));
+                  return Promise.resolve(Curry._1(setParsed, (function (param) {
+                                    return res;
+                                  })));
+                }), __x);
+        }), [text]);
   return React.createElement("div", {
               className: "parsed"
-            }, Belt_List.toArray(Belt_List.reduce(Belt_List.map($$String.split_on_char(/* '\n' */10, props.text), (function (string) {
-                            return React.createElement(React.Fragment, undefined, Belt_List.toArray(Belt_List.reduce(Curry._1(Lang.Lang.Lexs.show, Curry._1(Lang.Lang.Lexs.parse, string)), /* [] */0, (function (acc, curr) {
-                                                  if (acc === /* [] */0) {
-                                                    return {
-                                                            hd: curr,
-                                                            tl: /* [] */0
-                                                          };
-                                                  } else {
-                                                    return Belt_List.concatMany([
-                                                                acc,
-                                                                {
-                                                                  hd: " ",
-                                                                  tl: {
-                                                                    hd: curr,
-                                                                    tl: /* [] */0
-                                                                  }
-                                                                }
-                                                              ]);
-                                                  }
-                                                }))));
-                          })), /* [] */0, (function (acc, curr) {
+            }, Belt_List.toArray(Belt_List.reduce(Belt_List.fromArray(Belt_Array.map(match[0], (function (lex) {
+                                return React.createElement(React.Fragment, undefined, Belt_List.toArray(Belt_List.reduce(Curry._1(Lang.Lang.Lexs.show, lex), /* [] */0, (function (acc, curr) {
+                                                      if (acc === /* [] */0) {
+                                                        return {
+                                                                hd: curr,
+                                                                tl: /* [] */0
+                                                              };
+                                                      } else {
+                                                        return Belt_List.concatMany([
+                                                                    acc,
+                                                                    {
+                                                                      hd: " ",
+                                                                      tl: {
+                                                                        hd: curr,
+                                                                        tl: /* [] */0
+                                                                      }
+                                                                    }
+                                                                  ]);
+                                                      }
+                                                    }))));
+                              }))), /* [] */0, (function (acc, curr) {
                         if (acc === /* [] */0) {
                           return {
                                   hd: curr,
@@ -118,8 +139,17 @@ function App$InputPage(props) {
   };
   React.useEffect((function () {
           Js_promise.then_((function (term) {
-                  return Promise.resolve(Curry._1(setHint, (function (param) {
-                                    return term;
+                  return Promise.resolve(Belt_Option.forEach(term, (function (term) {
+                                    if (typeof term === "number") {
+                                      return ;
+                                    }
+                                    if (term.TAG !== /* Root */0) {
+                                      return ;
+                                    }
+                                    var term$1 = term._0;
+                                    Curry._1(setHint, (function (param) {
+                                            return term$1;
+                                          }));
                                   })));
                 }), Curry._1(Lang.Lang.Roots.translate, query));
         }), [query]);

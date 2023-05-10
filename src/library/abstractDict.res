@@ -1,9 +1,3 @@
-module type PARSABLE = {
-   type t;
-   let show : t => string
-   let parse : string => option<t>
-}
-
 module type SHOWER = {
    type t;
    // First string is the word, the second is translation
@@ -29,16 +23,19 @@ type conjTerm = {
    description: string,
 }
 
+let emptyTerm: term = { str: "", noun: "", verb: "", ad: "", description: "" }
+let emptyConjTerm: conjTerm = { str: "", definition: "", description: "" }
+
 module type CONJ_DICTIONARY = {
-   include PARSABLE with type t := conjTerm
    let nounMark : string
    let verbMark : string
    let adMark : string
    let mem : string => bool
+   let show : conjTerm => string
    let translate : string => promise<option<conjTerm>>
 }
 
 module type TERMIN_DICTIONARY = {
-   include PARSABLE with type t := term
+   let show : term => string
    let translate : string => promise<option<term>>
 }

@@ -34,58 +34,44 @@ module Make = (
             )
          }
 
-      let parse: string => t
+      let translate: string => promise<option<t>>
          = str => {
-            let rec iter: list<string> => t
-               = str => switch str {
+            let rec iter: list<string> => promise<option<t>>
+               = async str => switch str {
                   | list{word, ...next} => {
                      let compound = list{word, ...next}
                         -> Belt.List.reduce("",
                            (acc, curr) => acc == "" ? curr : `${acc}${combMarkString}${curr}`,
                         );
-                     switch TD.parse(compound) {
-                        | Some(word) => Root(word, End)
-                        | None => switch TD.parse(word) {
-                           | Some(word) => Root(word, iter(next))
-                           | None => Prop(word, iter(next))
+
+                     switch await TD.translate(compound) {
+                        | Some(word) => Some(Root(word, End))
+                        | None => switch await TD.translate(word) {
+                           | Some(word) => (await iter(next)) -> Belt.Option.map(next => Root(word, next))
+                           | None => (await iter(next)) -> Belt.Option.map(next => Prop(word, next))
                         }
                      }
                   }
-                  | list{} => End
+                  | list{} => Some(End)
                }
 
             String.split_on_char(combMark, str) -> iter
          }
-      
-      let translate: string => promise<option<term>>
-         = TD.translate;
    }
 
    module Conjs = {
-      type t =
-         | Conj(conjTerm)
-         | End
-
-      let fold: (t, conjTerm => 'a, 'a) => 'a
-         = (t, fn, default) => switch t {
-            | Conj(t) => fn(t)
-            | End => default
-         }
+      type t = Conj(conjTerm);
 
       let show: t => string
-         = t => switch t {
-            | Conj(str) => CD.show(str)
-            | End => ""
-         }
+         = (Conj(str)) => CD.show(str);
    
-      let parse: string => t
-         = str => switch CD.parse(str) {
-            | Some(str) => Conj(str)
-            | None => End
-         }
-      
-      let translate: string => promise<option<conjTerm>>
-         = CD.translate;
+      let fold: (t, conjTerm => 'a) => 'a
+         = (Conj(conjTerm), fn) => fn(conjTerm)
+
+      let translate: string => promise<option<t>>
+         = async str =>
+            (await CD.translate(str))
+            -> Belt.Option.map(str => Conj(str));
    }
 
    module Lexs = {
@@ -102,39 +88,102 @@ module Make = (
 
       type pending = P_N | P_V | P_A;
 
-      let parse: string => t
-         = str => {
-            let rec iter: (pending, list<string>) => t
-               = (pending, strs) => switch (pending, strs) {
+      let parse: string => promise<option<t>>
+         = async str => {
+            let map2 = (
+               a: option<'a>,
+               b: option<'b>,
+               fn: ('a, 'b) => option<'c>,
+            ) => a -> Belt.Option.flatMap(a =>
+                  b -> Belt.Option.flatMap(b => fn(a, b))
+               )
+            open Belt.Option;
+
+            let rec iter: (pending, list<string>) => promise<option<t>>
+               = async (pending, strs) => switch (pending, strs) {
                   | (_, list{}) 
-                     => End
-                  
+                     => Some(End)
+
                   | (_, list{conj, ...next}) when CD.mem(conj)
-                     => Con(Conjs.parse(conj), iter(P_N, next))
+                     => {
+                        let conj = await Conjs.translate(conj);
+                        let next = await iter(P_N, next);
+
+                        conj -> flatMap(conj =>
+                        next -> flatMap(next =>
+                           Some(Con(conj, next))
+                        ));
+                     }
 
                   | (_, list{mark, word, ...next}) when mark == CD.nounMark && !isMark(word)
-                     => Noun(Roots.parse(word), iter(P_V, next))
+                     => {
+                        let word = await Roots.translate(word);
+                        let next = await iter(P_V, next);
+
+                        word -> flatMap(word =>
+                        next -> flatMap(next =>
+                           Some(Noun(word, next))
+                        ))
+                     }
+                  
                   | (_, list{mark, word, ...next}) when mark == CD.verbMark && !isMark(word)
-                     => Verb(Roots.parse(word), iter(P_N, next))
+                     => {
+                        let word = await Roots.translate(word);
+                        let next = await iter(P_N, next);
+
+                        word -> flatMap(word =>
+                        next -> flatMap(next =>
+                           Some(Verb(word, next))
+                        ))
+                     }
                   | (_, list{mark, word, ...next}) when mark == CD.adMark && !isMark(word)
-                     => Ad(Roots.parse(word), iter(P_A, next))
+                     => {
+                        let word = await Roots.translate(word);
+                        let next = await iter(P_A, next);
+
+                        word -> flatMap(word =>
+                        next -> flatMap(next =>
+                           Some(Ad(word, next))
+                        ))
+                     }
 
                   | (P_N, list{word, ...next})
-                     => Noun(Roots.parse(word), iter(P_V, next))
+                     => {
+                        let word = await Roots.translate(word);
+                        let next = await iter(P_V, next);
+
+                        word -> flatMap(word =>
+                        next -> flatMap(next =>
+                           Some(Noun(word, next))
+                        ))
+                     }
+
                   | (P_V, list{word, ...next})
-                     => Verb(Roots.parse(word), iter(P_N, next))
+                     => {
+                        let word = await Roots.translate(word);
+                        let next = await iter(P_N, next);
+
+                        word -> flatMap(word =>
+                        next -> flatMap(next =>
+                           Some(Verb(word, next))
+                        ))
+                     }
+
                   | (P_A, list{word, ...next})
-                     => Ad(Roots.parse(word), iter(P_A, next))
+                     => {
+                        let word = await Roots.translate(word);
+                        let next = await iter(P_A, next);
+
+                        word -> flatMap(word =>
+                        next -> flatMap(next =>
+                           Some(Ad(word, next))
+                        ))
+                     }
                }
 
-            String.trim(str)
-            |> String.split_on_char(' ')
-            |> iter(P_N)
-            |> lex => Start(lex)
+            (await (String.trim(str) |> String.split_on_char(' ') |> iter(P_N)))
+               -> Belt.Option.map(lex => Start(lex))
          }
-
-      let mem: string => bool
-         = str => parse(str) != End;
 
       let show: t => list<SH.t>
          = lex => {
@@ -142,7 +191,7 @@ module Make = (
             let c: Conjs.t => SH.t
                = conj => SH.wrapConj(
                   Conjs.show(conj),
-                  Conjs.fold(conj, t => t.definition, "unknown"),
+                  Conjs.fold(conj, t => t.definition),
                );
 
             let rec iterRoot: (term => string, Roots.t) => list<(bool, string, string)>
