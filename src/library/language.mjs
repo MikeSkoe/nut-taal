@@ -81,10 +81,12 @@ function Make(TD, CD, SH) {
     };
     return iter($$String.split_on_char(/* '-' */45, str));
   };
+  var Roots_translate = TD.translate;
   var Roots = {
     fold: fold,
     show: show,
-    parse: parse
+    parse: parse,
+    translate: Roots_translate
   };
   var fold$1 = function (t, fn, $$default) {
     if (t) {
@@ -110,10 +112,12 @@ function Make(TD, CD, SH) {
       return /* End */0;
     }
   };
+  var Conjs_translate = CD.translate;
   var Conjs = {
     fold: fold$1,
     show: show$1,
-    parse: parse$1
+    parse: parse$1,
+    translate: Conjs_translate
   };
   var isMark = function (__x) {
     return List.mem(__x, {

@@ -47,6 +47,9 @@ module Term: TERMIN_DICTIONARY = {
          -> Js.Promise.resolve
       );
 
+   let translate: string => promise<option<term>>
+      = async string => (await all) -> Belt.List.getBy(term => term.str == string);
+
    let parse: MyDict.key => option<term> 
       = string => MyDict.find_opt(string, dict.contents);
 
@@ -60,7 +63,7 @@ module Conj: CONJ_DICTIONARY = {
    let adMark = "e"
 
    let dict: ref<MyDict.t<conjTerm>> = ref(MyDict.empty);
-   
+
    let dictProm: promise<MyDict.t<conjTerm>>
       = Utils.loadDict(
          "particles.csv",
@@ -77,6 +80,9 @@ module Conj: CONJ_DICTIONARY = {
          -> Belt.List.map(((_, term)) => term)
          -> Js.Promise.resolve
       )
+   
+   let translate: string => promise<option<conjTerm>>
+      = async string => (await all) -> Belt.List.getBy(term => term.str == string);
 
    let mem: MyDict.key => bool
       = key =>

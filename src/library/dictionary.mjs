@@ -47,6 +47,12 @@ var all = Js_promise.then_((function (dict) {
                         })));
       }), dictProm);
 
+async function translate(string) {
+  return Belt_List.getBy(await all, (function (term) {
+                return term.str === string;
+              }));
+}
+
 function parse(string) {
   return Curry._2(MyDict.find_opt, string, dict.contents);
 }
@@ -58,7 +64,7 @@ function show(param) {
 var Term = {
   show: show,
   parse: parse,
-  all: all
+  translate: translate
 };
 
 var dict$1 = {
@@ -79,6 +85,12 @@ var all$1 = Js_promise.then_((function (dict) {
                         })));
       }), dictProm$1);
 
+async function translate$1(string) {
+  return Belt_List.getBy(await all$1, (function (term) {
+                return term.str === string;
+              }));
+}
+
 function mem(key) {
   return Belt_Option.isSome(Curry._2(MyDict.find_opt, key, dict$1.contents));
 }
@@ -98,7 +110,7 @@ var Conj = {
   verbMark: "i",
   adMark: "e",
   mem: mem,
-  all: all$1
+  translate: translate$1
 };
 
 export {

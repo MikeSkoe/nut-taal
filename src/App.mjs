@@ -5,7 +5,6 @@ import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
-import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
@@ -118,13 +117,11 @@ function App$InputPage(props) {
     
   };
   React.useEffect((function () {
-          Js_promise.then_((function (all) {
+          Js_promise.then_((function (term) {
                   return Promise.resolve(Curry._1(setHint, (function (param) {
-                                    return Belt_List.getBy(all, (function (term) {
-                                                  return term.str === query;
-                                                }));
+                                    return term;
                                   })));
-                }), Dictionary.Term.all);
+                }), Curry._1(Lang.Lang.Roots.translate, query));
         }), [query]);
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
               value: (function (str) {
@@ -158,9 +155,7 @@ function App$InputPage(props) {
 }
 
 function App(props) {
-  return React.createElement(DictionaryContext.make, {
-              children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "taal")), React.createElement(App$InputPage, {}));
+  return React.createElement(React.Fragment, undefined, React.createElement("h1", undefined, React.createElement("b", undefined, "taal")), React.createElement(App$InputPage, {}));
 }
 
 var make = App;

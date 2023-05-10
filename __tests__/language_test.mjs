@@ -19,12 +19,14 @@ function parse(str) {
         };
 }
 
-var all = Promise.resolve(/* [] */0);
+function translate(param) {
+  return Promise.resolve(undefined);
+}
 
 var MockTermDict = {
   show: show,
   parse: parse,
-  all: all
+  translate: translate
 };
 
 function show$1(t) {
@@ -39,11 +41,13 @@ function parse$1(str) {
         };
 }
 
+function translate$1(param) {
+  return Promise.resolve(undefined);
+}
+
 function mem(word) {
   return word === "en";
 }
-
-var all$1 = Promise.resolve(/* [] */0);
 
 var MockConjDict = {
   show: show$1,
@@ -52,7 +56,7 @@ var MockConjDict = {
   verbMark: "i",
   adMark: "e",
   mem: mem,
-  all: all$1
+  translate: translate$1
 };
 
 function drawMock(root) {
@@ -110,4 +114,4 @@ export {
   MockShower ,
   Lang ,
 }
-/* all Not a pure module */
+/* Lang Not a pure module */

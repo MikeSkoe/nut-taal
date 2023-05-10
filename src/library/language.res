@@ -56,6 +56,9 @@ module Make = (
 
             String.split_on_char(combMark, str) -> iter
          }
+      
+      let translate: string => promise<option<term>>
+         = TD.translate;
    }
 
    module Conjs = {
@@ -80,6 +83,9 @@ module Make = (
             | Some(str) => Conj(str)
             | None => End
          }
+      
+      let translate: string => promise<option<conjTerm>>
+         = CD.translate;
    }
 
    module Lexs = {

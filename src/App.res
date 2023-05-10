@@ -89,14 +89,9 @@ module InputPage = {
         }
 
         React.useEffect1(() => {
-            Dictionary.Term.all
-            |>Js.Promise.then_((all: list<AbstractDict.term>) =>
-                setHint(
-                    _ => all->Belt.List.getBy(term => term.str == query)
-                )
-                ->Js.Promise.resolve
-            )
-            |>ignore;
+            Lang.Roots.translate(query)
+            |> Js.Promise.then_(term => Promise.resolve(setHint(_ => term)))
+            |> ignore;
             None;
         }, [query])
 
@@ -113,17 +108,15 @@ module InputPage = {
                 />
             </div>
             <input onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
-            {isEditMode
-                ? React.null
-                : <Hint hint={hint} />}
+            {isEditMode ? React.null : <Hint hint={hint} />}
         </DictionaryContext.OnWordClickProvider>
     }
 }
 
 @react.component
 let make = () => {
-    <DictionaryContext>
+    <>
         <h1><b>{"taal"->React.string}</b></h1>
         <InputPage />
-    </DictionaryContext>
+    </>
 }

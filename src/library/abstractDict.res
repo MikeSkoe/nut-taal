@@ -35,11 +35,10 @@ module type CONJ_DICTIONARY = {
    let verbMark : string
    let adMark : string
    let mem : string => bool
-   let all : promise<list<conjTerm>>
+   let translate : string => promise<option<conjTerm>>
 }
 
 module type TERMIN_DICTIONARY = {
    include PARSABLE with type t := term
-   // TODO: should "mem" function be implemented?
-   let all : promise<list<term>>
+   let translate : string => promise<option<term>>
 }

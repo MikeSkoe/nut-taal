@@ -10,21 +10,21 @@ module MockTermDict: AbstractDict.TERMIN_DICTIONARY = {
     ad: str,
     description: str,
   })
-  let all = Js.Promise.resolve(list{});
+  let translate = _ => Promise.resolve(None)
 }
 
 module MockConjDict: AbstractDict.CONJ_DICTIONARY = {
   let nounMark = "a"
   let verbMark = "i"
   let adMark = "e"
-  let show = (t: conjTerm) => t.str
+  let show = t => t.str
   let parse = str => Some({
     str: str,
     definition: str,
     description: str,
   })
+  let translate = _ => Promise.resolve(None);
   let mem = word => word == "en"
-  let all = Js.Promise.resolve(list{})
 }
 
 module MockShower: AbstractDict.SHOWER with type t = string = {

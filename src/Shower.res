@@ -27,38 +27,45 @@ module Word = {
 }
 
 let collapse = (elements): list<t> =>
-    elements
-    ->Belt.List.reduce(list{}, (acc, curr) =>
-        acc == list{}
-            ? list{curr}
-            : list{
-                ...acc,
-                "-"->React.string,
-                curr,
-            });
+    elements -> Belt.List.reduce(list{},
+        (acc, curr) =>
+            acc == list{}
+                ? list{curr}
+                : list{
+                    ...acc,
+                    "-"->React.string,
+                    curr,
+                },
+    );
 
 let wrapNoun = (data: list<(bool, string, string)>) =>
     <>
-        {collapse(
+        {
             data
-            ->Belt.List.map(data => <Word className="noun" data />)
-        )->Belt.List.toArray->React.array}
+            -> Belt.List.map(data => <Word className="noun" data />)
+            -> collapse
+            -> Belt.List.toArray->React.array
+        }
     </>
 
 let wrapVerb = (data: list<(bool, string, string)>) =>
     <>
-        {collapse(
+        {
             data
-            ->Belt.List.map(data => <Word className="verb" data />)
-        )->Belt.List.toArray->React.array}
+            -> Belt.List.map(data => <Word className="verb" data />)
+            -> collapse
+            -> Belt.List.toArray->React.array
+        }
     </>
 
 let wrapAd = (data: list<(bool, string, string)>) =>
     <>
-        {collapse(
+        {
             data
-            ->Belt.List.map(data => <Word className="ad" data />)
-        )->Belt.List.toArray->React.array}
+            -> Belt.List.map(data => <Word className="ad" data />)
+            -> collapse
+            -> Belt.List.toArray->React.array
+        }
     </>
 
 let wrapConj = (conj, def) =>
