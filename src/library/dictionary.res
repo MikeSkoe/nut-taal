@@ -3,49 +3,55 @@ include AbstractDict
 module MyDict = Map.Make(String)
 
 module Utils = {
-   let loadDict = (url, dict, makeEntity) =>
-      Fetch.fetch(url)
-      |> Js.Promise.then_(Fetch.Response.text)
-      |> Js.Promise.then_(text => {
+   let loadDict: (string, ref<MyDict.t<'a>>, list<MyDict.key> => 'a) => promise<MyDict.t<'a>>
+      = async (url, dict, makeEntity) => {
+         open Js.Promise;
+         open Belt.List;
+
+         let text = await (Fetch.fetch(url) |> then_(Fetch.Response.text));
          let words = 
-            text
-            ->String.split_on_char('\n', _)
-            ->Belt.List.map(String.split_on_char(','));
+            String.split_on_char('\n', text)
+            -> map(String.split_on_char(','));
+
          dict :=
             words
-            ->Belt.List.reduce(
-               dict.contents,
-               (acc, line) => line->Belt.List.getExn(0)->MyDict.add(makeEntity(line), acc),
+            -> reduce(dict.contents,
+               (acc, line) =>
+                  line
+                  -> getExn(0)
+                  -> MyDict.add(makeEntity(line), acc),
             );
-         Js.Promise.resolve(dict.contents)
-      })
+
+         dict.contents;
+      }
 }
 
 module Term: TERMIN_DICTIONARY = {
-   let dict: ref<MyDict.t<term>> = ref(MyDict.empty)
+   let dict: ref<MyDict.t<term>>
+      = ref(MyDict.empty)
 
-   let dictProm = "dictionary.csv"
-      ->Utils.loadDict(
+   let dictProm: promise<MyDict.t<term>>
+      = Utils.loadDict(
+         "dictionary.csv",
          dict,
-         line => ({
-            str: Belt.List.getExn(line, 0),
-            noun: Belt.List.getExn(line, 1),
-            verb: Belt.List.getExn(line, 2),
-            ad: Belt.List.getExn(line, 3),
-            description: Belt.List.getExn(line, 4),
-         }),
-      )
-
-   let all =
-      dictProm
-      |> Js.Promise.then_ (dict =>
-         MyDict.bindings(dict)
-         ->Belt.List.map(((_, term)) => term)
-         ->Js.Promise.resolve
+         line => {
+            let at = Belt.List.getExn(line);
+            { str: at(0), noun: at(1), verb: at(2), ad: at(3), description: at(4) }
+         },
       );
 
-   let parse = string => MyDict.find_opt(string, dict.contents);
-   let show = ({ str }: term) => str;
+   let all: promise<list<term>>
+      = dictProm |> Js.Promise.then_ (dict =>
+         MyDict.bindings(dict)
+         -> Belt.List.map(((_, term)) => term)
+         -> Js.Promise.resolve
+      );
+
+   let parse: MyDict.key => option<term> 
+      = string => MyDict.find_opt(string, dict.contents);
+
+   let show: term => string
+      = ({ str }) => str;
 }
 
 module Conj: CONJ_DICTIONARY = {
@@ -55,24 +61,32 @@ module Conj: CONJ_DICTIONARY = {
 
    let dict: ref<MyDict.t<conjTerm>> = ref(MyDict.empty);
    
-   let dictProm = "particles.csv"
-      ->Utils.loadDict(
+   let dictProm: promise<MyDict.t<conjTerm>>
+      = Utils.loadDict(
+         "particles.csv",
          dict,
-         line => ({
-            str: Belt.List.getExn(line, 0),
-            definition: Belt.List.getExn(line, 1),
-            description: Belt.List.getExn(line, 2),
-         }),
+         line => {
+            let at = Belt.List.getExn(line);
+            { str: at(0), definition: at(1), description: at(2) };
+         }
       );
 
-   let all = dictProm
-      |> Js.Promise.then_(dict =>
+   let all: promise<list<conjTerm>>
+      = dictProm |> Js.Promise.then_(dict =>
          MyDict.bindings(dict)
-         ->Belt.List.map(((_, term)) => term)
+         -> Belt.List.map(((_, term)) => term)
          -> Js.Promise.resolve
       )
 
-   let mem = key => key->MyDict.find_opt(dict.contents)->Belt.Option.isSome
-   let parse = key => key->MyDict.find_opt(dict.contents)
-   let show = ({ str }: conjTerm) => str
+   let mem: MyDict.key => bool
+      = key =>
+         key
+         -> MyDict.find_opt(dict.contents)
+         -> Belt.Option.isSome;
+
+   let parse: MyDict.key => option<conjTerm>
+      = key => key -> MyDict.find_opt(dict.contents)
+
+   let show: conjTerm => string
+      = ({ str }) => str
 }

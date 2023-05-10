@@ -115,8 +115,8 @@ function Make(TD, CD, SH) {
     show: show$1,
     parse: parse$1
   };
-  var isMark = function (str) {
-    return List.mem(str, {
+  var isMark = function (__x) {
+    return List.mem(__x, {
                 hd: CD.nounMark,
                 tl: {
                   hd: CD.verbMark,

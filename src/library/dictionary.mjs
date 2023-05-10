@@ -12,16 +12,15 @@ var MyDict = $$Map.Make({
       compare: $$String.compare
     });
 
-function loadDict(url, dict, makeEntity) {
-  return Js_promise.then_((function (text) {
-                var words = Belt_List.map($$String.split_on_char(/* '\n' */10, text), (function (param) {
-                        return $$String.split_on_char(/* ',' */44, param);
-                      }));
-                dict.contents = Belt_List.reduce(words, dict.contents, (function (acc, line) {
-                        return Curry._3(MyDict.add, Belt_List.getExn(line, 0), Curry._1(makeEntity, line), acc);
-                      }));
-                return Promise.resolve(dict.contents);
-              }), Js_promise.then_(Fetch.$$Response.text, fetch(url)));
+async function loadDict(url, dict, makeEntity) {
+  var text = await Js_promise.then_(Fetch.$$Response.text, fetch(url));
+  var words = Belt_List.map($$String.split_on_char(/* '\n' */10, text), (function (param) {
+          return $$String.split_on_char(/* ',' */44, param);
+        }));
+  dict.contents = Belt_List.reduce(words, dict.contents, (function (acc, line) {
+          return Curry._3(MyDict.add, Belt_List.getExn(line, 0), Curry._1(makeEntity, line), acc);
+        }));
+  return dict.contents;
 }
 
 var Utils = {
