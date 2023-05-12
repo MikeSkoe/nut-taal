@@ -1,1 +1,1 @@
-module Lang = Language.Make (Dictionary.Term) (Dictionary.Conj) (Shower)
+module Lang = Language.Make (Dictionary.Marks) (Shower)

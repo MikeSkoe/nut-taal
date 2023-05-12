@@ -1,22 +1,13 @@
 
 
+import * as $$Map from "rescript/lib/es6/map.js";
+import * as $$String from "rescript/lib/es6/string.js";
 
-var emptyTerm = {
-  str: "",
-  noun: "",
-  verb: "",
-  ad: "",
-  description: ""
-};
-
-var emptyConjTerm = {
-  str: "",
-  definition: "",
-  description: ""
-};
+var MyDict = $$Map.Make({
+      compare: $$String.compare
+    });
 
 export {
-  emptyTerm ,
-  emptyConjTerm ,
+  MyDict ,
 }
-/* No side effect */
+/* MyDict Not a pure module */

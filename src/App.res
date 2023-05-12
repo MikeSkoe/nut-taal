@@ -1,6 +1,7 @@
 %%raw("import './app.css'")
 
 open Lang
+open Belt
 
 module Links = {
     let dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
@@ -17,50 +18,23 @@ module Links = {
 
 module Parser = {
     @react.component
-    let make = (~text) => {
-        let (parsed, setParsed) = React.useState(_ => []);
+    let make = (~text: string, ~marks) => {
+        let (parsed, setParsed) = React.useState(_ => Lang.Start(Lang.End));
 
-        React.useEffect1(() => {
-            String.split_on_char('\n', text)
-            -> Belt.List.map(Lang.Lexs.parse)
-            -> Belt.List.toArray
-            -> Js.Promise.all
-            -> Js.Promise.then_(arr => 
-                arr
-                -> Belt.Array.reduce(
-                    [],
-                    (acc: array<Lang.Lexs.t>, curr) => switch curr {
-                        | Some(parsed) => Belt.Array.concat(acc, [parsed])
-                        | None => acc
-                    }
-                )
-                -> res => Js.Promise.resolve(setParsed(_ => res))
-            , _)
-            -> ignore;
-
-            None;
-        }, [text]);
+        React.useEffect2(() => {
+            Lang.parse(marks, text)
+            -> res => setParsed(_ => res)
+            -> _ => None;
+        }, (text, marks));
 
         <div className="parsed">
-            {parsed
-            -> Belt.Array.map(lex => <>{
-                lex
-                -> Lang.Lexs.show
-                -> Belt.List.reduce(list{}, (acc, curr) =>
-                    acc == list{}
-                        ? list{curr}
-                        : list{...acc, {" "->React.string}, curr}
-                )
-                -> Belt.List.toArray
-                -> React.array
-            }</>)
-            -> Belt.List.fromArray
-            -> Belt.List.reduce(list{}, (acc, curr) =>
+            {Lang.show(parsed)
+            -> List.reduce(list{}, (acc, curr) =>
                 acc == list{}
                     ? list{curr}
-                    : list{...acc, <br />, curr}
+                    : list{...acc, {" "->React.string}, curr}
             )
-            -> Belt.List.toArray
+            -> List.toArray
             -> React.array
             }
         </div>
@@ -69,22 +43,16 @@ module Parser = {
 
 module Hint = {
     @react.component
-    let make = (~hint) => {
+    let make = (~word, ~translations) => {
         <div className="box hint">
-            {hint
-            ->Belt.Option.map((({ str, noun, verb, ad, description }): AbstractDict.term) =>
-                <>
-                    <h3>{str->React.string}</h3>
-                    {`noun: ${noun}`->React.string}
-                    <br/>
-                    <span className="verb">{`verb: ${verb}`->React.string}</span>
-                    <br/>
-                    <span className="ad">{`ad: ${ad}`->React.string}</span>
-                    <br/>
-                    {`description: ${description}`->React.string}
-                </>
-            )
-            ->Belt.Option.getWithDefault(<></>)}
+            <h3>{word->React.string}</h3>
+            {translations
+            -> Belt.List.map(str => <>
+                <span className="verb">{str->React.string}</span>
+                <br/>
+            </>)
+            -> Belt.List.toArray
+            -> React.array }
             <Links />
         </div>
     }
@@ -92,41 +60,15 @@ module Hint = {
 
 module InputPage = {
     @react.component
-    let make = () => {
-        let (query, setQuery) = React.useState(_ => "my");
-        let divRef = React.useRef(Js.Nullable.null);
-        let (hint, setHint) = React.useState(_ => None);
+    let make = (~marks) => {
         let (isEditMode, setIsEditMode) = React.useState(_ => true);
         let (input, setInput) = React.useState(_ => "");
-        let onChange = event => {
-            let target = (event->ReactEvent.Form.target)
-            let innerText: string = target["innerText"];
-            let innerHtml: string = target["innerHTML"];
-            setInput(_ => innerText);
-            if innerHtml->Js.String2.includes("<p") {
-                Js.log(innerText);
-                Js.log(innerHtml);
-                target["innerText"] = innerText
-            }
-        }
+        let onChange = event => setInput(_ => ReactEvent.Form.target(event)["innerText"]);
 
-        React.useEffect1(() => {
-            Lang.Roots.translate(query)
-            |> Js.Promise.then_(term => Js.Promise.resolve(
-                term -> Belt.Option.forEach(term => switch term {
-                    | Lang.Roots.Root(term, _) => setHint(_ => Some(term))
-                    | _ => ()
-                })
-            ))
-            |> ignore;
-            None;
-        }, [query])
-
-        <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
+        <>
             <div className="box area">
-                <Parser text={input} />
+                <Parser text={input} marks={marks} />
                 <div
-                    ref={ReactDOM.Ref.domRef(divRef)}
                     className={isEditMode ? "editable" : "nonEditable"}
                     spellCheck={false}
                     contentEditable={true}
@@ -135,15 +77,48 @@ module InputPage = {
                 />
             </div>
             <input onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
-            {isEditMode ? React.null : <Hint hint={hint} />}
-        </DictionaryContext.OnWordClickProvider>
+        </>
     }
 }
 
 @react.component
 let make = () => {
-    <>
+    let (termDict, setTermDict) = React.useState(_ => None)
+    let (marksDict, setMarksDict) = React.useState(_ => None)
+    let (query, setQuery) = React.useState(_ => "my");
+    let (hint, setHint) = React.useState(_ => None);
+
+    React.useEffect0(() => {
+        Js.Promise.all2((
+            Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
+            Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl),
+        ))
+        -> Js.Promise.then_(((terms, marks)) => Js.Promise.resolve({
+            setTermDict(_ => Some(terms))
+            setMarksDict(_ => Some(marks))
+        }), _)
+        -> _ => None;
+    });
+
+    React.useEffect2(() => {
+        termDict -> Option.forEach(dict =>
+        query -> Lang.translate(dict) -> Option.forEach(translations =>
+            setHint(_ => Some((query, translations))))
+        )
+        -> _ => None;
+    }, (query, termDict));
+
+    <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
         <h1><b>{"taal"->React.string}</b></h1>
-        <InputPage />
-    </>
+        {
+            marksDict
+            -> Option.map(marks => <InputPage marks={marks} />)
+            -> Option.getWithDefault(React.null)
+        }
+        {
+            hint
+            -> Option.map(((word, translations)) => <Hint word={word} translations={translations} />)
+            -> Option.getWithDefault(React.null)
+        }
+    </DictionaryContext.OnWordClickProvider>
 }

@@ -1,80 +1,27 @@
 type t = React.element;
 
-module Tooltip = {
-    @react.component
-    let make = (~children, ~hint: string) => <>
-        {React.cloneElement(
-            children,
-            { "data-tooltip": hint, "tooltip-pos": "up"},
-        )}
-    </>
-}
-
 module Word = {
     @react.component
-    let make = (~className, ~data) => {
-        let (known, word, def) = data;
+    let make = (~className, ~word) => {
         let onClick = React.useContext(DictionaryContext.onWordClickContext); 
 
-        known
-            ? <Tooltip hint={def}>
-                <span className onClick={_ => onClick(word)}>
-                    {`${word}`->React.string}
-                </span>
-            </Tooltip>
-            : <u className>{`${word}`->React.string}</u>
+        <span className onClick={_ => onClick(word)}>
+            {word->React.string}
+        </span>
     }
 }
 
-let collapse = (elements): list<t> =>
-    elements -> Belt.List.reduce(list{},
-        (acc, curr) =>
-            acc == list{}
-                ? list{curr}
-                : list{
-                    ...acc,
-                    "-"->React.string,
-                    curr,
-                },
-    );
+let noun : string => t
+    = word => <Word className="noun" word />
 
-let wrapNoun = (data: list<(bool, string, string)>) =>
-    <>
-        {
-            data
-            -> Belt.List.map(data => <Word className="noun" data />)
-            -> collapse
-            -> Belt.List.toArray->React.array
-        }
-    </>
+let verb : string => t
+    = word => <Word className="verb" word />
 
-let wrapVerb = (data: list<(bool, string, string)>) =>
-    <>
-        {
-            data
-            -> Belt.List.map(data => <Word className="verb" data />)
-            -> collapse
-            -> Belt.List.toArray->React.array
-        }
-    </>
+let ad : string => t
+    = word => <Word className="ad" word />
 
-let wrapAd = (data: list<(bool, string, string)>) =>
-    <>
-        {
-            data
-            -> Belt.List.map(data => <Word className="ad" data />)
-            -> collapse
-            -> Belt.List.toArray->React.array
-        }
-    </>
+let con: string => t
+    = word => <span className="conj">{word->React.string}</span>
 
-let wrapConj = (conj, def) =>
-    <span className="conj">
-        <Tooltip hint={def}>
-            <span>{conj->React.string}</span>
-        </Tooltip>
-    </span>
-
-let wrapPunctuation = str => <span>{str->React.string}</span>
-
-let wrapMark = mark => <span>{mark->React.string}</span>
+let mark: string => t
+    = mark => <span>{mark->React.string}</span>

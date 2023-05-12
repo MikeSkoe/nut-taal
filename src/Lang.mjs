@@ -5,15 +5,14 @@ import * as Language from "./library/language.mjs";
 import * as Dictionary from "./library/dictionary.mjs";
 
 var param = {
-  wrapNoun: Shower.wrapNoun,
-  wrapVerb: Shower.wrapVerb,
-  wrapAd: Shower.wrapAd,
-  wrapConj: Shower.wrapConj,
-  wrapMark: Shower.wrapMark,
-  wrapPunctuation: Shower.wrapPunctuation
+  noun: Shower.noun,
+  verb: Shower.verb,
+  ad: Shower.ad,
+  con: Shower.con,
+  mark: Shower.mark
 };
 
-var Lang = Language.Make(Dictionary.Term, Dictionary.Conj, param);
+var Lang = Language.Make(Dictionary.Marks, param);
 
 export {
   Lang ,
