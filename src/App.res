@@ -117,7 +117,7 @@ let make = () => {
         }
         {
             hint
-            -> Option.map(((word, translations)) => <Hint word={word} translations={translations} />)
+            -> Option.map(((word, translations)) => <Hint word={word} translations={translations->List.tailExn} />)
             -> Option.getWithDefault(React.null)
         }
     </DictionaryContext.OnWordClickProvider>

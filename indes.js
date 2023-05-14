@@ -57,4 +57,40 @@ function removeDublications(path, output) {
     });
 }
 
-zipTranslations("english", "dutch", "translations");
+function sort(path, output, sortFn) {
+    const strings = [];
+
+    const read = readline.createInterface({
+        input: fs.createReadStream(path),
+        output: process.stdout,
+        console: false
+    });
+
+    read.on('line', line => strings.push(line));
+    read.on('close', () => {
+        strings
+            .sort(sortFn)
+            .forEach(line => {
+                fs.appendFileSync(output, `${line}\n`);
+            });
+    })
+}
+
+function map(path, output, mapFn) {
+    const strings = [];
+
+    const read = readline.createInterface({
+        input: fs.createReadStream(path),
+        output: process.stdout,
+        console: false
+    });
+
+    read.on('line', line => strings.push(mapFn(line)));
+    read.on('close', () => {
+        strings.forEach(line => {
+            fs.appendFileSync(output, `${line}\n`);
+        });
+    })
+}
+
+map("afr: eng - sorted", "dictionary.csv", line => line.replace(": ", ", "))

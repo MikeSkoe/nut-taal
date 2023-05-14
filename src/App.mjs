@@ -176,7 +176,7 @@ function App(props) {
                       })), null), Belt_Option.getWithDefault(Belt_Option.map(match$3[0], (function (param) {
                         return React.createElement(App$Hint, {
                                     word: param[0],
-                                    translations: param[1]
+                                    translations: Belt_List.tailExn(param[1])
                                   });
                       })), null));
 }
