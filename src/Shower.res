@@ -24,4 +24,4 @@ let con: string => t
     = word => <Word className="conj" word />
 
 let mark: string => t
-    = mark => <span>{mark->React.string}</span>
+    = mark => <span className="mark">{mark->React.string}</span>

@@ -48,7 +48,9 @@ function con(word) {
 }
 
 function mark(mark$1) {
-  return React.createElement("span", undefined, mark$1);
+  return React.createElement("span", {
+              className: "mark"
+            }, mark$1);
 }
 
 export {

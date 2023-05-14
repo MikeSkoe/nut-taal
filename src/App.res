@@ -57,8 +57,6 @@ module Hint = {
         <div className="box hint">
             <h3>{word->React.string}</h3>
 
-            <b>{"Translations: " -> React.string}</b>
-            <br />
             <i>
                 {translations
                 -> List.map(str => str->React.string)

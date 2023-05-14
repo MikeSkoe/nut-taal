@@ -55,6 +55,7 @@ body { margin: 1rem 2rem; }
 .verb { color: var(--green); }
 .ad { color: var(--yellow); }
 .conj { color: var(--red); }
+.mark { color: lightslategray; }
 
 .box { box-sizing: border-box; }
 

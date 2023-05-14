@@ -87,7 +87,7 @@ function App$Parser(props) {
 function App$Hint(props) {
   return React.createElement("div", {
               className: "box hint"
-            }, React.createElement("h3", undefined, props.word), React.createElement("b", undefined, "Translations: "), React.createElement("br", undefined), React.createElement("i", undefined, Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
+            }, React.createElement("h3", undefined, props.word), React.createElement("i", undefined, Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
                                 return str;
                               })), ", "))), React.createElement(App$Links, {}));
 }
