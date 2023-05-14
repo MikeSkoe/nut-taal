@@ -3,6 +3,7 @@
 import * as Lang from "./Lang.mjs";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as React from "react";
+import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
@@ -12,6 +13,28 @@ import * as DictionaryContext from "./components/DictionaryContext.mjs";
 
 import './app.css'
 ;
+
+function putBetween(list, item) {
+  return Belt_List.reduce(list, /* [] */0, (function (acc, curr) {
+                if (acc === /* [] */0) {
+                  return {
+                          hd: curr,
+                          tl: /* [] */0
+                        };
+                } else {
+                  return Belt_List.concatMany([
+                              acc,
+                              {
+                                hd: item,
+                                tl: {
+                                  hd: curr,
+                                  tl: /* [] */0
+                                }
+                              }
+                            ]);
+                }
+              }));
+}
 
 function App$Links(props) {
   return React.createElement("div", {
@@ -30,13 +53,18 @@ function App$Parser(props) {
   var text = props.text;
   var match = React.useState(function () {
         return {
-                TAG: /* Start */0,
-                _0: /* End */0
+                hd: {
+                  TAG: /* Start */0,
+                  _0: /* End */0
+                },
+                tl: /* [] */0
               };
       });
   var setParsed = match[1];
   React.useEffect((function () {
-          var res = Curry._2(Lang.Lang.parse, marks, text);
+          var res = Belt_List.map($$String.split_on_char(/* '\n' */10, text), (function (line) {
+                  return Curry._2(Lang.Lang.parse, marks, line);
+                }));
           Curry._1(setParsed, (function (param) {
                   return res;
                 }));
@@ -46,35 +74,22 @@ function App$Parser(props) {
       ]);
   return React.createElement("div", {
               className: "parsed"
-            }, Belt_List.toArray(Belt_List.reduce(Curry._1(Lang.Lang.show, match[0]), /* [] */0, (function (acc, curr) {
-                        if (acc === /* [] */0) {
-                          return {
-                                  hd: curr,
-                                  tl: /* [] */0
-                                };
-                        } else {
-                          return Belt_List.concatMany([
-                                      acc,
-                                      {
-                                        hd: " ",
-                                        tl: {
-                                          hd: curr,
-                                          tl: /* [] */0
-                                        }
-                                      }
-                                    ]);
-                        }
-                      }))));
+            }, Belt_List.toArray(Belt_List.flatten(putBetween(Belt_List.map(match[0], (function (line) {
+                                return putBetween(Curry._1(Lang.Lang.show, line), " ");
+                              })), {
+                          hd: React.createElement("br", undefined),
+                          tl: /* [] */0
+                        }))));
 }
 
 function App$Hint(props) {
   return React.createElement("div", {
               className: "box hint"
-            }, React.createElement("h3", undefined, props.word), Belt_List.toArray(Belt_List.map(props.translations, (function (str) {
-                        return React.createElement(React.Fragment, undefined, React.createElement("span", {
+            }, React.createElement("h3", undefined, props.word), Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
+                            return React.createElement("span", {
                                         className: "verb"
-                                      }, str), React.createElement("br", undefined));
-                      }))), React.createElement(App$Links, {}));
+                                      }, str);
+                          })), React.createElement("br", undefined))), React.createElement(App$Links, {}));
 }
 
 function App$InputPage(props) {
@@ -82,6 +97,7 @@ function App$InputPage(props) {
         return true;
       });
   var setIsEditMode = match[1];
+  var isEditMode = match[0];
   var match$1 = React.useState(function () {
         return "";
       });
@@ -97,20 +113,35 @@ function App$InputPage(props) {
                       text: match$1[0],
                       marks: props.marks
                     }), React.createElement("div", {
-                      className: match[0] ? "editable" : "nonEditable",
+                      className: isEditMode ? "editable" : "nonEditable",
                       contentEditable: true,
                       spellCheck: false,
                       inputMode: "text",
                       onInput: onChange
                     })), React.createElement("input", {
                   className: "switch",
+                  id: "isEdit",
                   type: "checkbox",
                   onClick: (function (param) {
                       Curry._1(setIsEditMode, (function (is) {
                               return !is;
                             }));
                     })
-                }));
+                }), React.createElement("label", undefined, "" + (
+                  isEditMode ? "Edit" : "View"
+                ) + " mode"));
+}
+
+function App$Legend(props) {
+  return React.createElement("div", undefined, React.createElement("span", {
+                  className: "noun"
+                }, "noun "), React.createElement("span", {
+                  className: "verb"
+                }, "verb "), React.createElement("span", {
+                  className: "ad"
+                }, "ad "), React.createElement("span", {
+                  className: "conj"
+                }, "conjuction "));
 }
 
 function App(props) {
@@ -169,7 +200,7 @@ function App(props) {
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "taal")), Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (marks) {
+            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut")), React.createElement(App$Legend, {}), Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (marks) {
                         return React.createElement(App$InputPage, {
                                     marks: marks
                                   });

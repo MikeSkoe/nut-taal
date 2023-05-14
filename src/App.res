@@ -2,6 +2,15 @@
 
 open Lang
 open Belt
+open Option
+
+let putBetween = (list: list<'a>, item: 'a): list<'a> => {
+    list -> List.reduce(list{}, (acc: list<'a>, curr: 'a) =>
+        acc == list{}
+            ? list{curr}
+            : list{...acc, item, curr}
+    )
+}
 
 module Links = {
     let dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
@@ -19,21 +28,21 @@ module Links = {
 module Parser = {
     @react.component
     let make = (~text: string, ~marks) => {
-        let (parsed, setParsed) = React.useState(_ => Lang.Start(Lang.End));
+        let (parsed, setParsed) = React.useState(_ => list{Lang.Start(Lang.End)});
 
         React.useEffect2(() => {
-            Lang.parse(marks, text)
+            text
+            -> String.split_on_char('\n', _)
+            -> List.map(line => Lang.parse(marks, line))
             -> res => setParsed(_ => res)
             -> _ => None;
         }, (text, marks));
 
         <div className="parsed">
-            {Lang.show(parsed)
-            -> List.reduce(list{}, (acc, curr) =>
-                acc == list{}
-                    ? list{curr}
-                    : list{...acc, {" "->React.string}, curr}
-            )
+            {parsed
+            -> List.map(line => line -> Lang.show -> putBetween(" " -> React.string))
+            -> putBetween(list{<br />})
+            -> List.flatten
             -> List.toArray
             -> React.array
             }
@@ -46,12 +55,11 @@ module Hint = {
     let make = (~word, ~translations) => {
         <div className="box hint">
             <h3>{word->React.string}</h3>
+
             {translations
-            -> Belt.List.map(str => <>
-                <span className="verb">{str->React.string}</span>
-                <br/>
-            </>)
-            -> Belt.List.toArray
+            -> List.map(str => <span className="verb">{str->React.string}</span>)
+            -> putBetween(<br />)
+            -> List.toArray
             -> React.array }
             <Links />
         </div>
@@ -76,8 +84,21 @@ module InputPage = {
                     inputMode="text"
                 />
             </div>
-            <input onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
+            <input id="isEdit" onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
+            <label>{`${(isEditMode ? "Edit" : "View")} mode` -> React.string}</label>
         </>
+    }
+}
+
+module Legend = {
+    @react.component
+    let make = () => {
+        <div>
+            <span className="noun">{"noun "->React.string}</span>
+            <span className="verb">{"verb "->React.string}</span>
+            <span className="ad">{"ad "->React.string}</span>
+            <span className="conj">{"conjuction "->React.string}</span>
+        </div>
     }
 }
 
@@ -101,24 +122,27 @@ let make = () => {
     });
 
     React.useEffect2(() => {
-        termDict -> Option.forEach(dict =>
-        query -> Lang.translate(dict) -> Option.forEach(translations =>
-            setHint(_ => Some((query, translations))))
+        termDict
+        -> forEach(dict =>
+            query -> Lang.translate(dict) -> forEach(translations =>
+                setHint(_ => Some((query, translations)))
+            )
         )
         -> _ => None;
     }, (query, termDict));
 
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
-        <h1><b>{"taal"->React.string}</b></h1>
+        <h1><b>{"nut"->React.string}</b></h1>
+        <Legend />
         {
             marksDict
-            -> Option.map(marks => <InputPage marks={marks} />)
-            -> Option.getWithDefault(React.null)
+            -> map(marks => <InputPage marks={marks} />)
+            -> getWithDefault(React.null)
         }
         {
             hint
-            -> Option.map(((word, translations)) => <Hint word={word} translations={translations->List.tailExn} />)
-            -> Option.getWithDefault(React.null)
+            -> map(((word, translations)) => <Hint word={word} translations={translations->List.tailExn} />)
+            -> getWithDefault(React.null)
         }
     </DictionaryContext.OnWordClickProvider>
 }
