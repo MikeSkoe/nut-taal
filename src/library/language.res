@@ -3,11 +3,6 @@ include AbstractDict
 let combMark = '-'
 let combMarkString = "-"
 
-let log = value => {
-    Js.log(value);
-    value;
-}
-
 module Make = (
    Marks: MARKS,
    Show: SHOWER,

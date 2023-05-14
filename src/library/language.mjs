@@ -6,11 +6,6 @@ import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as AbstractDict from "./abstractDict.mjs";
 
-function log(value) {
-  console.log(value);
-  return value;
-}
-
 function Make(Marks, Show) {
   var translate = function (str, dict) {
     return Curry._2(AbstractDict.MyDict.find_opt, str, dict);
@@ -319,7 +314,6 @@ export {
   MyDict ,
   combMark ,
   combMarkString ,
-  log ,
   Make ,
 }
 /* AbstractDict Not a pure module */
