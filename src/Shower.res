@@ -21,7 +21,7 @@ let ad : string => t
     = word => <Word className="ad" word />
 
 let con: string => t
-    = word => <span className="conj">{word->React.string}</span>
+    = word => <Word className="conj" word />
 
 let mark: string => t
     = mark => <span>{mark->React.string}</span>

@@ -41,9 +41,10 @@ function ad(word) {
 }
 
 function con(word) {
-  return React.createElement("span", {
-              className: "conj"
-            }, word);
+  return React.createElement(Shower$Word, {
+              className: "conj",
+              word: word
+            });
 }
 
 function mark(mark$1) {

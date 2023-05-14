@@ -40,10 +40,12 @@ function App$Links(props) {
   return React.createElement("div", {
               className: "samples"
             }, React.createElement("p", undefined, React.createElement("a", {
+                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md"
+                    }, "README (with grammar)")), React.createElement("p", undefined, React.createElement("a", {
                       href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv"
                     }, "Dictionary")), React.createElement("p", undefined, React.createElement("a", {
-                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/particles.csv"
-                    }, "Particles")), React.createElement("p", undefined, React.createElement("a", {
+                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv"
+                    }, "Conjugations")), React.createElement("p", undefined, React.createElement("a", {
                       href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv"
                     }, "Examples")));
 }
@@ -85,11 +87,9 @@ function App$Parser(props) {
 function App$Hint(props) {
   return React.createElement("div", {
               className: "box hint"
-            }, React.createElement("h3", undefined, props.word), Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
-                            return React.createElement("span", {
-                                        className: "verb"
-                                      }, str);
-                          })), React.createElement("br", undefined))), React.createElement(App$Links, {}));
+            }, React.createElement("h3", undefined, props.word), React.createElement("b", undefined, "Translations: "), React.createElement("br", undefined), React.createElement("i", undefined, Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
+                                return str;
+                              })), ", "))), React.createElement(App$Links, {}));
 }
 
 function App$InputPage(props) {
@@ -133,7 +133,7 @@ function App$InputPage(props) {
 }
 
 function App$Legend(props) {
-  return React.createElement("div", undefined, React.createElement("span", {
+  return React.createElement("div", undefined, React.createElement("b", undefined, "Legend: "), React.createElement("span", {
                   className: "noun"
                 }, "noun "), React.createElement("span", {
                   className: "verb"
@@ -154,6 +154,7 @@ function App(props) {
         
       });
   var setMarksDict = match$1[1];
+  var marksDict = match$1[0];
   var match$2 = React.useState(function () {
         return "my";
       });
@@ -179,19 +180,22 @@ function App(props) {
                 }), __x);
         }), []);
   React.useEffect((function () {
-          Belt_Option.forEach(termDict, (function (dict) {
-                  Belt_Option.forEach(Curry._2(Lang.Lang.translate, query, dict), (function (translations) {
-                          Curry._1(setHint, (function (param) {
-                                  return [
-                                          query,
-                                          translations
-                                        ];
-                                }));
-                        }));
+          Belt_Option.flatMap(termDict, (function (terms) {
+                  return Belt_Option.flatMap(marksDict, (function (marks) {
+                                Belt_Option.forEach(Belt_Option.orElse(Curry._2(Lang.Lang.translate, query, marks), Curry._2(Lang.Lang.translate, query, terms)), (function (translations) {
+                                        Curry._1(setHint, (function (param) {
+                                                return [
+                                                        Belt_List.headExn(translations),
+                                                        Belt_List.tailExn(translations)
+                                                      ];
+                                              }));
+                                      }));
+                              }));
                 }));
         }), [
         query,
-        termDict
+        termDict,
+        marksDict
       ]);
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
               value: (function (str) {
@@ -200,14 +204,14 @@ function App(props) {
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut")), React.createElement(App$Legend, {}), Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (marks) {
+            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut")), React.createElement(App$Legend, {}), Belt_Option.getWithDefault(Belt_Option.map(marksDict, (function (marks) {
                         return React.createElement(App$InputPage, {
                                     marks: marks
                                   });
                       })), null), Belt_Option.getWithDefault(Belt_Option.map(match$3[0], (function (param) {
                         return React.createElement(App$Hint, {
                                     word: param[0],
-                                    translations: Belt_List.tailExn(param[1])
+                                    translations: param[1]
                                   });
                       })), null));
 }

@@ -13,14 +13,16 @@ let putBetween = (list: list<'a>, item: 'a): list<'a> => {
 }
 
 module Links = {
+    let readmeURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md";
     let dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
-    let particlesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/particles.csv";
+    let conjugationsURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv";
     let examplesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv";
 
     @react.component
     let make = () => <div className="samples">
+        <p><a href={readmeURL}>{"README (with grammar)"->React.string}</a></p>
         <p><a href={dicrionaryURL}>{"Dictionary"->React.string}</a></p>
-        <p><a href={particlesURL}>{"Particles"->React.string}</a></p>
+        <p><a href={conjugationsURL}>{"Conjugations"->React.string}</a></p>
         <p><a href={examplesURL}>{"Examples"->React.string}</a></p>
     </div>;
 }
@@ -44,8 +46,7 @@ module Parser = {
             -> putBetween(list{<br />})
             -> List.flatten
             -> List.toArray
-            -> React.array
-            }
+            -> React.array}
         </div>
     }
 }
@@ -56,11 +57,15 @@ module Hint = {
         <div className="box hint">
             <h3>{word->React.string}</h3>
 
-            {translations
-            -> List.map(str => <span className="verb">{str->React.string}</span>)
-            -> putBetween(<br />)
-            -> List.toArray
-            -> React.array }
+            <b>{"Translations: " -> React.string}</b>
+            <br />
+            <i>
+                {translations
+                -> List.map(str => str->React.string)
+                -> putBetween(", "->React.string)
+                -> List.toArray
+                -> React.array}
+            </i>
             <Links />
         </div>
     }
@@ -94,10 +99,11 @@ module Legend = {
     @react.component
     let make = () => {
         <div>
-            <span className="noun">{"noun "->React.string}</span>
-            <span className="verb">{"verb "->React.string}</span>
-            <span className="ad">{"ad "->React.string}</span>
-            <span className="conj">{"conjuction "->React.string}</span>
+            <b>{"Legend: " -> React.string}</b>
+            <span className="noun">{"noun " -> React.string}</span>
+            <span className="verb">{"verb " -> React.string}</span>
+            <span className="ad">{"ad " -> React.string}</span>
+            <span className="conj">{"conjuction " -> React.string}</span>
         </div>
     }
 }
@@ -121,28 +127,34 @@ let make = () => {
         -> _ => None;
     });
 
-    React.useEffect2(() => {
-        termDict
-        -> forEach(dict =>
-            query -> Lang.translate(dict) -> forEach(translations =>
-                setHint(_ => Some((query, translations)))
+    React.useEffect3(() => {
+        termDict -> flatMap(terms =>
+        marksDict -> flatMap(marks => 
+            orElse(
+                query -> Lang.translate(marks),
+                query -> Lang.translate(terms),
             )
-        )
+            -> forEach(translations => setHint(_ => Some((
+                translations -> List.headExn,
+                translations -> List.tailExn,
+            ))))
+            -> _ => None
+        ))
         -> _ => None;
-    }, (query, termDict));
+    }, (query, termDict, marksDict));
 
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
-        <h1><b>{"nut"->React.string}</b></h1>
-        <Legend />
-        {
-            marksDict
-            -> map(marks => <InputPage marks={marks} />)
-            -> getWithDefault(React.null)
-        }
-        {
-            hint
-            -> map(((word, translations)) => <Hint word={word} translations={translations->List.tailExn} />)
-            -> getWithDefault(React.null)
-        }
+            <h1><b>{"nut"->React.string}</b></h1>
+            <Legend />
+            {
+                marksDict
+                -> map(marks => <InputPage marks />)
+                -> getWithDefault(React.null)
+            }
+            {
+                hint
+                -> map(((word, translations)) => <Hint word translations />)
+                -> getWithDefault(React.null)
+            }
     </DictionaryContext.OnWordClickProvider>
 }
