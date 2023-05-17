@@ -1,5 +1,7 @@
 include AbstractDict
 
+open Belt
+
 let combMark = '-'
 let combMarkString = "-"
 
@@ -20,24 +22,22 @@ module Make = (
 
    let parse: (MyDict.t<list<string>>, string) => t
       = (marks, str) => {
-         open Belt.Option;
-
          let isMark : string => bool
             = str =>
                list{Marks.noun, Marks.verb, Marks.ad}
-               -> Belt.List.some(mark => mark == str);
+               -> List.some(mark => mark == str);
          
          let toMark : string => mark
             = str => if str == Marks.noun {
-               AbstractDict.Noun
+               AbstractDict.Noun;
             } else if str == Marks.verb {
-               AbstractDict.Verb
+               AbstractDict.Verb;
             } else {
-               AbstractDict.Ad
+               AbstractDict.Ad;
             }
          
          let isCon : string => bool
-            = str => str -> translate(marks) -> isSome;
+            = str => str -> translate(marks) -> Option.isSome;
 
          let rec iter: (mark, list<string>) => t
             = (mark, strs) => {
@@ -47,6 +47,12 @@ module Make = (
 
                   | (something, list{markA, markB, ...next}) when isMark(markA) && isMark(markB) =>
                      iter(something, list{markB, ...next})
+
+                  | (AbstractDict.Noun, list{mark}) when isMark(mark) =>
+                     Noun(mark, End)
+
+                  | (AbstractDict.Verb, list{mark}) when isMark(mark) =>
+                     Verb(mark, End)
 
                   | (_, list{mark, ...next}) when isMark(mark) =>
                      iter(toMark(mark), next)
@@ -59,15 +65,17 @@ module Make = (
                      
                   | (AbstractDict.Ad, list{word, ...next}) =>
                      Ad(word, iter(AbstractDict.Ad, next))
-
+                  
                   | _ =>
                      End
                }
             }
 
-         Start(
-            iter(AbstractDict.Noun, String.trim(str) |> String.split_on_char(' '))
-         )
+         let words = String.split_on_char(' ', str);
+         
+         Js.log(words -> List.toArray);
+
+         Start(iter(AbstractDict.Noun, words))
       }
 
    let show: t => list<Show.t>

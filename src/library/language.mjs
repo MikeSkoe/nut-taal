@@ -60,10 +60,37 @@ function Make(Marks, Show) {
             continue ;
           }
           
+        } else {
+          switch (mark) {
+            case /* Noun */0 :
+                var mark$1 = strs.hd;
+                if (isMark(mark$1)) {
+                  return {
+                          TAG: /* Noun */1,
+                          _0: mark$1,
+                          _1: /* End */0
+                        };
+                }
+                break;
+            case /* Verb */1 :
+                var mark$2 = strs.hd;
+                if (isMark(mark$2)) {
+                  return {
+                          TAG: /* Verb */2,
+                          _0: mark$2,
+                          _1: /* End */0
+                        };
+                }
+                break;
+            case /* Ad */2 :
+                break;
+            
+          }
         }
-        if (isMark(con)) {
-          _strs = next;
-          _mark = toMark(con);
+        var mark$3 = strs.hd;
+        if (isMark(mark$3)) {
+          _strs = strs.tl;
+          _mark = toMark(mark$3);
           continue ;
         }
         switch (mark) {
@@ -89,9 +116,11 @@ function Make(Marks, Show) {
         }
       };
     };
+    var words = $$String.split_on_char(/* ' ' */32, str);
+    console.log(Belt_List.toArray(words));
     return {
             TAG: /* Start */0,
-            _0: iter(/* Noun */0, $$String.split_on_char(/* ' ' */32, $$String.trim(str)))
+            _0: iter(/* Noun */0, words)
           };
   };
   var show = function (lex) {

@@ -40,14 +40,14 @@ module Parser = {
             -> _ => None;
         }, (text, marks));
 
-        <div className="parsed">
-            {parsed
+        <div className="parsed">{
+            parsed
             -> List.map(line => line -> Lang.show -> putBetween(" " -> React.string))
             -> putBetween(list{<br />})
             -> List.flatten
             -> List.toArray
-            -> React.array}
-        </div>
+            -> React.array
+        }</div>
     }
 }
 
@@ -57,13 +57,13 @@ module Hint = {
         <div className="box hint">
             <h3>{word->React.string}</h3>
 
-            <i>
-                {translations
+            <i>{
+                translations
                 -> List.map(str => str->React.string)
                 -> putBetween(", "->React.string)
                 -> List.toArray
-                -> React.array}
-            </i>
+                -> React.array
+            }</i>
             <Links />
         </div>
     }
