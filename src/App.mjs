@@ -9,6 +9,7 @@ import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
+import * as AbstractDict from "./library/abstractDict.mjs";
 import * as DictionaryContext from "./components/DictionaryContext.mjs";
 
 import './app.css'
@@ -167,13 +168,17 @@ function App(props) {
   React.useEffect((function () {
           var __x = Promise.all([
                 Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
+                Dictionary.Loader.loadDict(Dictionary.Loader.artificialDictUrl),
                 Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl)
               ]);
           Js_promise.then_((function (param) {
-                  var marks = param[1];
+                  var marks = param[2];
+                  var articitial = param[1];
                   var terms = param[0];
                   return Promise.resolve((Curry._1(setTermDict, (function (param) {
-                                      return Caml_option.some(terms);
+                                      return Caml_option.some(Curry._3(AbstractDict.MyDict.merge, (function (param, a, b) {
+                                                        return Belt_Option.orElse(a, b);
+                                                      }), terms, articitial));
                                     })), Curry._1(setMarksDict, (function (param) {
                                       return Caml_option.some(marks);
                                     }))));

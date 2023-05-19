@@ -114,12 +114,17 @@ let make = () => {
     let (hint, setHint) = React.useState(_ => None);
 
     React.useEffect0(() => {
-        Js.Promise.all2((
+        Js.Promise.all3((
             Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
+            Dictionary.Loader.loadDict(Dictionary.Loader.artificialDictUrl),
             Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl),
         ))
-        -> Js.Promise.then_(((terms, marks)) => Js.Promise.resolve({
-            setTermDict(_ => Some(terms))
+        -> Js.Promise.then_(((terms, articitial, marks)) => Js.Promise.resolve({
+            setTermDict(_ => Some(Dictionary.MyDict.merge(
+                (_, a, b) => Belt.Option.orElse(a, b),
+                terms,
+                articitial,
+            )))
             setMarksDict(_ => Some(marks))
         }), _)
         -> _ => None;
@@ -128,10 +133,8 @@ let make = () => {
     React.useEffect3(() => {
         termDict -> flatMap(terms =>
         marksDict -> flatMap(marks => 
-            orElse(
-                query -> Lang.translate(marks),
-                query -> Lang.translate(terms),
-            )
+            Lang.translate(query , marks)
+            -> orElse(Lang.translate(query, terms))
             -> forEach(translations => setHint(_ => Some((
                 translations -> List.headExn,
                 translations -> List.tailExn,

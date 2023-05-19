@@ -26,5 +26,6 @@ module Loader = {
       }
 
    let dictUrl = "dictionary.csv";
+   let artificialDictUrl = "artificial.csv"
    let marksUrl = "conjugations.csv"
 }
