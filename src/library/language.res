@@ -17,8 +17,19 @@ module Make = (
       | Con(string, t)
       | End;
 
-   let translate : (string, MyDict.t<list<string>>) => option<list<string>>
-      = (str, dict) => MyDict.find_opt(str, dict)
+   let rec translate : (string, MyDict.t<list<string>>) => option<list<string>>
+      = (str, dict) => {
+         MyDict.find_opt(str, dict)
+         -> Option.orElse(
+            switch String.split_on_char('-', str) {
+               | list{} => None
+               | list{_} => None
+               | list{word, ...next} =>
+                  translate(word, dict)
+                  -> Option.orElse(translate(next -> Utils.concatWords, dict))
+            }
+         )
+      }
 
    let parse: (MyDict.t<list<string>>, string) => t
       = (marks, str) => {
@@ -71,11 +82,7 @@ module Make = (
                }
             }
 
-         let words = String.split_on_char(' ', str);
-         
-         Js.log(words -> List.toArray);
-
-         Start(iter(AbstractDict.Noun, words))
+         Start(iter(AbstractDict.Noun, String.split_on_char(' ', str)))
       }
 
    let show: t => list<Show.t>

@@ -1,6 +1,7 @@
 
 
 import * as Curry from "rescript/lib/es6/curry.js";
+import * as Utils from "../Utils.mjs";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
@@ -8,7 +9,15 @@ import * as AbstractDict from "./abstractDict.mjs";
 
 function Make(Marks, Show) {
   var translate = function (str, dict) {
-    return Curry._2(AbstractDict.MyDict.find_opt, str, dict);
+    var match = $$String.split_on_char(/* '-' */45, str);
+    var tmp;
+    if (match) {
+      var next = match.tl;
+      tmp = next ? Belt_Option.orElse(translate(match.hd, dict), translate(Utils.concatWords(next), dict)) : undefined;
+    } else {
+      tmp = undefined;
+    }
+    return Belt_Option.orElse(Curry._2(AbstractDict.MyDict.find_opt, str, dict), tmp);
   };
   var parse = function (marks, str) {
     var isMark = function (str) {
@@ -43,7 +52,7 @@ function Make(Marks, Show) {
         }
         var next = strs.tl;
         var con = strs.hd;
-        if (Belt_Option.isSome(Curry._2(AbstractDict.MyDict.find_opt, con, marks))) {
+        if (Belt_Option.isSome(translate(con, marks))) {
           return {
                   TAG: /* Con */4,
                   _0: con,
@@ -116,11 +125,9 @@ function Make(Marks, Show) {
         }
       };
     };
-    var words = $$String.split_on_char(/* ' ' */32, str);
-    console.log(Belt_List.toArray(words));
     return {
             TAG: /* Start */0,
-            _0: iter(/* Noun */0, words)
+            _0: iter(/* Noun */0, $$String.split_on_char(/* ' ' */32, str))
           };
   };
   var show = function (lex) {

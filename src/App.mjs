@@ -204,6 +204,7 @@ function App(props) {
       ]);
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
               value: (function (str) {
+                  console.log(str);
                   Curry._1(setQuery, (function (param) {
                           return str;
                         }));

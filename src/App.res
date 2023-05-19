@@ -144,7 +144,10 @@ let make = () => {
         -> _ => None;
     }, (query, termDict, marksDict));
 
-    <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
+    <DictionaryContext.OnWordClickProvider value={str => {
+        Js.log(str);
+        setQuery(_ => str);
+    }}>
             <h1><b>{"nut"->React.string}</b></h1>
             <Legend />
             {
