@@ -1,5 +1,5 @@
-# **nut**
-> A constructed language that is parsable by both computer and human
+# **nut-taal**
+> A constructed language that is parsable by both computer and human. Inspired by [mini language](https://minilanguage.com)
 
 ### A taste of the language:
 ## [Try it out](https://mikeskoe.github.io/code-ish-app/)
