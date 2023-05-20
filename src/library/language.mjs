@@ -9,6 +9,9 @@ import * as AbstractDict from "./abstractDict.mjs";
 
 function Make(Marks, Show) {
   var translate = function (str, dict) {
+    if (str === "") {
+      return ;
+    }
     var match = $$String.split_on_char(/* '-' */45, str);
     var tmp;
     if (match) {

@@ -19,16 +19,20 @@ module Make = (
 
    let rec translate : (string, MyDict.t<list<string>>) => option<list<string>>
       = (str, dict) => {
-         MyDict.find_opt(str, dict)
-         -> Option.orElse(
-            switch String.split_on_char('-', str) {
-               | list{} => None
-               | list{_} => None
-               | list{word, ...next} =>
-                  translate(word, dict)
-                  -> Option.orElse(translate(next -> Utils.concatWords, dict))
-            }
-         )
+         if str == "" {
+             None
+         } else {
+             MyDict.find_opt(str, dict)
+             -> Option.orElse(
+                switch String.split_on_char('-', str) {
+                   | list{} => None
+                   | list{_} => None
+                   | list{word, ...next} =>
+                      translate(word, dict)
+                      -> Option.orElse(translate(next -> Utils.concatWords, dict))
+                }
+             )
+         }
       }
 
    let parse: (MyDict.t<list<string>>, string) => t
@@ -37,7 +41,7 @@ module Make = (
             = str =>
                list{Marks.noun, Marks.verb, Marks.ad}
                -> List.some(mark => mark == str);
-         
+
          let toMark : string => mark
             = str => if str == Marks.noun {
                AbstractDict.Noun;
@@ -46,7 +50,7 @@ module Make = (
             } else {
                AbstractDict.Ad;
             }
-         
+
          let isCon : string => bool
             = str => str -> translate(marks) -> Option.isSome;
 
