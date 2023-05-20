@@ -20,10 +20,10 @@ module Links = {
 
     @react.component
     let make = () => <div className="samples">
-        <p><a href={readmeURL}>{"README (with grammar)"->React.string}</a></p>
-        <p><a href={dicrionaryURL}>{"Dictionary"->React.string}</a></p>
-        <p><a href={conjugationsURL}>{"Conjugations"->React.string}</a></p>
-        <p><a href={examplesURL}>{"Examples"->React.string}</a></p>
+        <a href={readmeURL}>{"README (with grammar)"->React.string}</a>
+        <a href={dicrionaryURL}>{"Dictionary"->React.string}</a>
+        <a href={conjugationsURL}>{"Conjugations"->React.string}</a>
+        <a href={examplesURL}>{"Examples"->React.string}</a>
     </div>;
 }
 
@@ -51,15 +51,35 @@ module Parser = {
     }
 }
 
+module WithTooltip = {
+    @react.component
+    let make = (~text, ~children, ~pos) => {
+        React.cloneElement(
+            children,
+            { "data-tooltip": text, "tooltip-pos": pos, "tooltip-length": "medium" },
+        )
+    }
+}
+
 module Legend = {
     @react.component
     let make = () => {
-        <div>
-            <b>{"Legend: " -> React.string}</b>
-            <span className="noun">{"noun " -> React.string}</span>
-            <span className="verb">{"verb " -> React.string}</span>
-            <span className="ad">{"ad " -> React.string}</span>
-            <span className="conj">{"conjuction " -> React.string}</span>
+        <div className="legend">
+            <WithTooltip text="Work markers, like: a i e, have this colour" pos="down-left">
+                <i className="mark">{"mark " -> React.string}</i>
+            </WithTooltip>
+            <WithTooltip text="Nouns have this colour" pos="down">
+                <i className="noun">{"noun " -> React.string}</i>
+            </WithTooltip>
+            <WithTooltip text="Verbs have this colour" pos="down">
+                <i className="verb">{"verb " -> React.string}</i>
+            </WithTooltip>
+            <WithTooltip text="Adjectives and adverbs have this colour" pos="down">
+                <i className="ad">{"ad " -> React.string}</i>
+            </WithTooltip>
+            <WithTooltip text={`Words that mean "and", "but", "because", etc., that introduce a clause, have this colour`} pos="down-right">
+                <i className="conj">{"conjuction " -> React.string}</i>
+            </WithTooltip>
         </div>
     }
 }
@@ -68,17 +88,16 @@ module Hint = {
     @react.component
     let make = (~word, ~translations) => {
         <div className="box hint">
-            <h3>{word->React.string}</h3>
-
-            <i>{
+            <i>{word->React.string}</i>
+            <h3>{
                 translations
+                -> List.keep(str => str != "")
                 -> List.map(str => str->React.string)
                 -> putBetween(", "->React.string)
                 -> List.toArray
                 -> React.array
-            }</i>
+            }</h3>
             <Legend />
-            <Links />
         </div>
     }
 }
@@ -115,17 +134,12 @@ let make = () => {
     let (hint, setHint) = React.useState(_ => None);
 
     React.useEffect0(() => {
-        Js.Promise.all3((
+        Js.Promise.all2((
             Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
-            Dictionary.Loader.loadDict(Dictionary.Loader.artificialDictUrl),
             Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl),
         ))
-        -> Js.Promise.then_(((terms, articitial, marks)) => Js.Promise.resolve({
-            setTermDict(_ => Some(Dictionary.MyDict.merge(
-                (_, a, b) => Belt.Option.orElse(a, b),
-                terms,
-                articitial,
-            )))
+        -> Js.Promise.then_(((terms, marks)) => Js.Promise.resolve({
+            setTermDict(_ => Some(terms))
             setMarksDict(_ => Some(marks))
         }), _)
         -> _ => None;
@@ -146,7 +160,7 @@ let make = () => {
     }, (query, termDict, marksDict));
 
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
-            <h1><b>{"nut"->React.string}</b></h1>
+            <h1><b>{"nut-taal"->React.string}</b></h1>
             {
                 marksDict
                 -> map(marks => <InputPage marks />)
@@ -157,5 +171,6 @@ let make = () => {
                 -> map(((word, translations)) => <Hint word translations />)
                 -> getWithDefault(React.null)
             }
+            <Links />
     </DictionaryContext.OnWordClickProvider>
 }

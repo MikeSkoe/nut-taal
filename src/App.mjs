@@ -9,7 +9,6 @@ import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
-import * as AbstractDict from "./library/abstractDict.mjs";
 import * as DictionaryContext from "./components/DictionaryContext.mjs";
 
 import './app.css'
@@ -40,15 +39,15 @@ function putBetween(list, item) {
 function App$Links(props) {
   return React.createElement("div", {
               className: "samples"
-            }, React.createElement("p", undefined, React.createElement("a", {
-                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md"
-                    }, "README (with grammar)")), React.createElement("p", undefined, React.createElement("a", {
-                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv"
-                    }, "Dictionary")), React.createElement("p", undefined, React.createElement("a", {
-                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv"
-                    }, "Conjugations")), React.createElement("p", undefined, React.createElement("a", {
-                      href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv"
-                    }, "Examples")));
+            }, React.createElement("a", {
+                  href: "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md"
+                }, "README (with grammar)"), React.createElement("a", {
+                  href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv"
+                }, "Dictionary"), React.createElement("a", {
+                  href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv"
+                }, "Conjugations"), React.createElement("a", {
+                  href: "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv"
+                }, "Examples"));
 }
 
 function App$Parser(props) {
@@ -85,24 +84,58 @@ function App$Parser(props) {
                         }))));
 }
 
+function App$WithTooltip(props) {
+  return React.cloneElement(props.children, {
+              "data-tooltip": props.text,
+              "tooltip-pos": props.pos,
+              "tooltip-length": "medium"
+            });
+}
+
 function App$Legend(props) {
-  return React.createElement("div", undefined, React.createElement("b", undefined, "Legend: "), React.createElement("span", {
-                  className: "noun"
-                }, "noun "), React.createElement("span", {
-                  className: "verb"
-                }, "verb "), React.createElement("span", {
-                  className: "ad"
-                }, "ad "), React.createElement("span", {
-                  className: "conj"
-                }, "conjuction "));
+  return React.createElement("div", {
+              className: "legend"
+            }, React.createElement(App$WithTooltip, {
+                  text: "Work markers, like: a i e, have this colour",
+                  children: React.createElement("i", {
+                        className: "mark"
+                      }, "mark "),
+                  pos: "down-left"
+                }), React.createElement(App$WithTooltip, {
+                  text: "Nouns have this colour",
+                  children: React.createElement("i", {
+                        className: "noun"
+                      }, "noun "),
+                  pos: "down"
+                }), React.createElement(App$WithTooltip, {
+                  text: "Verbs have this colour",
+                  children: React.createElement("i", {
+                        className: "verb"
+                      }, "verb "),
+                  pos: "down"
+                }), React.createElement(App$WithTooltip, {
+                  text: "Adjectives and adverbs have this colour",
+                  children: React.createElement("i", {
+                        className: "ad"
+                      }, "ad "),
+                  pos: "down"
+                }), React.createElement(App$WithTooltip, {
+                  text: "Words that mean \"and\", \"but\", \"because\", etc., that introduce a clause, have this colour",
+                  children: React.createElement("i", {
+                        className: "conj"
+                      }, "conjuction "),
+                  pos: "down-right"
+                }));
 }
 
 function App$Hint(props) {
   return React.createElement("div", {
               className: "box hint"
-            }, React.createElement("h3", undefined, props.word), React.createElement("i", undefined, Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
+            }, React.createElement("i", undefined, props.word), React.createElement("h3", undefined, Belt_List.toArray(putBetween(Belt_List.map(Belt_List.keep(props.translations, (function (str) {
+                                    return str !== "";
+                                  })), (function (str) {
                                 return str;
-                              })), ", "))), React.createElement(App$Legend, {}), React.createElement(App$Links, {}));
+                              })), ", "))), React.createElement(App$Legend, {}));
 }
 
 function App$InputPage(props) {
@@ -168,17 +201,13 @@ function App(props) {
   React.useEffect((function () {
           var __x = Promise.all([
                 Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
-                Dictionary.Loader.loadDict(Dictionary.Loader.artificialDictUrl),
                 Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl)
               ]);
           Js_promise.then_((function (param) {
-                  var marks = param[2];
-                  var articitial = param[1];
+                  var marks = param[1];
                   var terms = param[0];
                   return Promise.resolve((Curry._1(setTermDict, (function (param) {
-                                      return Caml_option.some(Curry._3(AbstractDict.MyDict.merge, (function (param, a, b) {
-                                                        return Belt_Option.orElse(a, b);
-                                                      }), terms, articitial));
+                                      return Caml_option.some(terms);
                                     })), Curry._1(setMarksDict, (function (param) {
                                       return Caml_option.some(marks);
                                     }))));
@@ -209,7 +238,7 @@ function App(props) {
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut")), Belt_Option.getWithDefault(Belt_Option.map(marksDict, (function (marks) {
+            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut-taal")), Belt_Option.getWithDefault(Belt_Option.map(marksDict, (function (marks) {
                         return React.createElement(App$InputPage, {
                                     marks: marks
                                   });
@@ -218,7 +247,7 @@ function App(props) {
                                     word: param[0],
                                     translations: param[1]
                                   });
-                      })), null));
+                      })), null), React.createElement(App$Links, {}));
 }
 
 var make = App;
