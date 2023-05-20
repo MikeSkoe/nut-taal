@@ -47,6 +47,10 @@ a {
     color: transparent;
     caret-color: #FFF;
     z-index: 1000000;
+    display: inline-block;
+    border: none;
+    resize: none;
+    background-color: transparent;
 }
 
 .hint {

@@ -139,6 +139,7 @@ function App$Hint(props) {
 }
 
 function App$InputPage(props) {
+  var ref = React.useRef(null);
   var match = React.useState(function () {
         return true;
       });
@@ -153,7 +154,16 @@ function App$InputPage(props) {
             return $$event.target.innerText;
           }));
   };
+  var onPaste = (event => {
+            // event.preventDefault();
+            const text = event.clipboardData.getData("text");
+            event.target.innerText = text;
+            setInput(text);
+            setIsEditMode(false);
+        });
   return React.createElement(React.Fragment, undefined, React.createElement("div", {
+                  ref: Caml_option.some(ref)
+                }), React.createElement("div", {
                   className: "box area"
                 }, React.createElement(App$Parser, {
                       text: match$1[0],
@@ -163,6 +173,7 @@ function App$InputPage(props) {
                       contentEditable: true,
                       spellCheck: false,
                       inputMode: "text",
+                      onPaste: onPaste,
                       onInput: onChange
                     })), React.createElement("input", {
                   className: "switch",

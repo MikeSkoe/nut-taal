@@ -105,14 +105,24 @@ module Hint = {
 module InputPage = {
     @react.component
     let make = (~marks) => {
+        let ref = React.useRef(Js.Nullable.null);
         let (isEditMode, setIsEditMode) = React.useState(_ => true);
         let (input, setInput) = React.useState(_ => "");
         let onChange = event => setInput(_ => ReactEvent.Form.target(event)["innerText"]);
+        let onPaste = %raw(`event => {
+            // event.preventDefault();
+            const text = event.clipboardData.getData("text");
+            event.target.innerText = text;
+            setInput(text);
+            setIsEditMode(false);
+        }`);
 
         <>
+            <div ref={ReactDOM.Ref.domRef(ref)} />
             <div className="box area">
                 <Parser text={input} marks={marks} />
                 <div
+                    onPaste={onPaste}
                     className={isEditMode ? "editable" : "nonEditable"}
                     spellCheck={false}
                     contentEditable={true}
