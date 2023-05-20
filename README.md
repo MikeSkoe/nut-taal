@@ -3,13 +3,15 @@
 
 ### A taste of the language:
 ## [Try it out](https://mikeskoe.github.io/code-ish-app/)
-maklik-taal | English 
+nut-taal | English 
 -- | --
 my <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
 dit a kat e *my klein mooi* | This is my *small beutiful* cat
-e *vandag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
+e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
 
 ### [More Examples](https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv)
+### [Dictionary](https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv)
+### [Conjugations](https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv)
 
 ---
 ## Grammar
@@ -92,9 +94,19 @@ It is rather a dependency.
 
 At the moment all roots come from Afrikaans.
 I did it for few reasons:
-- I think it is better to have only one source of roots.
-Plus there will always be someone who does not know a single word in any possible conlang
-- It allows to use any translator, that supports Afrikaans, in cases when the dictionary does not include a word you need. (Plus some translators exposes speach!)
-- It one of the simples natural languages.
-It is a simplified Dutch, which is a Germanic language (like German and English), located at Africa!
+- Having only one source language allows to use a translator! Which means you can fallback to a root from the translator and voice a sentence, since pronunciation follows Afrikaans rules
+- It is one of the simples natural languages
 - It is much simpler to read and pronounce than English, since spelling is regular
+- It sounds great (let's be honest, some event popular conlangs sound artificial)
+- There will always be someone who does not know the majority a vocabulary anyways
+- It is a Germanic language, located in Africa, so it has a lot of common words with English, Dutch, German and Khoisan languages of Southern Africa
+
+### How to contribute
+> [Discord server](https://discord.gg/3AsNmZVJ)
+
+Even though you can already use the language for a communication, it is far from being perfect.
+If you want to mature the language, you can suggest dictionary modification using issue template.
+Go to "Issues" -> "New Issue" -> choose a template and press "Get started" or press "Open a blank issue"
+
+💜
+
