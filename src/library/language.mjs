@@ -34,7 +34,7 @@ function Make(Marks, Show) {
                     }
                   }
                 }, (function (mark) {
-                    return mark === str;
+                    return mark === $$String.lowercase_ascii(str);
                   }));
     };
     var toMark = function (str) {
@@ -46,6 +46,9 @@ function Make(Marks, Show) {
         return /* Ad */2;
       }
     };
+    var isCon = function (str) {
+      return Belt_Option.isSome(translate($$String.lowercase_ascii(str), marks));
+    };
     var iter = function (_mark, _strs) {
       while(true) {
         var strs = _strs;
@@ -55,7 +58,7 @@ function Make(Marks, Show) {
         }
         var next = strs.tl;
         var con = strs.hd;
-        if (Belt_Option.isSome(translate(con, marks))) {
+        if (isCon(con)) {
           return {
                   TAG: /* Con */4,
                   _0: con,
@@ -152,7 +155,7 @@ function Make(Marks, Show) {
                     return {
                             hd: Curry._1(Show.mark, Marks.verb),
                             tl: iter({
-                                  TAG: /* Ad */3,
+                                  TAG: /* Verb */2,
                                   _0: next._0,
                                   _1: next._1
                                 })

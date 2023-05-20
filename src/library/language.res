@@ -40,7 +40,7 @@ module Make = (
          let isMark : string => bool
             = str =>
                list{Marks.noun, Marks.verb, Marks.ad}
-               -> List.some(mark => mark == str);
+               -> List.some(mark => mark == String.lowercase_ascii(str));
 
          let toMark : string => mark
             = str => if str == Marks.noun {
@@ -52,7 +52,11 @@ module Make = (
             }
 
          let isCon : string => bool
-            = str => str -> translate(marks) -> Option.isSome;
+            = str =>
+                str
+                -> String.lowercase_ascii
+                -> translate(marks)
+                -> Option.isSome;
 
          let rec iter: (mark, list<string>) => t
             = (mark, strs) => {
@@ -118,7 +122,7 @@ module Make = (
                | Start(Ad(root, next))
                   => list{Show.mark(Marks.ad), ...iter(Ad(root, next))}
                | Start(Verb(root, next))
-                  => list{Show.mark(Marks.verb), ...iter(Ad(root, next))}
+                  => list{Show.mark(Marks.verb), ...iter(Verb(root, next))}
 
                | Ad(root, Noun(root', next))
                   => list{Show.ad(root), Show.mark(Marks.noun), ...iter(Noun(root', next))}
