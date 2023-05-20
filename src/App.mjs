@@ -65,7 +65,7 @@ function App$Parser(props) {
       });
   var setParsed = match[1];
   React.useEffect((function () {
-          var res = Belt_List.map($$String.split_on_char(/* '\n' */10, text), (function (line) {
+          var res = Belt_List.map($$String.split_on_char(/* '.' */46, text), (function (line) {
                   return Curry._2(Lang.Lang.parse, marks, line);
                 }));
           Curry._1(setParsed, (function (param) {
@@ -80,9 +80,21 @@ function App$Parser(props) {
             }, Belt_List.toArray(Belt_List.flatten(putBetween(Belt_List.map(match[0], (function (line) {
                                 return putBetween(Curry._1(Lang.Lang.show, line), " ");
                               })), {
-                          hd: React.createElement("br", undefined),
+                          hd: ". ",
                           tl: /* [] */0
                         }))));
+}
+
+function App$Legend(props) {
+  return React.createElement("div", undefined, React.createElement("b", undefined, "Legend: "), React.createElement("span", {
+                  className: "noun"
+                }, "noun "), React.createElement("span", {
+                  className: "verb"
+                }, "verb "), React.createElement("span", {
+                  className: "ad"
+                }, "ad "), React.createElement("span", {
+                  className: "conj"
+                }, "conjuction "));
 }
 
 function App$Hint(props) {
@@ -90,7 +102,7 @@ function App$Hint(props) {
               className: "box hint"
             }, React.createElement("h3", undefined, props.word), React.createElement("i", undefined, Belt_List.toArray(putBetween(Belt_List.map(props.translations, (function (str) {
                                 return str;
-                              })), ", "))), React.createElement(App$Links, {}));
+                              })), ", "))), React.createElement(App$Legend, {}), React.createElement(App$Links, {}));
 }
 
 function App$InputPage(props) {
@@ -131,18 +143,6 @@ function App$InputPage(props) {
                 }), React.createElement("label", undefined, "" + (
                   isEditMode ? "Edit" : "View"
                 ) + " mode"));
-}
-
-function App$Legend(props) {
-  return React.createElement("div", undefined, React.createElement("b", undefined, "Legend: "), React.createElement("span", {
-                  className: "noun"
-                }, "noun "), React.createElement("span", {
-                  className: "verb"
-                }, "verb "), React.createElement("span", {
-                  className: "ad"
-                }, "ad "), React.createElement("span", {
-                  className: "conj"
-                }, "conjuction "));
 }
 
 function App(props) {
@@ -204,13 +204,12 @@ function App(props) {
       ]);
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
               value: (function (str) {
-                  console.log(str);
                   Curry._1(setQuery, (function (param) {
                           return str;
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut")), React.createElement(App$Legend, {}), Belt_Option.getWithDefault(Belt_Option.map(marksDict, (function (marks) {
+            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut")), Belt_Option.getWithDefault(Belt_Option.map(marksDict, (function (marks) {
                         return React.createElement(App$InputPage, {
                                     marks: marks
                                   });

@@ -3,13 +3,24 @@ open Belt;
 type t = React.element;
 
 module Word = {
+    let normalizeWord: string => string
+        = word =>
+            word
+            -> String.map(char =>
+                list{'.', ',', '!', '?'}
+                -> List.has(char, (a, b) => a == b)
+                    ? ' '
+                    : char,
+                _
+            )
+            -> String.trim
+            -> String.lowercase_ascii
+
     let rec iter = (~onClick, ~className, ~word, ~withDash) => {
         switch String.split_on_char('-', word) {
             | list{root, ...next} => <>
-                {withDash
-                    ? "-" -> React.string
-                    : React.null}
-                <span className onClick={_ => onClick(word)}>
+                {(withDash ? "-" : "") -> React.string}
+                <span className onClick={_ => onClick(word->normalizeWord)}>
                     {root->React.string}
                 </span>
                 {next == list{}

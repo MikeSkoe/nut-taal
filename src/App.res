@@ -34,7 +34,7 @@ module Parser = {
 
         React.useEffect2(() => {
             text
-            -> String.split_on_char('\n', _)
+            -> String.split_on_char('.', _)
             -> List.map(line => Lang.parse(marks, line))
             -> res => setParsed(_ => res)
             -> _ => None;
@@ -43,11 +43,24 @@ module Parser = {
         <div className="parsed">{
             parsed
             -> List.map(line => line -> Lang.show -> putBetween(" " -> React.string))
-            -> putBetween(list{<br />})
+            -> putBetween(list{". " -> React.string})
             -> List.flatten
             -> List.toArray
             -> React.array
         }</div>
+    }
+}
+
+module Legend = {
+    @react.component
+    let make = () => {
+        <div>
+            <b>{"Legend: " -> React.string}</b>
+            <span className="noun">{"noun " -> React.string}</span>
+            <span className="verb">{"verb " -> React.string}</span>
+            <span className="ad">{"ad " -> React.string}</span>
+            <span className="conj">{"conjuction " -> React.string}</span>
+        </div>
     }
 }
 
@@ -64,6 +77,7 @@ module Hint = {
                 -> List.toArray
                 -> React.array
             }</i>
+            <Legend />
             <Links />
         </div>
     }
@@ -90,19 +104,6 @@ module InputPage = {
             <input id="isEdit" onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
             <label>{`${(isEditMode ? "Edit" : "View")} mode` -> React.string}</label>
         </>
-    }
-}
-
-module Legend = {
-    @react.component
-    let make = () => {
-        <div>
-            <b>{"Legend: " -> React.string}</b>
-            <span className="noun">{"noun " -> React.string}</span>
-            <span className="verb">{"verb " -> React.string}</span>
-            <span className="ad">{"ad " -> React.string}</span>
-            <span className="conj">{"conjuction " -> React.string}</span>
-        </div>
     }
 }
 
@@ -144,12 +145,8 @@ let make = () => {
         -> _ => None;
     }, (query, termDict, marksDict));
 
-    <DictionaryContext.OnWordClickProvider value={str => {
-        Js.log(str);
-        setQuery(_ => str);
-    }}>
+    <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
             <h1><b>{"nut"->React.string}</b></h1>
-            <Legend />
             {
                 marksDict
                 -> map(marks => <InputPage marks />)
