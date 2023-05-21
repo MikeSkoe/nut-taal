@@ -138,6 +138,8 @@ function App$Hint(props) {
                               })), ", "))), React.createElement(App$Legend, {}));
 }
 
+var initialText = "my lief jy";
+
 function App$InputPage(props) {
   var ref = React.useRef(null);
   var match = React.useState(function () {
@@ -146,7 +148,7 @@ function App$InputPage(props) {
   var setIsEditMode = match[1];
   var isEditMode = match[0];
   var match$1 = React.useState(function () {
-        return "";
+        return initialText;
       });
   var setInput = match$1[1];
   var onChange = function ($$event) {
@@ -176,7 +178,7 @@ function App$InputPage(props) {
                       inputMode: "text",
                       onPaste: onPaste,
                       onInput: onChange
-                    })), React.createElement("input", {
+                    }, initialText)), React.createElement("input", {
                   className: "switch",
                   id: "isEdit",
                   type: "checkbox",

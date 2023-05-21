@@ -103,11 +103,13 @@ module Hint = {
 }
 
 module InputPage = {
+    let initialText = "my lief jy"
+
     @react.component
     let make = (~marks) => {
         let ref = React.useRef(Js.Nullable.null);
         let (isEditMode, setIsEditMode) = React.useState(_ => true);
-        let (input, setInput) = React.useState(_ => "");
+        let (input, setInput) = React.useState(_ => initialText);
         let onChange = event => setInput(_ => ReactEvent.Form.target(event)["innerText"]);
         let onPaste = %raw(`event => {
             event.preventDefault();
@@ -130,7 +132,9 @@ module InputPage = {
                     contentEditable={true}
                     onInput={onChange}
                     inputMode="text"
-                />
+                >
+                    {initialText -> React.string}
+                </div>
             </div>
             <input id="isEdit" onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
             <label>{`${(isEditMode ? "Edit" : "View")} mode` -> React.string}</label>
