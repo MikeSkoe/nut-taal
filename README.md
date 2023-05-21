@@ -2,7 +2,7 @@
 > A constructed language that is parsable by both computer and human. Inspired by [mini language](https://minilanguage.com)
 
 ### A taste of the language:
-## [Try it out](https://mikeskoe.github.io/code-ish-app/)
+## [Try it out](https://mikeskoe.github.io/nut-taal/)
 nut-taal | English 
 -- | --
 my <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
