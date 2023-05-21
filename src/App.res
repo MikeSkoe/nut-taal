@@ -110,18 +110,20 @@ module InputPage = {
         let (input, setInput) = React.useState(_ => "");
         let onChange = event => setInput(_ => ReactEvent.Form.target(event)["innerText"]);
         let onPaste = %raw(`event => {
-            // event.preventDefault();
+            event.preventDefault();
             const text = event.clipboardData.getData("text");
             event.target.innerText = text;
             setInput(text);
-            setIsEditMode(false);
+            if (ref.current) {
+                ref.current.innerText = text;
+            }
         }`);
 
         <>
-            <div ref={ReactDOM.Ref.domRef(ref)} />
             <div className="box area">
                 <Parser text={input} marks={marks} />
                 <div
+                    ref={ReactDOM.Ref.domRef(ref)}
                     onPaste={onPaste}
                     className={isEditMode ? "editable" : "nonEditable"}
                     spellCheck={false}

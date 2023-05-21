@@ -155,20 +155,21 @@ function App$InputPage(props) {
           }));
   };
   var onPaste = (event => {
-            // event.preventDefault();
+            event.preventDefault();
             const text = event.clipboardData.getData("text");
             event.target.innerText = text;
             setInput(text);
-            setIsEditMode(false);
+            if (ref.current) {
+                ref.current.innerText = text;
+            }
         });
   return React.createElement(React.Fragment, undefined, React.createElement("div", {
-                  ref: Caml_option.some(ref)
-                }), React.createElement("div", {
                   className: "box area"
                 }, React.createElement(App$Parser, {
                       text: match$1[0],
                       marks: props.marks
                     }), React.createElement("div", {
+                      ref: Caml_option.some(ref),
                       className: isEditMode ? "editable" : "nonEditable",
                       contentEditable: true,
                       spellCheck: false,
