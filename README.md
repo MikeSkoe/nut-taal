@@ -15,6 +15,9 @@ e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u>
 
 ---
 ## Grammar
+
+[Diagram](https://github.com/MikeSkoe/code-ish-app/blob/main/public/diagram.png)
+
 ### Low level
 The language have three low-level language units:
 - [Root](#Root) - a building block of the language
