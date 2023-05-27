@@ -68,8 +68,9 @@ module Make = (
          let rec iter: (mark, list<string>) => t
             = (mark, strs) => {
                switch (mark, strs) {
-                  | (_, list{con, ...next}) when isCon(con) =>
-                     Con(con, iter(AbstractDict.Noun, next))
+                  | (_, list{}) => End
+                  | (_, list{con, word, ...next}) when isCon(con) =>
+                     Con(con, iter(AbstractDict.Noun, list{word, ...next}))
 
                   | (something, list{markA, markB, ...next}) when isMark(markA) && isMark(markB) =>
                      iter(something, list{markB, ...next})
@@ -80,6 +81,9 @@ module Make = (
                   | (AbstractDict.Verb, list{mark}) when isMark(mark) =>
                      Verb(mark, End)
 
+                  | (AbstractDict.Ad, list{mark}) when isMark(mark) =>
+                     Ad(mark, End)
+
                   | (_, list{mark, ...next}) when isMark(mark) =>
                      iter(toMark(mark), next)
 
@@ -88,7 +92,7 @@ module Make = (
 
                   | (AbstractDict.Verb, list{word, ...next}) =>
                      Verb(word, iter(AbstractDict.Noun, next))
-                     
+
                   | (AbstractDict.Ad, list{word, ...next}) =>
                      Ad(word, iter(AbstractDict.Ad, next))
                   

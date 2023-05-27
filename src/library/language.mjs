@@ -56,21 +56,25 @@ function Make(Marks, Show) {
         if (!strs) {
           return /* End */0;
         }
-        var next = strs.tl;
-        var con = strs.hd;
-        if (isCon(con)) {
-          return {
-                  TAG: /* Con */4,
-                  _0: con,
-                  _1: iter(/* Noun */0, next)
-                };
-        }
-        if (next) {
-          var markB = next.hd;
-          if (isMark(con) && isMark(markB)) {
+        var match = strs.tl;
+        if (match) {
+          var next = match.tl;
+          var word = match.hd;
+          var con = strs.hd;
+          if (isCon(con)) {
+            return {
+                    TAG: /* Con */4,
+                    _0: con,
+                    _1: iter(/* Noun */0, {
+                          hd: word,
+                          tl: next
+                        })
+                  };
+          }
+          if (isMark(con) && isMark(word)) {
             _strs = {
-              hd: markB,
-              tl: next.tl
+              hd: word,
+              tl: next
             };
             continue ;
           }
@@ -98,14 +102,22 @@ function Make(Marks, Show) {
                 }
                 break;
             case /* Ad */2 :
+                var mark$3 = strs.hd;
+                if (isMark(mark$3)) {
+                  return {
+                          TAG: /* Ad */3,
+                          _0: mark$3,
+                          _1: /* End */0
+                        };
+                }
                 break;
             
           }
         }
-        var mark$3 = strs.hd;
-        if (isMark(mark$3)) {
+        var mark$4 = strs.hd;
+        if (isMark(mark$4)) {
           _strs = strs.tl;
-          _mark = toMark(mark$3);
+          _mark = toMark(mark$4);
           continue ;
         }
         switch (mark) {
