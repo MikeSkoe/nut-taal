@@ -10,14 +10,9 @@ var initialText = "my lief jy want jy is persoon e goed";
 function Input(props) {
   var ref = React.useRef(null);
   var match = React.useState(function () {
-        return true;
-      });
-  var setIsEditMode = match[1];
-  var isEditMode = match[0];
-  var match$1 = React.useState(function () {
         return initialText;
       });
-  var setInput = match$1[1];
+  var setInput = match[1];
   var onChange = function ($$event) {
     Curry._1(setInput, (function (param) {
             return $$event.target.innerText;
@@ -33,30 +28,32 @@ function Input(props) {
         }
     });
   return React.createElement(React.Fragment, undefined, React.createElement("div", {
-                  className: "box area"
-                }, React.createElement(Parser.make, {
-                      text: match$1[0],
-                      marks: props.marks
-                    }), React.createElement("div", {
-                      ref: Caml_option.some(ref),
-                      className: isEditMode ? "editable" : "nonEditable",
-                      contentEditable: true,
-                      spellCheck: false,
-                      inputMode: "text",
-                      onPaste: onPaste,
-                      onInput: onChange
-                    }, initialText)), React.createElement("input", {
-                  className: "switch",
-                  id: "isEdit",
-                  type: "checkbox",
-                  onClick: (function (param) {
-                      Curry._1(setIsEditMode, (function (is) {
-                              return !is;
-                            }));
-                    })
-                }), React.createElement("label", undefined, "" + (
-                  isEditMode ? "Edit" : "View"
-                ) + " mode"));
+                  className: "area-holder"
+                }, React.createElement("div", {
+                      className: "column"
+                    }, React.createElement("h2", {
+                          className: "area-heading"
+                        }, "Type here"), React.createElement("div", {
+                          className: "box area"
+                        }, React.createElement("div", {
+                              ref: Caml_option.some(ref),
+                              className: "editable",
+                              contentEditable: true,
+                              spellCheck: false,
+                              inputMode: "text",
+                              onPaste: onPaste,
+                              onInput: onChange,
+                              suppressContentEditableWarning: true
+                            }, initialText))), React.createElement("div", {
+                      className: "column"
+                    }, React.createElement("h2", {
+                          className: "area-heading"
+                        }, "Preview here"), React.createElement("div", {
+                          className: "box area"
+                        }, React.createElement(Parser.make, {
+                              text: match[0],
+                              marks: props.marks
+                            })))));
 }
 
 var make = Input;

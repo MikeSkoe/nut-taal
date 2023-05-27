@@ -85,7 +85,7 @@ module Make = (
                      Ad(mark, End)
 
                   | (_, list{mark, ...next}) when isMark(mark) =>
-                     iter(toMark(mark), next)
+                     iter(toMark(mark -> String.lowercase_ascii), next)
 
                   | (AbstractDict.Noun, list{word, ...next}) =>
                      Noun(word, iter(AbstractDict.Verb, next))
