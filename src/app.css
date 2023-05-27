@@ -17,20 +17,40 @@ a {
     font-size: 0.8em;
 }
 
+.area-holder {
+    gap: 1rem;
+    display: flex;
+}
+
+@media screen and (max-width: 600px) {
+    .area-holder {
+        gap: 2rem;
+        margin: 2rem 0;
+        flex-direction: column;
+    }
+}
+
+.area-holder > .column {
+    flex: 1;
+}
+
+.area-heading {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
 .area {
     border: 1px solid rgba(255, 255, 255, 0.2);
-    margin: 1rem 0;
     padding: 1rem;
     border-radius: calc(var(--h1Size) * 0.25);
     background: var(--dark);
     position: relative;
-    width: 100%;
+    min-height: 5rem;
 }
 
 .parsed {
     width: 100%;
     height: 100%;
-    min-height: 5rem;
 }
 
 .parsed span {
@@ -39,15 +59,8 @@ a {
 
 .editable {
     outline: none;
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    bottom: 1rem;
-    right: 1rem;
-    color: transparent;
     caret-color: #FFF;
-    z-index: 1000000;
-    display: inline-block;
+    display: block;
     border: none;
     resize: none;
     background-color: transparent;
@@ -69,8 +82,6 @@ a {
     gap: 0 1rem;
 }
 
-.nonEditable { display: none; }
-
 .verb { color: var(--green); }
 .ad { color: var(--yellow); }
 .conj { color: var(--red); }
@@ -78,7 +89,12 @@ a {
 
 .box { box-sizing: border-box; }
 
-.samples {
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
     display: flex;
     flex-direction: column;
 }

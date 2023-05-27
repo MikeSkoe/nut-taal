@@ -117,7 +117,7 @@ function Make(Marks, Show) {
         var mark$4 = strs.hd;
         if (isMark(mark$4)) {
           _strs = strs.tl;
-          _mark = toMark(mark$4);
+          _mark = toMark($$String.lowercase_ascii(mark$4));
           continue ;
         }
         switch (mark) {

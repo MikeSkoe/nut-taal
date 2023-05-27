@@ -12,7 +12,7 @@ var examplesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/exa
 
 function Links(props) {
   return React.createElement("div", {
-              className: "samples"
+              className: "column"
             }, React.createElement("a", {
                   href: readmeURL
                 }, "README (with grammar)"), React.createElement("a", {

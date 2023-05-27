@@ -3,7 +3,6 @@ let initialText = "my lief jy want jy is persoon e goed"
 @react.component
 let make = (~marks) => {
     let ref = React.useRef(Js.Nullable.null);
-    let (isEditMode, setIsEditMode) = React.useState(_ => true);
     let (input, setInput) = React.useState(_ => initialText);
     let onChange = event => setInput(_ => ReactEvent.Form.target(event)["innerText"]);
     let onPaste = %raw(`event => {
@@ -17,21 +16,30 @@ let make = (~marks) => {
     }`);
 
     <>
-        <div className="box area">
-            <Parser text={input} marks={marks} />
-            <div
-                ref={ReactDOM.Ref.domRef(ref)}
-                onPaste={onPaste}
-                className={isEditMode ? "editable" : "nonEditable"}
-                spellCheck={false}
-                contentEditable={true}
-                onInput={onChange}
-                inputMode="text"
-            >
-                {initialText -> React.string}
+        <div className="area-holder">
+            <div className="column">
+                <h2 className="area-heading">{"Type here" -> React.string}</h2>
+                <div className="box area">
+                    <div
+                        ref={ReactDOM.Ref.domRef(ref)}
+                        onPaste={onPaste}
+                        className="editable"
+                        spellCheck={false}
+                        contentEditable={true}
+                        suppressContentEditableWarning={true}
+                        onInput={onChange}
+                        inputMode="text"
+                    >
+                        {initialText -> React.string}
+                    </div>
+                </div>
+            </div>
+            <div className="column">
+                <h2 className="area-heading">{"Preview here" -> React.string}</h2>
+                <div className="box area">
+                    <Parser text={input} marks={marks} />
+                </div>
             </div>
         </div>
-        <input id="isEdit" onClick={_ => setIsEditMode(is => !is)} type_="checkbox" className="switch" />
-        <label>{`${(isEditMode ? "Edit" : "View")} mode` -> React.string}</label>
     </>
 }
