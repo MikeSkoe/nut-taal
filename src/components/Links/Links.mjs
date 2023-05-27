@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+var readerURL = "reader";
+
 var readmeURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md";
 
 var dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
@@ -14,6 +16,8 @@ function Links(props) {
   return React.createElement("div", {
               className: "samples"
             }, React.createElement("a", {
+                  href: readerURL
+                }, "Reader"), React.createElement("a", {
                   href: readmeURL
                 }, "README (with grammar)"), React.createElement("a", {
                   href: dicrionaryURL
@@ -27,6 +31,7 @@ function Links(props) {
 var make = Links;
 
 export {
+  readerURL ,
   readmeURL ,
   dicrionaryURL ,
   conjugationsURL ,
