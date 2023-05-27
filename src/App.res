@@ -53,19 +53,6 @@ module MainPage = {
     }
 }
 
-module ReaderPage = {
-    @react.component
-    let make = (~marksDict: option<Lang.dictionary>) => {
-        let textWithTranslation = list{("My lief jy",  "I love you")};
-
-        marksDict
-        -> Option.mapWithDefault(
-            React.null,
-            marks => <Reader textWithTranslation marks />
-        )
-    }
-}
-
 @react.component
 let make = () => {
     let (termDict, marksDict) = useDictionary();
@@ -83,9 +70,15 @@ let make = () => {
             }
             {
                 hint
-                -> Option.map(((word, translations)) => <Hint word translations />)
+                -> Option.map(((word, translations)) => {
+                    switch url.path {
+                        | list{"reader"} => <Hint word translations fixed=true/>
+                        | _ => <Hint word translations fixed=false/>
+                    }
+                    
+                })
                 -> Option.getWithDefault(React.null)
             }
-            <Links />
+            <div className="floor" />
     </DictionaryContext.OnWordClickProvider>
 }

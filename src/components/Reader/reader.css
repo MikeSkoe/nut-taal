@@ -1,6 +1,8 @@
 .reader {
     display: flex;
+    flex-direction: column;
     align-items: stretch;
+    margin: 3rem 0;
 }
 
 .reader > div {
@@ -15,10 +17,9 @@
 }
 
 .reader > div:first-child {
-    border-radius: calc(var(--h1Size) * 0.25) 0 0 calc(var(--h1Size) * 0.25);
+    border-radius: calc(var(--h1Size) * 0.25) calc(var(--h1Size) * 0.25) 0 0;
 }
 
 .reader > div:last-child {
-    border-radius: 0 calc(var(--h1Size) * 0.25) calc(var(--h1Size) * 0.25) 0;
-    border-left: none;
+    border-radius: 0 0 calc(var(--h1Size) * 0.25) calc(var(--h1Size) * 0.25);
 }
