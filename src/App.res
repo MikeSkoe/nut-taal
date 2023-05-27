@@ -1,7 +1,5 @@
 %%raw("import './app.css'")
 
-let languageName = "nut-taal";
-
 open Lang
 open Belt
 
@@ -61,23 +59,23 @@ let make = () => {
     let url = RescriptReactRouter.useUrl();
 
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
-            <h1><b>{languageName->React.string}</b></h1>
-            {
+        <Header />
+        {
+            switch url.hash {
+                | "reader" => <ReaderPage marksDict />
+                | _ => <MainPage marksDict />
+            }
+        }
+        {
+            hint
+            -> Option.map(((word, translations)) => {
                 switch url.hash {
-                    | "reader" => <ReaderPage marksDict />
-                    | _ => <MainPage marksDict />
+                    | "reader" => <Hint word translations fixed=true/>
+                    | _ => <Hint word translations fixed=false/>
                 }
-            }
-            {
-                hint
-                -> Option.map(((word, translations)) => {
-                    switch url.hash {
-                        | "reader" => <Hint word translations fixed=true/>
-                        | _ => <Hint word translations fixed=false/>
-                    }
-                })
-                -> Option.getWithDefault(React.null)
-            }
-            <div className="floor" />
+            })
+            -> Option.getWithDefault(React.null)
+        }
+        <div className="floor" />
     </DictionaryContext.OnWordClickProvider>
 }

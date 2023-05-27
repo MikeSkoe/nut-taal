@@ -5,6 +5,7 @@ import * as Lang from "./Lang.mjs";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as Input from "./components/Input/Input.mjs";
 import * as React from "react";
+import * as Header from "./components/Header/Header.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
@@ -103,7 +104,7 @@ function App(props) {
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut-taal")), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
+            }, React.createElement(Header.make, {}), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
                         var translations = param[1];
                         var word = param[0];
                         var match = url.hash;
