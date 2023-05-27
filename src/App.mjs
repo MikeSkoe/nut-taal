@@ -106,19 +106,20 @@ function App(props) {
             }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut-taal")), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
                         var translations = param[1];
                         var word = param[0];
-                        var match = url.path;
-                        if (match && match.hd === "reader" && !match.tl) {
+                        var match = url.hash;
+                        if (match === "reader") {
                           return React.createElement(Hint.make, {
                                       word: word,
                                       translations: translations,
                                       fixed: true
                                     });
+                        } else {
+                          return React.createElement(Hint.make, {
+                                      word: word,
+                                      translations: translations,
+                                      fixed: false
+                                    });
                         }
-                        return React.createElement(Hint.make, {
-                                    word: word,
-                                    translations: translations,
-                                    fixed: false
-                                  });
                       })), null), React.createElement("div", {
                   className: "floor"
                 }));

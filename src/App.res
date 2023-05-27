@@ -71,8 +71,8 @@ let make = () => {
             {
                 hint
                 -> Option.map(((word, translations)) => {
-                    switch url.path {
-                        | list{"reader"} => <Hint word translations fixed=true/>
+                    switch url.hash {
+                        | "reader" => <Hint word translations fixed=true/>
                         | _ => <Hint word translations fixed=false/>
                     }
                 })
