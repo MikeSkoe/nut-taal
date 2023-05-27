@@ -59,12 +59,12 @@ let make = () => {
     let (query, setQuery) = React.useState(_ => "taal");
     let hint = useHint(termDict, marksDict, query);
     let url = RescriptReactRouter.useUrl();
-  
+
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
             <h1><b>{languageName->React.string}</b></h1>
             {
-                switch url.path {
-                    | list{"reader"} => <ReaderPage marksDict />
+                switch url.hash {
+                    | "reader" => <ReaderPage marksDict />
                     | _ => <MainPage marksDict />
                 }
             }
@@ -75,7 +75,6 @@ let make = () => {
                         | list{"reader"} => <Hint word translations fixed=true/>
                         | _ => <Hint word translations fixed=false/>
                     }
-                    
                 })
                 -> Option.getWithDefault(React.null)
             }

@@ -90,9 +90,8 @@ function App(props) {
   var setQuery = match$1[1];
   var hint = useHint(match[0], marksDict, match$1[0]);
   var url = RescriptReactRouter.useUrl(undefined, undefined);
-  var match$2 = url.path;
-  var tmp;
-  tmp = match$2 && match$2.hd === "reader" && !match$2.tl ? React.createElement(ReaderPage.make, {
+  var match$2 = url.hash;
+  var tmp = match$2 === "reader" ? React.createElement(ReaderPage.make, {
           marksDict: marksDict
         }) : React.createElement(App$MainPage, {
           marksDict: marksDict

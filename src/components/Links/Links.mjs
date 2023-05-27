@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-var readerURL = "reader";
+var readerURL = "/#reader";
 
 var readmeURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md";
 
@@ -16,6 +16,8 @@ function Links(props) {
   return React.createElement("div", {
               className: "links"
             }, React.createElement("a", {
+                  href: "/"
+                }, "Main"), React.createElement("a", {
                   href: readerURL
                 }, "Reader"), React.createElement("a", {
                   href: readmeURL
