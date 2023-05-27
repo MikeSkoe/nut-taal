@@ -6,12 +6,14 @@ import * as Curry from "rescript/lib/es6/curry.js";
 import * as Input from "./components/Input/Input.mjs";
 import * as Links from "./components/Links/Links.mjs";
 import * as React from "react";
+import * as Reader from "./components/Reader/Reader.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as DictionaryContext from "./components/DictionaryContext/DictionaryContext.mjs";
+import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
 
 import './app.css'
 ;
@@ -72,14 +74,45 @@ function useHint(termDict, marksDict, query) {
   return match[0];
 }
 
+function App$MainPage(props) {
+  return Belt_Option.getWithDefault(Belt_Option.map(props.marksDict, (function (marks) {
+                    return React.createElement(Input.make, {
+                                marks: marks
+                              });
+                  })), null);
+}
+
+function App$ReaderPage(props) {
+  return Belt_Option.mapWithDefault(props.marksDict, null, (function (marks) {
+                return React.createElement(Reader.make, {
+                            textWithTranslation: {
+                              hd: [
+                                "My lief jy",
+                                "I love you"
+                              ],
+                              tl: /* [] */0
+                            },
+                            marks: marks
+                          });
+              }));
+}
+
 function App(props) {
-  var match = React.useState(function () {
+  var match = useDictionary(undefined);
+  var marksDict = match[1];
+  var match$1 = React.useState(function () {
         return "taal";
       });
-  var setQuery = match[1];
-  var match$1 = useDictionary(undefined);
-  var marksDict = match$1[1];
-  var hint = useHint(match$1[0], marksDict, match[0]);
+  var setQuery = match$1[1];
+  var hint = useHint(match[0], marksDict, match$1[0]);
+  var url = RescriptReactRouter.useUrl(undefined, undefined);
+  var match$2 = url.path;
+  var tmp;
+  tmp = match$2 && match$2.hd === "reader" && !match$2.tl ? React.createElement(App$ReaderPage, {
+          marksDict: marksDict
+        }) : React.createElement(App$MainPage, {
+          marksDict: marksDict
+        });
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
               value: (function (str) {
                   Curry._1(setQuery, (function (param) {
@@ -87,11 +120,7 @@ function App(props) {
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut-taal")), Belt_Option.getWithDefault(Belt_Option.map(marksDict, (function (marks) {
-                        return React.createElement(Input.make, {
-                                    marks: marks
-                                  });
-                      })), null), Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
+            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut-taal")), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
                         return React.createElement(Hint.make, {
                                     word: param[0],
                                     translations: param[1]
