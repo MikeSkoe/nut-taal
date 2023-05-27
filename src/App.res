@@ -30,7 +30,7 @@ module Links = {
 module Parser = {
     @react.component
     let make = (~text: string, ~marks) => {
-        let (parsed, setParsed) = React.useState(_ => list{Lang.Start(Lang.End)});
+        let (parsed, setParsed) = React.useState(_ => list{Lang.empty});
 
         React.useEffect2(() => {
             text
@@ -164,7 +164,7 @@ let make = () => {
     React.useEffect3(() => {
         termDict -> flatMap(terms =>
         marksDict -> flatMap(marks => 
-            Lang.translate(query , marks)
+            Lang.translate(query, marks)
             -> orElse(Lang.translate(query, terms))
             -> forEach(translations => setHint(_ => Some((
                 translations -> List.headExn,

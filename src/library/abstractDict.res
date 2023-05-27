@@ -16,3 +16,14 @@ module type MARKS = {
    let verb: string;
    let ad: string;
 }
+
+module type LANGUAGE = {
+   type t;
+   type dictionary;
+   type presentation;
+
+   let empty : t;
+   let translate : (string, dictionary) => option<list<string>>;
+   let parse : (dictionary, string) => t;
+   let show : t => list<presentation>;
+}

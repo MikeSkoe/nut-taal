@@ -8,7 +8,13 @@ let combMarkString = "-"
 module Make = (
    Marks: MARKS,
    Show: SHOWER,
+): (
+   LANGUAGE with
+      type presentation = Show.t and
+      type dictionary = MyDict.t<list<string>>
 ) => {
+   type presentation = Show.t;
+   type dictionary = MyDict.t<list<string>>;
    type rec t =
       | Start(t)
       | Noun(string, t)
@@ -17,7 +23,8 @@ module Make = (
       | Con(string, t)
       | End;
 
-   let rec translate : (string, MyDict.t<list<string>>) => option<list<string>>
+   let empty = Start(End);
+   let rec translate : (string, dictionary) => option<list<string>>
       = (str, dict) => {
          if str == "" {
              None
@@ -35,7 +42,7 @@ module Make = (
          }
       }
 
-   let parse: (MyDict.t<list<string>>, string) => t
+   let parse: (dictionary, string) => t
       = (marks, str) => {
          let isMark : string => bool
             = str =>

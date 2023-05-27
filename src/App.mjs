@@ -55,10 +55,7 @@ function App$Parser(props) {
   var text = props.text;
   var match = React.useState(function () {
         return {
-                hd: {
-                  TAG: /* Start */0,
-                  _0: /* End */0
-                },
+                hd: Lang.Lang.empty,
                 tl: /* [] */0
               };
       });

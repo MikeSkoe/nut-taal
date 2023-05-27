@@ -340,6 +340,10 @@ function Make(Marks, Show) {
     return iter(lex);
   };
   return {
+          empty: {
+            TAG: /* Start */0,
+            _0: /* End */0
+          },
           translate: translate,
           parse: parse,
           show: show
