@@ -1,8 +1,8 @@
 open Belt
 
 @react.component
-let make = (~word, ~translations) => {
-    <div className="box hint">
+let make = (~word, ~translations, ~fixed) => {
+    <div className=`box hint ${fixed ? "hintFixed" : ""}`>
         <i>{word->React.string}</i>
         <h3>{
             translations
@@ -13,5 +13,6 @@ let make = (~word, ~translations) => {
             -> React.array
         }</h3>
         <Legend />
+        <Links />
     </div>
 }

@@ -44,24 +44,41 @@ let useHint = (termDict, marksDict, query) => {
     hint
 }
 
+module MainPage = {
+    @react.component
+    let make = (~marksDict: option<Lang.dictionary>) => {
+        marksDict
+        -> Option.map(marks => <Input marks />)
+        -> Option.getWithDefault(React.null)
+    }
+}
+
 @react.component
 let make = () => {
-    let (query, setQuery) = React.useState(_ => "taal");
     let (termDict, marksDict) = useDictionary();
+    let (query, setQuery) = React.useState(_ => "taal");
     let hint = useHint(termDict, marksDict, query);
-
+    let url = RescriptReactRouter.useUrl();
+  
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
             <h1><b>{languageName->React.string}</b></h1>
             {
-                marksDict
-                -> Option.map(marks => <Input marks />)
-                -> Option.getWithDefault(React.null)
+                switch url.path {
+                    | list{"reader"} => <ReaderPage marksDict />
+                    | _ => <MainPage marksDict />
+                }
             }
             {
                 hint
-                -> Option.map(((word, translations)) => <Hint word translations />)
+                -> Option.map(((word, translations)) => {
+                    switch url.path {
+                        | list{"reader"} => <Hint word translations fixed=true/>
+                        | _ => <Hint word translations fixed=false/>
+                    }
+                    
+                })
                 -> Option.getWithDefault(React.null)
             }
-            <Links />
+            <div className="floor" />
     </DictionaryContext.OnWordClickProvider>
 }

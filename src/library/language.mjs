@@ -145,7 +145,9 @@ function Make(Marks, Show) {
     };
     return {
             TAG: /* Start */0,
-            _0: iter(/* Noun */0, $$String.split_on_char(/* ' ' */32, str))
+            _0: iter(/* Noun */0, Belt_List.keep($$String.split_on_char(/* ' ' */32, str), (function (str) {
+                        return str !== "";
+                      })))
           };
   };
   var show = function (lex) {

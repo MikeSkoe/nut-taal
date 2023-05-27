@@ -101,7 +101,12 @@ module Make = (
                }
             }
 
-         Start(iter(AbstractDict.Noun, String.split_on_char(' ', str)))
+         Start(
+            iter(
+               AbstractDict.Noun,
+               String.split_on_char(' ', str) -> List.keep(str => str != ""),
+            )
+         )
       }
 
    let show: t => list<Show.t>
