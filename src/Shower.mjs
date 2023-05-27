@@ -5,7 +5,7 @@ import * as Utils from "./Utils.mjs";
 import * as React from "react";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
-import * as DictionaryContext from "./components/DictionaryContext.mjs";
+import * as DictionaryContext from "./components/DictionaryContext/DictionaryContext.mjs";
 
 function normalizeWord(word) {
   return $$String.lowercase_ascii($$String.trim($$String.map((function ($$char) {
