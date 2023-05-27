@@ -5,6 +5,7 @@ import * as Lang from "./Lang.mjs";
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as Input from "./components/Input/Input.mjs";
 import * as React from "react";
+import * as Header from "./components/Header/Header.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
@@ -90,9 +91,8 @@ function App(props) {
   var setQuery = match$1[1];
   var hint = useHint(match[0], marksDict, match$1[0]);
   var url = RescriptReactRouter.useUrl(undefined, undefined);
-  var match$2 = url.path;
-  var tmp;
-  tmp = match$2 && match$2.hd === "reader" && !match$2.tl ? React.createElement(ReaderPage.make, {
+  var match$2 = url.hash;
+  var tmp = match$2 === "reader" ? React.createElement(ReaderPage.make, {
           marksDict: marksDict
         }) : React.createElement(App$MainPage, {
           marksDict: marksDict
@@ -104,22 +104,23 @@ function App(props) {
                         }));
                 }),
               children: null
-            }, React.createElement("h1", undefined, React.createElement("b", undefined, "nut-taal")), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
+            }, React.createElement(Header.make, {}), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
                         var translations = param[1];
                         var word = param[0];
-                        var match = url.path;
-                        if (match && match.hd === "reader" && !match.tl) {
+                        var match = url.hash;
+                        if (match === "reader") {
                           return React.createElement(Hint.make, {
                                       word: word,
                                       translations: translations,
                                       fixed: true
                                     });
+                        } else {
+                          return React.createElement(Hint.make, {
+                                      word: word,
+                                      translations: translations,
+                                      fixed: false
+                                    });
                         }
-                        return React.createElement(Hint.make, {
-                                    word: word,
-                                    translations: translations,
-                                    fixed: false
-                                  });
                       })), null), React.createElement("div", {
                   className: "floor"
                 }));

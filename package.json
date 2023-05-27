@@ -4,6 +4,7 @@
   "author": "Mikhail Skorykh",
   "license": "MIT",
   "type": "commonjs",
+  "homepage": "https://mikeskoe.github.io/nut-taal",
   "keywords": [
     "reason-react",
     "ReScript",
