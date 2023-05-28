@@ -75,6 +75,24 @@ The second verb in a phrase
 The second noun in a phrase
 
 ---
+## Tenses
+If a tense, quantity or conditionals are clear from a context, no additional marker needed.
+But if explicitness is required, here are some useful words:
+- voor - before. A past tense indicator
+- sal - shall. A future tense indicator
+- al - already, yet. A perfect tense indicator
+- sou - would, could. A conditionals indicator
+
+| nut-taal | English
+| - | -
+| e *voor* a my <u>eet</u> oranje | I ate an orange
+| e *sal* a my <u>eet</u> oranje | I will eat an orange
+| e *al* a my <u>eet</u> oranje | I have eaten an orange
+| e *voor* a my <u>al-eet</u> oranje | I had eaten an orange
+| e *sal* a my <u>al-eet</u> oranje | I will have eaten an orange
+| e *sou* a my <u>eet</u> oranje | I would eat an orange
+
+---
 ## Vocabulary
 Ideally, every root should have a meaning, be it a noun, verb, or adjective, as long as it is clear and makes sense.
 Therefore, related words could be collapsed into a single root.
