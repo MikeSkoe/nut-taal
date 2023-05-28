@@ -4,13 +4,13 @@ import * as React from "react";
 
 var readerURL = "#reader";
 
-var readmeURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md";
+var readmeURL = "https://github.com/MikeSkoe/nut-taal/blob/main/README.md";
 
-var dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
+var dicrionaryURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv";
 
-var conjugationsURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv";
+var conjugationsURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/conjugations.csv";
 
-var examplesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv";
+var examplesURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/examples.csv";
 
 function Links(props) {
   return React.createElement("div", {

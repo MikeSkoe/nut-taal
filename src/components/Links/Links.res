@@ -1,8 +1,8 @@
 let readerURL = "#reader";
-let readmeURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/README.md";
-let dicrionaryURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv";
-let conjugationsURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv";
-let examplesURL = "https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv";
+let readmeURL = "https://github.com/MikeSkoe/nut-taal/blob/main/README.md";
+let dicrionaryURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv";
+let conjugationsURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/conjugations.csv";
+let examplesURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/examples.csv";
 
 @react.component
 let make = () => <div className="links">

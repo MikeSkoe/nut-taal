@@ -9,13 +9,13 @@ my <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
 dit a kat e *my klein mooi* | This is my *small beutiful* cat
 e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
 
-### [More Examples](https://github.com/MikeSkoe/code-ish-app/blob/main/public/examples.csv)
-### [Dictionary](https://github.com/MikeSkoe/code-ish-app/blob/main/public/dictionary.csv)
-### [Conjugations](https://github.com/MikeSkoe/code-ish-app/blob/main/public/conjugations.csv)
+### [More Examples](https://github.com/MikeSkoe/nut-taal/blob/main/public/examples.csv)
+### [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
+### [Conjugations](https://github.com/MikeSkoe/nut-taal/blob/main/public/conjugations.csv)
 
 ---
 ## Grammar
-<img src="https://github.com/MikeSkoe/code-ish-app/blob/main/public/diagram.png" alt= “diagram” width="25%" height="25%">
+<img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/diagram.svg" alt= “diagram” width="25%" height="25%">
 
 ### Low level
 The language have three low-level language units:

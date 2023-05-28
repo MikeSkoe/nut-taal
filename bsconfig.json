@@ -1,5 +1,5 @@
 {
-  "name": "code-ish-app",
+  "name": "nut-taal",
   "suffix": ".mjs",
   "jsx": { "version": 4, "mode": "classic" },
   "bsc-flags": [
