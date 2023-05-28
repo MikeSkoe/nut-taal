@@ -90,7 +90,7 @@ But if explicitness is required, here are some useful words:
 | e *al* a my <u>eet</u> oranje | I have eaten an orange
 | e *voor* a my <u>al-eet</u> oranje | I had eaten an orange
 | e *sal* a my <u>al-eet</u> oranje | I will have eaten an orange
-| my <u>sou</u> oranje <u>eet</u> | I would eat an orange
+| e *sou* a my <u>eet</u> oranje | I would eat an orange
 
 ---
 ## Vocabulary
