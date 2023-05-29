@@ -52,7 +52,7 @@ function Input(props) {
                           className: "box area"
                         }, React.createElement(Parser.make, {
                               text: match[0],
-                              marks: props.marks
+                              conjunctions: props.conjunctions
                             })))));
 }
 

@@ -6,10 +6,10 @@ import * as Sample from "./Sample.mjs";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 
 function ReaderPage(props) {
-  return Belt_Option.mapWithDefault(props.marksDict, null, (function (marks) {
+  return Belt_Option.mapWithDefault(props.conjunctionDict, null, (function (conjunctions) {
                 return React.createElement(Reader.make, {
                             textWithTranslation: Sample.fiets,
-                            marks: marks
+                            conjunctions: conjunctions
                           });
               }));
 }

@@ -26,19 +26,19 @@ function useDictionary(param) {
   var match$1 = React.useState(function () {
         
       });
-  var setMarksDict = match$1[1];
+  var setConjunctionDict = match$1[1];
   React.useEffect((function () {
           var __x = Promise.all([
                 Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
-                Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl)
+                Dictionary.Loader.loadDict(Dictionary.Loader.conjunctionsUrl)
               ]);
           Js_promise.then_((function (param) {
-                  var marks = param[1];
+                  var conjunctions = param[1];
                   var terms = param[0];
                   return Promise.resolve((Curry._1(setTermDict, (function (param) {
                                       return Caml_option.some(terms);
-                                    })), Curry._1(setMarksDict, (function (param) {
-                                      return Caml_option.some(marks);
+                                    })), Curry._1(setConjunctionDict, (function (param) {
+                                      return Caml_option.some(conjunctions);
                                     }))));
                 }), __x);
         }), []);
@@ -48,15 +48,15 @@ function useDictionary(param) {
         ];
 }
 
-function useHint(termDict, marksDict, query) {
+function useHint(termDict, conjunctionDict, query) {
   var match = React.useState(function () {
         
       });
   var setHint = match[1];
   React.useEffect((function () {
           Belt_Option.flatMap(termDict, (function (terms) {
-                  return Belt_Option.flatMap(marksDict, (function (marks) {
-                                Belt_Option.forEach(Belt_Option.orElse(Curry._2(Lang.Lang.translate, query, marks), Curry._2(Lang.Lang.translate, query, terms)), (function (translations) {
+                  return Belt_Option.flatMap(conjunctionDict, (function (conjunction) {
+                                Belt_Option.forEach(Belt_Option.orElse(Curry._2(Lang.Lang.translate, query, conjunction), Curry._2(Lang.Lang.translate, query, terms)), (function (translations) {
                                         Curry._1(setHint, (function (param) {
                                                 return [
                                                         Belt_List.headExn(translations),
@@ -69,33 +69,33 @@ function useHint(termDict, marksDict, query) {
         }), [
         query,
         termDict,
-        marksDict
+        conjunctionDict
       ]);
   return match[0];
 }
 
 function App$MainPage(props) {
-  return Belt_Option.getWithDefault(Belt_Option.map(props.marksDict, (function (marks) {
+  return Belt_Option.getWithDefault(Belt_Option.map(props.conjunctionDict, (function (conjunctions) {
                     return React.createElement(Input.make, {
-                                marks: marks
+                                conjunctions: conjunctions
                               });
                   })), null);
 }
 
 function App(props) {
   var match = useDictionary(undefined);
-  var marksDict = match[1];
+  var conjunctionDict = match[1];
   var match$1 = React.useState(function () {
         return "taal";
       });
   var setQuery = match$1[1];
-  var hint = useHint(match[0], marksDict, match$1[0]);
+  var hint = useHint(match[0], conjunctionDict, match$1[0]);
   var url = RescriptReactRouter.useUrl(undefined, undefined);
   var match$2 = url.hash;
   var tmp = match$2 === "reader" ? React.createElement(ReaderPage.make, {
-          marksDict: marksDict
+          conjunctionDict: conjunctionDict
         }) : React.createElement(App$MainPage, {
-          marksDict: marksDict
+          conjunctionDict: conjunctionDict
         });
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
               value: (function (str) {

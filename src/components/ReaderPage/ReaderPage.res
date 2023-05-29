@@ -2,10 +2,10 @@ open Belt
 open Lang
 
 @react.component
-let make = (~marksDict: option<Lang.dictionary>) => {
-    marksDict
+let make = (~conjunctionDict: option<Lang.dictionary>) => {
+    conjunctionDict
     -> Option.mapWithDefault(
         React.null,
-        marks => <Reader textWithTranslation={Sample.fiets} marks />
+        conjunctions => <Reader textWithTranslation={Sample.fiets} conjunctions />
     )
 }

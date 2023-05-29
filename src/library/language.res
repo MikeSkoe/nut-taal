@@ -95,9 +95,6 @@ module Make = (
 
                   | (AbstractDict.Ad, list{word, ...next}) =>
                      Ad(word, iter(AbstractDict.Ad, next))
-                  
-                  | _ =>
-                     End
                }
             }
 

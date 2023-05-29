@@ -2,16 +2,16 @@ open Lang
 open Belt
 
 @react.component
-let make = (~text: string, ~marks) => {
+let make = (~text: string, ~conjunctions) => {
     let (parsed, setParsed) = React.useState(_ => list{Lang.empty});
 
     React.useEffect2(() => {
         text
         -> String.split_on_char('.', _)
-        -> List.map(line => Lang.parse(marks, line))
+        -> List.map(line => Lang.parse(conjunctions, line))
         -> res => setParsed(_ => res)
         -> _ => None;
-    }, (text, marks));
+    }, (text, conjunctions));
 
     <div className="parsed">{
         parsed

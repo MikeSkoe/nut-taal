@@ -11,7 +11,7 @@ e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u>
 
 ### [More Examples](https://github.com/MikeSkoe/nut-taal/blob/main/public/examples.csv)
 ### [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
-### [Conjugations](https://github.com/MikeSkoe/nut-taal/blob/main/public/conjugations.csv)
+### [Conjunctions](https://github.com/MikeSkoe/nut-taal/blob/main/public/Conjunctions.csv)
 
 ---
 ## Grammar
@@ -21,7 +21,7 @@ e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u>
 The language have three low-level language units:
 - [Root](#Root) - a building block of the language
 - [Mark](#Mark) - explains if the root a noun, verb or an ad (a modifier, like an adjective or adverb)
-- [Conjugation](#Conjugation) - introduces a [phrase](#Phrase) (clause), to make sentences richer
+- [Conjunction](#Conjunction) - introduces a [phrase](#Phrase) (clause), to make sentences richer
 
 #### **Root**
 Can be collapsed to make a compound word, using a `*-*-*` pattern.
@@ -40,9 +40,9 @@ Placed before a root
 
 There are some [patterns](#patterns), where the marks should be dropped.
 
-#### **Conjugation**
+#### **Conjunction**
 Placed before a [phrase](#Phrase).
-Examples of Conjugations could be words like:
+Examples of Conjunctions could be words like:
 - **want** - because
 - **in** - in
 - **vir** - to, for
@@ -57,13 +57,13 @@ Noun | Verb | Ad
 -- | -- | --- 
 `a *` | `i *` | `e *`
 `[BEGINING OF THE SENTENCE] *` | `[NOUN] *` | `[AD] *`
-`[Conjugation] *` ||
+`[Conjunction] *` ||
 `[VERB] *` ||
 
 ---
 ### High level
 #### Phrase
-The phrase (or clause) is a cluster of non-conjugation words.
+The phrase (or clause) is a cluster of non-conjunction words.
 
 #### Subject
 The first noun in a phrase
