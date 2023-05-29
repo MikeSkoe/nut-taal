@@ -1,7 +1,7 @@
 let initialText = "my lief jy want jy is persoon e goed"
 
 @react.component
-let make = (~marks) => {
+let make = (~conjunctions) => {
     let ref = React.useRef(Js.Nullable.null);
     let (input, setInput) = React.useState(_ => initialText);
     let onChange = event => setInput(_ => ReactEvent.Form.target(event)["innerText"]);
@@ -37,7 +37,7 @@ let make = (~marks) => {
             <div className="column">
                 <h2 className="area-heading">{"Preview here" -> React.string}</h2>
                 <div className="box area">
-                    <Parser text={input} marks={marks} />
+                    <Parser text={input} conjunctions={conjunctions} />
                 </div>
             </div>
         </div>

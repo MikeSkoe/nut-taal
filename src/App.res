@@ -5,30 +5,30 @@ open Belt
 
 let useDictionary = () => {
     let (termDict, setTermDict) = React.useState(_ => None);
-    let (marksDict, setMarksDict) = React.useState(_ => None);
+    let (conjunctionDict, setConjunctionDict) = React.useState(_ => None);
 
     React.useEffect0(() => {
         Js.Promise.all2((
             Dictionary.Loader.loadDict(Dictionary.Loader.dictUrl),
-            Dictionary.Loader.loadDict(Dictionary.Loader.marksUrl),
+            Dictionary.Loader.loadDict(Dictionary.Loader.conjunctionsUrl),
         ))
-        -> Js.Promise.then_(((terms, marks)) => Js.Promise.resolve({
+        -> Js.Promise.then_(((terms, conjunctions)) => Js.Promise.resolve({
             setTermDict(_ => Some(terms))
-            setMarksDict(_ => Some(marks))
+            setConjunctionDict(_ => Some(conjunctions))
         }), _)
         -> _ => None;
     });
 
-    (termDict, marksDict);
+    (termDict, conjunctionDict);
 }
 
-let useHint = (termDict, marksDict, query) => {
+let useHint = (termDict, conjunctionDict, query) => {
     let (hint, setHint) = React.useState(_ => None);
 
     React.useEffect3(() => {
         termDict -> Option.flatMap(terms =>
-        marksDict -> Option.flatMap(marks => 
-            Lang.translate(query, marks)
+        conjunctionDict -> Option.flatMap(conjunction => 
+            Lang.translate(query, conjunction)
             -> Option.orElse(Lang.translate(query, terms))
             -> Option.forEach(translations => setHint(_ => Some((
                 translations -> List.headExn,
@@ -37,33 +37,33 @@ let useHint = (termDict, marksDict, query) => {
             -> _ => None
         ))
         -> _ => None;
-    }, (query, termDict, marksDict));
+    }, (query, termDict, conjunctionDict));
 
     hint
 }
 
 module MainPage = {
     @react.component
-    let make = (~marksDict: option<Lang.dictionary>) => {
-        marksDict
-        -> Option.map(marks => <Input marks />)
+    let make = (~conjunctionDict: option<Lang.dictionary>) => {
+        conjunctionDict
+        -> Option.map(conjunctions => <Input conjunctions />)
         -> Option.getWithDefault(React.null)
     }
 }
 
 @react.component
 let make = () => {
-    let (termDict, marksDict) = useDictionary();
+    let (termDict, conjunctionDict) = useDictionary();
     let (query, setQuery) = React.useState(_ => "taal");
-    let hint = useHint(termDict, marksDict, query);
+    let hint = useHint(termDict, conjunctionDict, query);
     let url = RescriptReactRouter.useUrl();
 
     <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
         <Header />
         {
             switch url.hash {
-                | "reader" => <ReaderPage marksDict />
-                | _ => <MainPage marksDict />
+                | "reader" => <ReaderPage conjunctionDict />
+                | _ => <MainPage conjunctionDict />
             }
         }
         {

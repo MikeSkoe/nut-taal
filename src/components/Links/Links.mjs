@@ -8,7 +8,7 @@ var readmeURL = "https://github.com/MikeSkoe/nut-taal/blob/main/README.md";
 
 var dicrionaryURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv";
 
-var conjugationsURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/conjugations.csv";
+var conjunctionsURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/conjunctions.csv";
 
 var examplesURL = "https://github.com/MikeSkoe/nut-taal/blob/main/public/examples.csv";
 
@@ -24,8 +24,8 @@ function Links(props) {
                 }, "README (with grammar)"), React.createElement("a", {
                   href: dicrionaryURL
                 }, "Dictionary"), React.createElement("a", {
-                  href: conjugationsURL
-                }, "Conjugations"), React.createElement("a", {
+                  href: conjunctionsURL
+                }, "conjunctions"), React.createElement("a", {
                   href: examplesURL
                 }, "Examples"));
 }
@@ -36,7 +36,7 @@ export {
   readerURL ,
   readmeURL ,
   dicrionaryURL ,
-  conjugationsURL ,
+  conjunctionsURL ,
   examplesURL ,
   make ,
 }

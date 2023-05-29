@@ -8,7 +8,7 @@ import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 
 function Parser(props) {
-  var marks = props.marks;
+  var conjunctions = props.conjunctions;
   var text = props.text;
   var match = React.useState(function () {
         return {
@@ -19,14 +19,14 @@ function Parser(props) {
   var setParsed = match[1];
   React.useEffect((function () {
           var res = Belt_List.map($$String.split_on_char(/* '.' */46, text), (function (line) {
-                  return Curry._2(Lang.Lang.parse, marks, line);
+                  return Curry._2(Lang.Lang.parse, conjunctions, line);
                 }));
           Curry._1(setParsed, (function (param) {
                   return res;
                 }));
         }), [
         text,
-        marks
+        conjunctions
       ]);
   return React.createElement("div", {
               className: "parsed"

@@ -5,11 +5,11 @@ open Belt
 type textWithTranslation = list<(string, string)>;
 
 @react.component
-let make = (~textWithTranslation: textWithTranslation, ~marks) => {
+let make = (~textWithTranslation: textWithTranslation, ~conjunctions) => {
     textWithTranslation
     -> List.map(((text, translation)) =>
         <div className="reader">
-            <Parser text marks />
+            <Parser text conjunctions />
             <div>{translation->React.string}</div>
         </div>
     )

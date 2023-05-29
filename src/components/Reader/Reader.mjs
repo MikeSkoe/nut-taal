@@ -8,13 +8,13 @@ import './reader.css'
 ;
 
 function Reader(props) {
-  var marks = props.marks;
+  var conjunctions = props.conjunctions;
   return Belt_List.toArray(Belt_List.map(props.textWithTranslation, (function (param) {
                     return React.createElement("div", {
                                 className: "reader"
                               }, React.createElement(Parser.make, {
                                     text: param[0],
-                                    marks: marks
+                                    conjunctions: conjunctions
                                   }), React.createElement("div", undefined, param[1]));
                   })));
 }

@@ -26,7 +26,7 @@ async function loadDict(url) {
 var Loader = {
   loadDict: loadDict,
   dictUrl: "dictionary.csv",
-  marksUrl: "conjugations.csv"
+  conjunctionsUrl: "conjunctions.csv"
 };
 
 var MyDict = AbstractDict.MyDict;
