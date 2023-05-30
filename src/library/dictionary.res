@@ -9,10 +9,10 @@ module Marks: MARKS = {
 module Loader = {
    let loadDict: string => promise<MyDict.t<list<string>>>
       = async url => {
-         open Js.Promise;
          open Belt.List;
 
-         let text = await (Fetch.fetch(url) |> then_(Fetch.Response.text));
+         let fetched = await Fetch.fetch(url);
+         let text = await Fetch.Response.text(fetched);
          let words = 
             String.split_on_char('\n', text)
             -> map(String.split_on_char(','));

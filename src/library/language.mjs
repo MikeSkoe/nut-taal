@@ -353,6 +353,43 @@ function Make(Marks, Show) {
     };
     return iter(lex);
   };
+  var map = function (t, fn) {
+    if (typeof t === "number") {
+      return /* End */0;
+    }
+    switch (t.TAG | 0) {
+      case /* Start */0 :
+          return {
+                  TAG: /* Start */0,
+                  _0: map(t._0, fn)
+                };
+      case /* Noun */1 :
+          return {
+                  TAG: /* Noun */1,
+                  _0: Curry._1(fn, t._0),
+                  _1: map(t._1, fn)
+                };
+      case /* Verb */2 :
+          return {
+                  TAG: /* Verb */2,
+                  _0: Curry._1(fn, t._0),
+                  _1: map(t._1, fn)
+                };
+      case /* Ad */3 :
+          return {
+                  TAG: /* Ad */3,
+                  _0: Curry._1(fn, t._0),
+                  _1: map(t._1, fn)
+                };
+      case /* Con */4 :
+          return {
+                  TAG: /* Con */4,
+                  _0: Curry._1(fn, t._0),
+                  _1: map(t._1, fn)
+                };
+      
+    }
+  };
   return {
           empty: {
             TAG: /* Start */0,
@@ -360,7 +397,8 @@ function Make(Marks, Show) {
           },
           translate: translate,
           parse: parse,
-          show: show
+          show: show,
+          map: map
         };
 }
 

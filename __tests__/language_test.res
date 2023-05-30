@@ -1,79 +1,49 @@
-// open Ava
-// open AbstractDict
+open Ava
+open AbstractDict
+open Belt
 
-// module MockTermDict: AbstractDict.TERMIN_DICTIONARY = {
-//   let show = (t: term) => t.str
-//   let parse = str => Some({
-//     str: str,
-//     noun: str,
-//     verb: str,
-//     ad: str,
-//     description: str,
-//   })
-//   let translate = _ => Promise.resolve(None)
-// }
+module MockShower: (SHOWER with type t = string) = {
+   type t = string;
 
-// module MockConjDict: AbstractDict.CONJ_DICTIONARY = {
-//   let nounMark = "a"
-//   let verbMark = "i"
-//   let adMark = "e"
-//   let show = t => t.str
-//   let parse = str => Some({
-//     str: str,
-//     definition: str,
-//     description: str,
-//   })
-//   let translate = _ => Promise.resolve(None);
-//   let mem = word => word == "en"
-// }
+   let noun = str => `n:${str}`;
+   let verb = str => `v:${str}`;
+   let ad = str => `a:${str}`;
+   let con = str => `c:${str}`;
+   let mark = str => `m:${str}`;
+}
 
-// module MockShower: AbstractDict.SHOWER with type t = string = {
-//    type t = string
-//    let drawMock = root => root
-//     ->Belt.List.map(((_, str, _)) => str)
-//     ->Belt.List.reduce("", (acc, curr) => acc == "" ? curr : `${acc}-${curr}`)
-//    let wrapNoun = drawMock;
-//    let wrapVerb = drawMock;
-//    let wrapAd = drawMock;
-//    let wrapConj = (str, _) => str;
-//    let wrapMark = str => str;
-//    let wrapPunctuation = _ => "";
-// }
+module MockLang = Language.Make (Dictionary.Marks) (MockShower)
 
-// module Lang = Language.Make (MockTermDict) (MockConjDict) (MockShower)
+asyncTest("foo", async t => try {
+    let dict = await Dictionary.Loader.loadDict("http://localhost:5173/dictionary.csv");
+    let conjunctions = await Dictionary.Loader.loadDict("http://localhost:5173/conjunctions.csv");
+    
+    let translateAndPickFirst: string => string
+        = term =>
+            term
+            -> MockLang.translate(dict)
+            -> Option.mapWithDefault(term,
+                list => list -> List.get(1) -> Option.getWithDefault(term),
+            );
 
-// asyncTest("foo", async t => {
-//   open Lang
+    let reparseMap: (string => string, string) => string
+        = (mapFn, str) => {
+            conjunctions
+            -> MockLang.parse(str)
+            -> MockLang.map(mapFn)
+            -> MockLang.show
+            -> List.reduce("", (a, b) => a === "" ? b : `${a} ${b}`)
+        }
 
-//   let parseAndShowAsString = str =>
-//     str
-//     ->Lexs.parse
-//     ->Lexs.show
-//     ->Belt.List.reduce("", (a, b) => `${a} ${b}`)
-//     ->Js.String2.trim;
+    let reparse = reparseMap(a => a);
+    let translate = reparseMap(translateAndPickFirst);
 
-//   t->Assert.deepEqual(
-//     "x0"->parseAndShowAsString,
-//     "x0", ()
-//   );
-//   t->Assert.deepEqual(
-//     "x0 x1"->parseAndShowAsString,
-//     "x0 x1", ()
-//   );
-//   t->Assert.deepEqual(
-//     "x0 i x1"->parseAndShowAsString,
-//     "x0 x1", ()
-//   );
-//   t->Assert.deepEqual(
-//     "x0 e x1 x2 i x3"->parseAndShowAsString,
-//     "x0 e x1 x2 i x3", ()
-//   );
-//   t->Assert.deepEqual(
-//     "x0 e x1 x2 a x3"->parseAndShowAsString,
-//     "x0 e x1 x2 a x3", ()
-//   );
-//   t->Assert.deepEqual(
-//     "x0 e x1 en x2 a x3"->parseAndShowAsString,
-//     "x0 e x1 en x2 a x3", ()
-//   );
-// })
+    t->Assert.deepEqual(reparse("my lief kat"),
+        "n:my v:lief n:kat", ());
+    t->Assert.deepEqual(translate("my lief kat"),
+        "n:me v:love n:cat", ());
+    t->Assert.deepEqual(translate("my lief kat maar kat nie-lief my"),
+        "n:me v:love n:cat c:maar n:cat v:not n:me", ());
+} catch {
+    | _ => Js.Exn.raiseError("Run `yarn start` with (default) port 5173")
+});

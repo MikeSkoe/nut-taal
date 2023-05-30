@@ -26,4 +26,5 @@ module type LANGUAGE = {
    let translate : (string, dictionary) => option<list<string>>;
    let parse : (dictionary, string) => t;
    let show : t => list<presentation>;
+   let map : (t, string => string) => t;
 }

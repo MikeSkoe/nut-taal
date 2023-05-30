@@ -155,4 +155,14 @@ module Make = (
 
          iter(lex);
       }
+
+      let rec map : (t, string => string) => t
+         = (t, fn) => switch t {
+            | Start(next) => Start(next -> map(fn))
+            | Noun(str, t) => Noun(fn(str), t -> map(fn))
+            | Verb(str, t) => Verb(fn(str), t -> map(fn))
+            | Ad(str, t) => Ad(fn(str), t -> map(fn))
+            | Con(str, t) => Con(fn(str), t -> map(fn))
+            | End => End
+         }
 }
