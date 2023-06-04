@@ -4,7 +4,7 @@ maar,but,
 dus,so,therefore
 hoewel,although,though
 want,because,since
-tot,until,
+tot,until,unless
 terwyl,while,whereas
 as,if,
 dan,then,
@@ -13,10 +13,8 @@ waar,where,
 vir,for,to
 van,from,of
 die,which,that
-in,in,
 hoe,how,
 met,with,
-oor,about,
 inplaats,instead,
 sonder,without,
 egter,however,
@@ -24,3 +22,7 @@ wie,who,
 waarom,why,
 hoeveel,how much,
 soms,sometimes,
+spyte,despite,
+voor,before,
+agter,behind,rear
+oor,over,about
