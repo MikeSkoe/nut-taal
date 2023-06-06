@@ -5,10 +5,15 @@ import * as Utils from "./Utils.mjs";
 import * as React from "react";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
+import * as Js_string from "rescript/lib/es6/js_string.js";
 import * as DictionaryContext from "./components/DictionaryContext/DictionaryContext.mjs";
 
+function uncapitalize(str) {
+  return Js_string.concat(Js_string.sliceToEnd(1, str), Js_string.charAt(0, str).toLowerCase());
+}
+
 function normalizeWord(word) {
-  return $$String.lowercase_ascii($$String.trim($$String.map((function ($$char) {
+  return uncapitalize($$String.trim($$String.map((function ($$char) {
                         if (Belt_List.has({
                                 hd: /* '.' */46,
                                 tl: {
@@ -51,6 +56,7 @@ function Shower$Word(props) {
 }
 
 var Word = {
+  uncapitalize: uncapitalize,
   normalizeWord: normalizeWord,
   iter: iter,
   make: Shower$Word

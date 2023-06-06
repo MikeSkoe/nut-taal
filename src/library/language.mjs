@@ -38,9 +38,10 @@ function Make(Marks, Show) {
                   }));
     };
     var toMark = function (str) {
-      if (str === Marks.noun) {
+      var mark = $$String.lowercase_ascii(str);
+      if (mark === Marks.noun) {
         return /* Noun */0;
-      } else if (str === Marks.verb) {
+      } else if (mark === Marks.verb) {
         return /* Verb */1;
       } else {
         return /* Ad */2;
