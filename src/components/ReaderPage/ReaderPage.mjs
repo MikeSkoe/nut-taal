@@ -23,7 +23,7 @@ function ReaderPage(props) {
   var text = match[0];
   React.useEffect((function () {
           var $$fetch$1 = async function (param) {
-            var fetched = await fetch("sentences3");
+            var fetched = await fetch("sentences");
             var text = await Fetch.$$Response.text(fetched);
             var words = Belt_List.map(Belt_List.fromArray(Js_string.split("\n\n", text)), (function (str) {
                     var match = $$String.split_on_char(/* '\n' */10, str);

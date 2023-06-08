@@ -7,7 +7,7 @@ let make = (~conjunctionDict: option<Lang.dictionary>) => {
 
     React.useEffect0(() => {
         let fetch = async () => {
-            let fetched = await Fetch.fetch("sentences3");
+            let fetched = await Fetch.fetch("sentences");
             let text = await Fetch.Response.text(fetched);
             let words: list<(string, string)> = 
                 Js.String.split("\n\n", text)
