@@ -45,7 +45,7 @@ There are some [patterns](#patterns), where the marks should be dropped.
 Placed before a [phrase](#Phrase).
 Examples of Conjunctions could be words like:
 - **want** - because
-- **in** - in
+- **maar** - but
 - **vir** - to, for
 ---
 
@@ -79,19 +79,32 @@ The second noun in a phrase
 ## Tenses
 If a tense, quantity or conditionals are clear from a context, no additional marker needed.
 But if explicitness is required, here are some useful words:
-- voor - before. A past tense indicator
+- was - before. A past tense indicator
 - sal - shall. A future tense indicator
 - al - already, yet. A perfect tense indicator
 - sou - would, could. A conditionals indicator
 
 | nut-taal | English
 | - | -
-| e *voor* a my <u>eet</u> oranje | I ate an orange
-| e *sal* a my <u>eet</u> oranje | I will eat an orange
-| e *al* a my <u>eet</u> oranje | I have eaten an orange
-| e *voor* a my <u>al-eet</u> oranje | I had eaten an orange
-| e *sal* a my <u>al-eet</u> oranje | I will have eaten an orange
-| e *sou* a my <u>eet</u> oranje | I would eat an orange
+| my <u>wil</u> oranje <u>eet</u> | I ate an orange
+| my <u>sal</u> oranje <u>eet</u> | I will eat an orange
+| my <u>al</u> oranje <u>eet</u> | I have eaten an orange
+| my <u>was</u> oranje <u>al-eet</u> | I had eaten an orange
+| my <u>sal</u> oranje <u>al-eet</u> | I will have eaten an orange
+| my <u>sou</u> oranje <u>eet</u> | I would eat an orange
+
+---
+## Prepositions
+Formally there is no such thing as preposition in the language, but we have directional words, like:
+- aan - to
+- in - in
+- by - near, by
+That usually put in a context using pattern: `e **preposition** **thing**`
+
+Examples of usage:
+- Jy gee bal e aan my? - Will you give the ball to me?
+- My sit e in huis - I sit in the house
+- Kat sit e by my - A cat sits near me
 
 ---
 ## Vocabulary
