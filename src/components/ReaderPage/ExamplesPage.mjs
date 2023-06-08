@@ -3,13 +3,13 @@
 import * as Curry from "rescript/lib/es6/curry.js";
 import * as Fetch from "bs-fetch/src/Fetch.mjs";
 import * as React from "react";
-import * as Reader from "../Reader/Reader.mjs";
 import * as $$String from "rescript/lib/es6/string.js";
+import * as Examples from "../Reader/Examples.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Js_string from "rescript/lib/es6/js_string.js";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 
-function ReaderPage(props) {
+function ExamplesPage(props) {
   var match = React.useState(function () {
         return {
                 hd: [
@@ -53,14 +53,14 @@ function ReaderPage(props) {
           $$fetch$1(undefined);
         }), []);
   return Belt_Option.mapWithDefault(props.conjunctionDict, null, (function (conjunctions) {
-                return React.createElement(Reader.make, {
+                return React.createElement(Examples.make, {
                             textWithTranslation: text,
                             conjunctions: conjunctions
                           });
               }));
 }
 
-var make = ReaderPage;
+var make = ExamplesPage;
 
 export {
   make ,

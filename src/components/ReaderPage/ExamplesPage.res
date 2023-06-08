@@ -29,6 +29,6 @@ let make = (~conjunctionDict: option<Lang.dictionary>) => {
     conjunctionDict
     -> Option.mapWithDefault(
         React.null,
-        conjunctions => <Reader textWithTranslation={text} conjunctions />
+        conjunctions => <Examples textWithTranslation={text} conjunctions />
     )
 }
