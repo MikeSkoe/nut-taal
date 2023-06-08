@@ -14,9 +14,11 @@ module MockShower: (SHOWER with type t = string) = {
 
 module MockLang = Language.Make (Dictionary.Marks) (MockShower)
 
-asyncTest("foo", async t => try {
+asyncTest("foo", async t => {
     let dict = await Dictionary.Loader.loadDict("http://localhost:5173/dictionary.csv");
     let conjunctions = await Dictionary.Loader.loadDict("http://localhost:5173/conjunctions.csv");
+    let examplesText = await Utils.loadFile("http://localhost:5173/sentences");
+    let sentences = Utils.parseExamples(examplesText);
     
     let translateAndPickFirst: string => string
         = term =>
@@ -38,12 +40,22 @@ asyncTest("foo", async t => try {
     let reparse = reparseMap(a => a);
     let translate = reparseMap(translateAndPickFirst);
 
-    t->Assert.deepEqual(reparse("my lief kat"),
-        "n:my v:lief n:kat", ());
-    t->Assert.deepEqual(translate("my lief kat"),
-        "n:me v:love n:cat", ());
-    t->Assert.deepEqual(translate("my lief kat maar kat nie-lief my"),
-        "n:me v:love n:cat c:maar n:cat v:not n:me", ());
-} catch {
-    | _ => Js.Exn.raiseError("Run `yarn start` with (default) port 5173")
+    t->Assert.deepEqual(
+        reparse("my lief kat"),
+        "n:my v:lief n:kat", (),
+    );
+    t->Assert.deepEqual(
+        translate("my lief kat"),
+        "n:me v:love n:cat", (),
+    );
+    t->Assert.deepEqual(
+        translate("my lief kat maar kat nie-lief my"),
+        "n:me v:love n:cat c:maar n:cat v:not n:me", (),
+    );
+    t->Assert.snapshot(
+        sentences
+            -> List.map(((_, taal)) => reparse(taal))
+            -> List.reduce("", (a, b) => `${a}\n${b}`),
+        (),
+    );
 });

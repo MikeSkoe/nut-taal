@@ -7,17 +7,8 @@ let make = (~conjunctionDict: option<Lang.dictionary>) => {
 
     React.useEffect0(() => {
         let fetch = async () => {
-            let fetched = await Fetch.fetch("sentences");
-            let text = await Fetch.Response.text(fetched);
-            let words: list<(string, string)> = 
-                Js.String.split("\n\n", text)
-                -> List.fromArray
-                -> List.map(
-                    str => switch String.split_on_char('\n', str) {
-                        | list{eng, nut, ..._} => (nut, eng)
-                        | _ => ("plek-hou", "placeholder")
-                    }
-                );
+            let text = await Utils.loadFile("sentences");
+            let words = Utils.parseExamples(text);
             setText(_ => words);
         }
 
