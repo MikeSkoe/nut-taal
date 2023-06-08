@@ -42,6 +42,7 @@ module Make = (
          }
       }
 
+   // TODO: change to (string, dictionary) => t
    let parse: (dictionary, string) => t
       = (marks, str) => {
          let isMark : string => bool
@@ -50,12 +51,11 @@ module Make = (
                -> List.some(mark => mark == String.lowercase_ascii(str));
 
          let toMark : string => mark
-            = str => if str == Marks.noun {
-               AbstractDict.Noun;
-            } else if str == Marks.verb {
-               AbstractDict.Verb;
-            } else {
-               AbstractDict.Ad;
+            = str => switch String.lowercase_ascii(str) {
+               | mark when mark == Marks.noun => AbstractDict.Noun
+               | mark when mark == Marks.verb => AbstractDict.Verb
+               | _ => AbstractDict.Ad
+               
             }
 
          let isCon : string => bool
@@ -85,7 +85,7 @@ module Make = (
                      Ad(mark, End)
 
                   | (_, list{mark, ...next}) when isMark(mark) =>
-                     iter(toMark(mark -> String.lowercase_ascii), next)
+                     iter(toMark(mark), next)
 
                   | (AbstractDict.Noun, list{word, ...next}) =>
                      Noun(word, iter(AbstractDict.Verb, next))
@@ -101,7 +101,9 @@ module Make = (
          Start(
             iter(
                AbstractDict.Noun,
-               String.split_on_char(' ', str) -> List.keep(str => str != ""),
+               String.split_on_char(' ', str)
+               -> List.keep(str => str != "")
+               -> List.map(String.trim),
             )
          )
       }

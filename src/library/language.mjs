@@ -38,9 +38,10 @@ function Make(Marks, Show) {
                   }));
     };
     var toMark = function (str) {
-      if (str === Marks.noun) {
+      var mark = $$String.lowercase_ascii(str);
+      if (mark === Marks.noun) {
         return /* Noun */0;
-      } else if (str === Marks.verb) {
+      } else if (mark === Marks.verb) {
         return /* Verb */1;
       } else {
         return /* Ad */2;
@@ -117,7 +118,7 @@ function Make(Marks, Show) {
         var mark$4 = strs.hd;
         if (isMark(mark$4)) {
           _strs = strs.tl;
-          _mark = toMark($$String.lowercase_ascii(mark$4));
+          _mark = toMark(mark$4);
           continue ;
         }
         switch (mark) {
@@ -145,9 +146,9 @@ function Make(Marks, Show) {
     };
     return {
             TAG: /* Start */0,
-            _0: iter(/* Noun */0, Belt_List.keep($$String.split_on_char(/* ' ' */32, str), (function (str) {
-                        return str !== "";
-                      })))
+            _0: iter(/* Noun */0, Belt_List.map(Belt_List.keep($$String.split_on_char(/* ' ' */32, str), (function (str) {
+                            return str !== "";
+                          })), $$String.trim))
           };
   };
   var show = function (lex) {

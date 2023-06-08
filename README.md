@@ -9,7 +9,7 @@ my <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
 dit a kat e *my klein mooi* | This is my *small beutiful* cat
 e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
 
-### [More Examples](https://github.com/MikeSkoe/nut-taal/blob/main/public/examples.csv)
+### [More Examples](https://mikeskoe.github.io/nut-taal/#examples)
 ### [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
 ### [Conjunctions](https://github.com/MikeSkoe/nut-taal/blob/main/public/Conjunctions.csv)
 ### [Discord](https://discord.gg/yVzvgJKH)

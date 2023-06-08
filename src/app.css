@@ -81,6 +81,7 @@ a {
     bottom: 2rem;
     right: 2rem;
     position: fixed;
+    box-shadow: 0 0 3rem rgba(0, 0, 0, 0.5);
 }
 
 .legend {
@@ -91,8 +92,8 @@ a {
 }
 
 .verb { color: var(--green); }
-.ad { color: var(--yellow); }
-.conj { color: var(--red); }
+.ad { color: var(--primary); }
+.conj { color: var(--yellow); }
 .mark { color: var(--primary); }
 
 .box { box-sizing: border-box; }
@@ -111,7 +112,6 @@ a {
     margin-top: 2rem;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     gap: 0 1rem;
 }
 

@@ -62,7 +62,7 @@ let make = () => {
         <Header />
         {
             switch url.hash {
-                | "reader" => <ReaderPage conjunctionDict />
+                | "examples" => <ExamplesPage conjunctionDict />
                 | _ => <MainPage conjunctionDict />
             }
         }
@@ -70,7 +70,7 @@ let make = () => {
             hint
             -> Option.map(((word, translations)) => {
                 switch url.hash {
-                    | "reader" => <Hint word translations fixed=true/>
+                    | "examples" => <Hint word translations fixed=true/>
                     | _ => <Hint word translations fixed=false/>
                 }
             })

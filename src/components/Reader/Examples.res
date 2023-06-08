@@ -1,4 +1,4 @@
-%%raw("import './reader.css'")
+%%raw("import './examples.css'")
 
 open Belt
 

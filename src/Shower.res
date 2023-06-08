@@ -3,18 +3,25 @@ open Belt;
 type t = React.element;
 
 module Word = {
+    let uncapitalize: string => string
+        = str =>
+            str
+            |> Js.String.charAt(0)
+            |> Js.String.toLowerCase
+            |> Js.String.concat(Js.String.sliceToEnd(~from=1, str));
+
     let normalizeWord: string => string
         = word =>
             word
-            -> String.map(char =>
+            |> String.map(char =>
                 list{'.', ',', '!', '?'}
                 -> List.has(char, (a, b) => a == b)
                     ? ' '
                     : char,
                 _
             )
-            -> String.trim
-            -> String.lowercase_ascii
+            |> String.trim
+            |> uncapitalize
 
     let rec iter = (~onClick, ~className, ~word, ~withDash) => {
         switch String.split_on_char('-', word) {

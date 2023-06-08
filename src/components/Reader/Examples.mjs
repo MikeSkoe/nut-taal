@@ -4,10 +4,10 @@ import * as React from "react";
 import * as Parser from "../Parser/Parser.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 
-import './reader.css'
+import './examples.css'
 ;
 
-function Reader(props) {
+function Examples(props) {
   var conjunctions = props.conjunctions;
   return Belt_List.toArray(Belt_List.map(props.textWithTranslation, (function (param) {
                     return React.createElement("div", {
@@ -19,7 +19,7 @@ function Reader(props) {
                   })));
 }
 
-var make = Reader;
+var make = Examples;
 
 export {
   make ,

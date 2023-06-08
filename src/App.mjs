@@ -9,9 +9,9 @@ import * as Header from "./components/Header/Header.mjs";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as Dictionary from "./library/dictionary.mjs";
 import * as Js_promise from "rescript/lib/es6/js_promise.js";
-import * as ReaderPage from "./components/ReaderPage/ReaderPage.mjs";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
+import * as ExamplesPage from "./components/ReaderPage/ExamplesPage.mjs";
 import * as DictionaryContext from "./components/DictionaryContext/DictionaryContext.mjs";
 import * as RescriptReactRouter from "@rescript/react/src/RescriptReactRouter.mjs";
 
@@ -92,7 +92,7 @@ function App(props) {
   var hint = useHint(match[0], conjunctionDict, match$1[0]);
   var url = RescriptReactRouter.useUrl(undefined, undefined);
   var match$2 = url.hash;
-  var tmp = match$2 === "reader" ? React.createElement(ReaderPage.make, {
+  var tmp = match$2 === "examples" ? React.createElement(ExamplesPage.make, {
           conjunctionDict: conjunctionDict
         }) : React.createElement(App$MainPage, {
           conjunctionDict: conjunctionDict
@@ -108,7 +108,7 @@ function App(props) {
                         var translations = param[1];
                         var word = param[0];
                         var match = url.hash;
-                        if (match === "reader") {
+                        if (match === "examples") {
                           return React.createElement(Hint.make, {
                                       word: word,
                                       translations: translations,
