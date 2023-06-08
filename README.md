@@ -17,6 +17,7 @@ e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u>
 ---
 ## Grammar
 <img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/diagram.svg" alt= “diagram” width="25%" height="25%">
+<img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/sentence-structure.svg" alt= “diagram” width="25%" height="25%">
 
 ### Low level
 The language have three low-level language units:
