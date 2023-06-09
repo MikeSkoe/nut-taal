@@ -5,9 +5,9 @@
 ## [Try it out](https://mikeskoe.github.io/nut-taal/)
 nut-taal | English 
 -- | --
-my <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
-dit a kat e *my klein mooi* | This is my *small beutiful* cat
-e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
+My <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
+Dit <u>is</u> kat e *my klein mooi* | This is my *small beutiful* cat
+E *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
 
 ### [More Examples](https://mikeskoe.github.io/nut-taal/#examples)
 ### [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
@@ -23,7 +23,7 @@ e *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u>
 The language have three low-level language units:
 - [Root](#Root) - a building block of the language
 - [Mark](#Mark) - explains if the root a noun, verb or an ad (a modifier, like an adjective or adverb)
-- [Conjunction](#Conjunction) - introduces a [phrase](#Phrase) (clause), to make sentences richer
+- [Conjunction](#Conjunction) - introduces a [clause](#Clause), to make sentences richer
 
 #### **Root**
 Can be collapsed to make a compound word, using a `*-*-*` pattern.
@@ -43,7 +43,7 @@ Placed before a root
 There are some [patterns](#patterns), where the marks should be dropped.
 
 #### **Conjunction**
-Placed before a [phrase](#Phrase).
+Placed before a [clause](#Clause).
 Examples of Conjunctions could be words like:
 - **want** - because
 - **maar** - but
@@ -55,26 +55,25 @@ Words are middle level units.
 They consist of roots and marks and can have three states: **noun**, **verb** and **ad**
 
 #### Patterns
-Noun | Verb | Ad
--- | -- | --- 
-`a *` | `i *` | `e *`
-`[BEGINING OF THE SENTENCE] *` | `[NOUN] *` | `[AD] *`
-`[Conjunction] *` ||
-`[VERB] *` ||
+.  | _ Noun | _ Verb | _ Ad
+-- | -- | -- | --- 
+Noun _ |a||e
+Verb _ ||i|e
+Ad _ |a|i|
 
 ---
 ### High level
-#### Phrase
-The phrase (or clause) is a cluster of non-conjunction words.
+#### Clause
+The clause is a cluster of non-conjunction words.
 
 #### Subject
-The first noun in a phrase
+The first noun in a clause
 
 #### Infinitive
-The second verb in a phrase
+The second verb in a clause
 
 #### Object
-The second noun in a phrase
+The noun after a verb in a clause
 
 ---
 ## Tenses
@@ -87,7 +86,7 @@ But if explicitness is required, here are some useful words:
 
 | nut-taal | English
 | - | -
-| my <u>wil</u> oranje <u>eet</u> | I ate an orange
+| my <u>was</u> oranje <u>eet</u> | I ate an orange
 | my <u>sal</u> oranje <u>eet</u> | I will eat an orange
 | my <u>al</u> oranje <u>eet</u> | I have eaten an orange
 | my <u>was</u> oranje <u>al-eet</u> | I had eaten an orange
