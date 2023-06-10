@@ -12,7 +12,7 @@ E *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u>
 ### [More Examples](https://mikeskoe.github.io/nut-taal/#examples)
 ### [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
 ### [Conjunctions](https://github.com/MikeSkoe/nut-taal/blob/main/public/Conjunctions.csv)
-### [Discord](https://discord.gg/yVzvgJKH)
+### [Discord](https://discord.gg/gxWQ7uXqrz)
 
 ---
 ## Grammar
