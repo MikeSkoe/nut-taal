@@ -91,6 +91,11 @@ function App(props) {
   var setQuery = match$1[1];
   var hint = useHint(match[0], conjunctionDict, match$1[0]);
   var url = RescriptReactRouter.useUrl(undefined, undefined);
+  var updateQuery = React.useCallback((function (str) {
+          Curry._1(setQuery, (function (param) {
+                  return str;
+                }));
+        }), [setQuery]);
   var match$2 = url.hash;
   var tmp = match$2 === "examples" ? React.createElement(ExamplesPage.make, {
           conjunctionDict: conjunctionDict
@@ -98,11 +103,7 @@ function App(props) {
           conjunctionDict: conjunctionDict
         });
   return React.createElement(DictionaryContext.OnWordClickProvider.make, {
-              value: (function (str) {
-                  Curry._1(setQuery, (function (param) {
-                          return str;
-                        }));
-                }),
+              value: updateQuery,
               children: null
             }, React.createElement(Header.make, {}), tmp, Belt_Option.getWithDefault(Belt_Option.map(hint, (function (param) {
                         var translations = param[1];

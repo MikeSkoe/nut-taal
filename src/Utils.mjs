@@ -1,5 +1,6 @@
 
 
+import * as Curry from "rescript/lib/es6/curry.js";
 import * as Fetch from "bs-fetch/src/Fetch.mjs";
 import * as $$String from "rescript/lib/es6/string.js";
 import * as Belt_List from "rescript/lib/es6/belt_List.js";
@@ -67,10 +68,15 @@ function parseExamples(text) {
               }));
 }
 
+function mapFirstChar(fn, str) {
+  return Js_string.concat(Js_string.sliceToEnd(1, str), Curry._1(fn, Js_string.charAt(0, str)));
+}
+
 export {
   concatWords ,
   putBetween ,
   loadFile ,
   parseExamples ,
+  mapFirstChar ,
 }
 /* No side effect */

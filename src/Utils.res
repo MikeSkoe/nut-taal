@@ -1,5 +1,7 @@
 open Belt;
 
+// TODO: get rid of the "utils" file
+
 let concatWords: list<string> => string
     = words => words -> List.reduce("", (acc, curr) => acc == "" ? curr : `${acc}-${curr}`)
 
@@ -27,3 +29,10 @@ let parseExamples: string => list<(string, string)>
                 | _ => ("plek-hou", "placeholder")
             }
         );
+
+let mapFirstChar: (string => string, string) => string
+    = (fn, str) =>
+        str
+        |> Js.String.charAt(0)
+        |> fn
+        |> Js.String.concat(Js.String.sliceToEnd(~from=1, str));

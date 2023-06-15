@@ -168,7 +168,9 @@ function Make(Marks, Show) {
               switch (next.TAG | 0) {
                 case /* Verb */2 :
                     return {
-                            hd: Curry._1(Show.mark, Marks.verb),
+                            hd: Curry._1(Show.mark, Utils.mapFirstChar((function (prim) {
+                                        return prim.toUpperCase();
+                                      }), Marks.verb)),
                             tl: iter({
                                   TAG: /* Verb */2,
                                   _0: next._0,
@@ -177,7 +179,9 @@ function Make(Marks, Show) {
                           };
                 case /* Ad */3 :
                     return {
-                            hd: Curry._1(Show.mark, Marks.ad),
+                            hd: Curry._1(Show.mark, Utils.mapFirstChar((function (prim) {
+                                        return prim.toUpperCase();
+                                      }), Marks.ad)),
                             tl: iter({
                                   TAG: /* Ad */3,
                                   _0: next._0,

@@ -3,13 +3,6 @@ open Belt;
 type t = React.element;
 
 module Word = {
-    let uncapitalize: string => string
-        = str =>
-            str
-            |> Js.String.charAt(0)
-            |> Js.String.toLowerCase
-            |> Js.String.concat(Js.String.sliceToEnd(~from=1, str));
-
     let normalizeWord: string => string
         = word =>
             word
@@ -21,7 +14,7 @@ module Word = {
                 _
             )
             |> String.trim
-            |> uncapitalize
+            |> Utils.mapFirstChar(Js.String.toLowerCase) // Only the first letter is lowercased because môre is mOre in the dictionary
 
     let rec iter = (~onClick, ~className, ~word, ~withDash) => {
         switch String.split_on_char('-', word) {

@@ -135,9 +135,9 @@ module Make = (
                   => list{Show.verb(root), ...iter(next)}
 
                | Start(Ad(root, next))
-                  => list{Show.mark(Marks.ad), ...iter(Ad(root, next))}
+                  => list{Show.mark(Marks.ad |> Utils.mapFirstChar(Js.String.toUpperCase)), ...iter(Ad(root, next))}
                | Start(Verb(root, next))
-                  => list{Show.mark(Marks.verb), ...iter(Verb(root, next))}
+                  => list{Show.mark(Marks.verb |> Utils.mapFirstChar(Js.String.toUpperCase)), ...iter(Verb(root, next))}
 
                | Ad(root, Noun(root', next))
                   => list{Show.ad(root), Show.mark(Marks.noun), ...iter(Noun(root', next))}

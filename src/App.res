@@ -57,8 +57,9 @@ let make = () => {
     let (query, setQuery) = React.useState(_ => "taal");
     let hint = useHint(termDict, conjunctionDict, query);
     let url = RescriptReactRouter.useUrl();
+    let updateQuery = React.useCallback1(str => setQuery(_ => str), [setQuery]);
 
-    <DictionaryContext.OnWordClickProvider value={str => setQuery(_ => str)}>
+    <DictionaryContext.OnWordClickProvider value={updateQuery}>
         <Header />
         {
             switch url.hash {

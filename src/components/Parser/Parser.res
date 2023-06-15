@@ -15,7 +15,7 @@ let make = (~text: string, ~conjunctions) => {
 
     <div className="parsed">{
         parsed
-        -> List.map(line => line -> Lang.show -> Utils.putBetween(" " -> React.string))
+        -> List.map(line => line -> Lang.show -> Utils.putBetween(React.string(" ")))
         -> Utils.putBetween(list{". " -> React.string})
         -> List.flatten
         -> List.toArray
