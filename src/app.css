@@ -85,7 +85,7 @@ a {
 }
 
 .legend {
-    margin-top: 1rem;
+    margin-top: 2rem;
     font-size: 0.8em;
     display: flex;
     gap: 0 1rem;
@@ -109,7 +109,7 @@ a {
 }
 
 .links {
-    margin-top: 2rem;
+    margin-top: 1rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0 1rem;
