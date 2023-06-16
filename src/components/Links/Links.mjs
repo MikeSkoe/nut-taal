@@ -21,7 +21,7 @@ function Links(props) {
                   href: dicrionaryURL
                 }, "Dictionary"), React.createElement("a", {
                   href: conjunctionsURL
-                }, "conjunctions"));
+                }, "Conjunctions"));
 }
 
 var make = Links;

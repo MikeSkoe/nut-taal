@@ -8,5 +8,5 @@ let make = () => <div className="links">
     <a href={examplesURL}>{"Examples"->React.string}</a>
     <a href={readmeURL}>{"README (with grammar)"->React.string}</a>
     <a href={dicrionaryURL}>{"Dictionary"->React.string}</a>
-    <a href={conjunctionsURL}>{"conjunctions"->React.string}</a>
+    <a href={conjunctionsURL}>{"Conjunctions"->React.string}</a>
 </div>;
