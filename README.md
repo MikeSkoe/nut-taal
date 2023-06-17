@@ -1,88 +1,104 @@
 # **nut-taal**
-> An auxiliary constructed language that is parsable by both computer and human. Inspired by [mini language](https://minilanguage.com)
+> An auxiliary constructed language that is parsable by both computer and human. Inspired by [mini](https://minilanguage.com)
 
-### A taste of the language:
-## [Try it out](https://mikeskoe.github.io/nut-taal/)
-nut-taal | English 
+# [Try it out](https://mikeskoe.github.io/nut-taal/)
+<img src="https://i.imgur.com/lW0KuI5.gif">
+
+# A taste of the language:
+Nut-taal | English 
 -- | --
 My <u>lief</u> dit <u>doen</u> | I <u>like</u> to <u>do</u> this
 Dit <u>is</u> kat e *my klein mooi* | This is my *small beutiful* cat
-E *dit-dag* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
+E *gister* a sy <u>wil</u> i <u>speel</u> **met** jy | *Today*, he <u>wants</u> to <u>play</u> **with** you
 
-### [More Examples](https://mikeskoe.github.io/nut-taal/#examples)
-### [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
-### [Conjunctions](https://github.com/MikeSkoe/nut-taal/blob/main/public/Conjunctions.csv)
-### [Discord](https://discord.gg/gxWQ7uXqrz)
+## [More Examples](https://mikeskoe.github.io/nut-taal/#examples)
+## [Dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv)
+## [Conjunctions](https://github.com/MikeSkoe/nut-taal/blob/main/public/Conjunctions.csv)
+## [Discord](https://discord.gg/gxWQ7uXqrz)
 
 ---
-## Grammar
-<img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/diagram.svg" alt= “diagram” width="25%" height="25%">
-<img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/sentence-structure.svg" alt= “diagram” width="25%" height="25%">
 
-### Low level
-The language have three low-level language units:
-- [Root](#Root) - a building block of the language
-- [Mark](#Mark) - explains if the root a noun, verb or an ad (a modifier, like an adjective or adverb)
-- [Conjunction](#Conjunction) - introduces a [clause](#Clause), to make sentences richer
+# Grammar
+<img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/diagram.svg" alt= “diagram” width="35%" height="35%">
+<img src="https://github.com/MikeSkoe/nut-taal/blob/main/public/sentence-structure.svg" alt= “diagram” width="35%" height="35%">
 
-#### **Root**
-Can be collapsed to make a compound word, using a `*-*-*` pattern.
-It keeps vocabulary richer and the dictionary shorter.
+---
 
-It can have three states, depending on position in a sentence:
-- noun - a thing
-- <u>verb</u> - an action
-- *ad* - a modification, like adjective or adverb
+## Low level
+### **Root**
+A term or stam defined if the [dictionary](https://github.com/MikeSkoe/nut-taal/blob/main/public/dictionary.csv).
+Compound roots are achieved by composing other roots using `*-*-*` pattern.
 
-#### **Mark**
+Examples:
+- **Speel** - game, play
+- **My** - I, me, my
+- **Na** - After, past
+
+### **Mark**
+An auxiliary unit that introduces either a noun, a verb or an ad (descriptor).
 Placed before a root
-- `a` - introduces a noun
-- `i` - introduces a verb
-- `e` - introduces a modificator
+- **a** - introduces a noun [word](#word)
+- **i** - introduces a verb [word](#word)
+- **e** - introduces a descriptor [word](#word)
 
-There are some [patterns](#patterns), where the marks should be dropped.
+### **Conjunction**
+A language unit that introduces a [clause](#Clause), to make sentences richer.
 
-#### **Conjunction**
-Placed before a [clause](#Clause).
-Examples of Conjunctions could be words like:
+Examples of conjunctions could be words like:
 - **want** - because
 - **maar** - but
 - **vir** - to, for
----
-
-### Middle level
-Words are middle level units.
-They consist of roots and marks and can have three states: **noun**, **verb** and **ad**
-
-#### Patterns
-.  | _ Noun | _ Verb | _ Ad
--- | -- | -- | --- 
-Noun _ |a||e
-Verb _ ||i|e
-Ad _ |a|i|
 
 ---
-### High level
-#### Clause
-The clause is a cluster of non-conjunction words.
 
-#### Subject
-The first noun in a clause
+## Middle level
+### Word
+See [patterns](#patterns) to learn when markers should be dropped
+#### **Noun** (A thing)
+`a` + `root`
 
-#### Infinitive
-The second verb in a clause
+Example:
+- **Speel** - A game
 
-#### Object
+#### **Verb** (An action)
+`i` + `root`
+
+Example: 
+- **I Speel** - To play
+
+#### **Ad** (A description)
+Adjective: `Noun` + `e` + `root`
+
+Example:
+- **Kat e speel** - The playful cat
+
+Adverb: `Verb` + `e` + `root`
+
+Example:
+- **I leer e speel** - To learn playfully
+
+---
+
+## High level
+### **Clause**
+The clause is a group of non-conjunction words in a sentence.
+
+### **Subject**
+The noun before the first verb in a clause
+
+### **Object**
 The noun after a verb in a clause
 
----
-## Tenses
+### **Infinitive**
+The second verb in a clause
+
+## Tense
 If a tense, quantity or conditionals are clear from a context, no additional marker needed.
-But if explicitness is required, here are some useful words:
-- was - before. A past tense indicator
-- sal - shall. A future tense indicator
-- al - already, yet. A perfect tense indicator
-- sou - would, could. A conditionals indicator
+But if explicitness is needed, here are some useful words:
+- **was** - before. A past tense indicator
+- **sal** - shall. A future tense indicator
+- **al** - already, yet. A perfect tense indicator
+- **sou** - would, could. A conditionals indicator
 
 | nut-taal | English
 | - | -
@@ -93,54 +109,56 @@ But if explicitness is required, here are some useful words:
 | my <u>sal</u> oranje <u>al-eet</u> | I will have eaten an orange
 | my <u>sou</u> oranje <u>eet</u> | I would eat an orange
 
----
-## Prepositions
+## Preposition
 Formally there is no such thing as preposition in the language, but we have directional words, like:
-- aan - to
-- in - in
-- by - near, by
-That usually put in a context using pattern: `e **preposition** **thing**`
+- **aan** - to
+- **in** - in
+- **by** - near, by
+
+That usually put in a context using the pattern: `e **preposition** **thing**`
 
 Examples of usage:
-- Jy gee bal e aan my? - Will you give the ball to me?
-- My sit e in huis - I sit in the house
-- Kat sit e by my - A cat sits near me
+- Jy <u>gee</u> bal e *aan my*? - Will you give the ball to me?
+- My <u>sit</u> e *in huis* - I sit in the house
+- Kat <u>sit</u> e *by my* - The cat sits near me
 
 ---
-## Vocabulary
-Ideally, every root should have a meaning, be it a noun, verb, or adjective, as long as it is clear and makes sense.
-Therefore, related words could be collapsed into a single root.
-For example, a root "vra" could mean "question" as a noun, "to ask" as a verb, and "curious/curiously" as an adjective.
+# Patterns
+In order to make sentences more concise, there are some patterns
+Pattern | Example | Translation
+-- | -- | --
+`[Noun] ...` | Kat | A cat
+`i [Verb] ...` | I <u>dink</u> | To think
+`e [Ad] ...` | E *oggend* | In the morning
+`[Conjunction] [Noun] ...` | **Want** kat | Because of the cat
+`... [Noun] a [Noun] ...` | Kat a dier | A cat is an animal
+`... [Noun] a [Noun] ...` | Kat a dier | A cat is an animal
+`... [Noun] [Verb] ...` | Kat <u>speel</u> | A cat plays
+`... [Noun] e [Ad] ...` | Kat e *goed* | A good cat
+`... [Verb] [Noun] ...` | I <u>lief</u> sy | To love her/him
+`... [Verb] i [Verb] ...` | I <u>lief</u> i <u>speel</u> | To love to play 
+`... [Verb] e [Ad] ...` | I <u>leef</u> e *geluk* | To live happily
+`... [Ad] a [Noun] ...` | E *dit-dag* a my <u>werk</u> | Today I work
+`... [Ad] i [Verb] ...` | E *dit-dag* i <u>werk</u> | To work today
+`... [Ad] [Ad] ...` | E *dit-dag aand* | Today evening
 
-At the same time, to prevent ambiguity, a single root should not cover too wide range of meanings or unrelated ideas.
-The dictionary should be optimised, not limited.
-Additionally there should not be a root, like English **like**, that could mean **alike** and **to love**, since these are two completely different meanings
+---
+# Vocabulary
+Nut-taal is first of all a parsable grammar.
+The dictionary is rather a dependency.
 
-At the moment the dictionary is not perfect.
-Some compound words should be replaced with more implicit compounds.
-Some words could be replaced with synonyms.
-Some words could be added.
-I hope the dictionary will be better and better as the comunity grows.
+Having only one source language is preferable, because it allows us to use external dictionaries, in cases when the local dictionary is not exhaustive
 
-### Why Afrikaans?
-> The dictionary is not tightly coupled with the language.
-It is rather a dependency.
+At the moment Afrikaans is selected as a source of roots, because: 
+- It is one of the simplest natural languages
+- It is close to English, because it is also a Germanic language, but has much simpler vocabulary
 
-At the moment all roots come from Afrikaans.
-I did it for few reasons:
-- Having only one source language allows to use a translator! Which means you can fallback to a root from the translator and voice a sentence, since pronunciation follows Afrikaans rules
-- It is one of the simples natural languages
-- It is much simpler to read and pronounce than English, since spelling is regular
-- It sounds great (let's be honest, some event popular conlangs sound artificial)
-- There will always be someone who does not know the majority a vocabulary anyways
-- It is a Germanic language, located in Africa, so it has a lot of common words with English, Dutch, German and Khoisan languages of Southern Africa
+---
 
-### How to contribute
-> [Discord server](https://discord.gg/3AsNmZVJ)
-
+# How to contribute
 Even though you can already use the language for a communication, it is far from being perfect.
-If you want to mature the language, you can suggest dictionary modification using issue template.
-Go to "Issues" -> "New Issue" -> choose a template and press "Get started" or press "Open a blank issue"
+But the language is open source, so you can easily participate.
+
+To issue a change in the language, go to "Issues" -> "New Issue" -> choose a template and press "Get started" or press "Open a blank issue"
 
 💜
-
