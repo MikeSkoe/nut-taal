@@ -7,9 +7,9 @@ import * as Belt_List from "rescript/lib/es6/belt_List.js";
 import * as AbstractDict from "./abstractDict.mjs";
 
 var Marks = {
-  noun: "a",
-  verb: "i",
-  ad: "e"
+  noun: "an",
+  verb: "te",
+  ad: "om"
 };
 
 async function loadDict(url) {

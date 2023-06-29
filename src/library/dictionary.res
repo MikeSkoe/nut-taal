@@ -1,9 +1,9 @@
 include AbstractDict
 
 module Marks: MARKS = {
-   let noun = "a"
-   let verb = "i"
-   let ad = "e"
+   let noun = "an"
+   let verb = "te"
+   let ad = "om"
 }
 
 module Loader = {
